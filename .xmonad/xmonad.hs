@@ -1,3 +1,15 @@
+-- | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░█░█░█▀█░█▀▄░█░█░▀█▀░█░█░▀░█▀▀░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░█▀█░█░█░█▀▄░█▀█░░█░░█▀▄░░░▀▀█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░▀░▀░▀▀▀░▀░▀░▀░▀░▀▀▀░▀░▀░░░▀▀▀░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░█▀▄░█▀█░▀█▀░█▀▀░▀█▀░█░░░█▀▀░█▀▀░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░█░█░█░█░░█░░█▀▀░░█░░█░░░█▀▀░▀▀█░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░▀▀░░▀▀▀░░▀░░▀░░░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+-- | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
 import XMonad
 import Data.Monoid
@@ -44,7 +56,7 @@ myClickJustFocuses    = False
 myBorderWidth         = 4
 superKey              = mod4Mask
 myModMask             = superKey
-myWorkspaces          = ["home","web","code","test","tkr","task","pub","chat","edit", "book"]
+myWorkspaces          = ["home","web","code","test","tkr","task","edit", "chat","book"]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
@@ -144,6 +156,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- dropdown terminal
     , ((modm                  , xK_u),  namedScratchpadAction myScratchpads "terminal")
     , ((modm .|. controlMask .|. shiftMask, xK_h), namedScratchpadAction myScratchpads "htop")
+
+    -- | Programs
+    , ((modm .|. shiftMask, xK_z), spawn "zathura &")                                                       -- book reader (zathura)
+    , ((modm .|. shiftMask, xK_b), spawn "firefox-developer-editioin &"                           )         -- browser
+    , ((modm .|. shiftMask, xK_b), spawn "firefox-developer-editioin &"                           )         -- browser
+    , ((modm .|. shiftMask, xK_e), spawn "emacs &"                                                )         -- editor (emacs)
+    , ((modm .|. shiftMask, xK_n), spawn "firefox-developer-edition https://www.notion.so/horhi &")         -- noteapp
+
 
 
     -- Restart xmonad
@@ -301,9 +321,10 @@ myLogHook xmproc = dynamicLogWithPP $ xmobarPP { -- XMobar
           , ppCurrent    = xmobarColor   greenColor      ""   .  wrap "(" ")"
           , ppUrgent     = xmobarColor   redColor        ""   .  wrap "[" "]"
           , ppHidden     = xmobarColor   foregroundColor ""   .  noScratchPad
+          , ppVisible    = xmobarColor   orangeColor     ""
           , ppSep        = xmobarColor   foregroundColor ""           "}-----{"
           , ppWsSep      =                                            "}-{"
-          , ppOrder      = \(ws:l:t:ex)  -> [ws]++ex++[t,l] -- show only workspaces and title
+          , ppOrder      = \(ws:l:t:ex)  -> [ws]++ex++[t,l] -- {workspaces}-{title}--{layout}
       }
 
       where
@@ -331,7 +352,7 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do
-  xmproc <- spawnPipe "xmobar -d"
+  xmproc <- spawnPipe "xmobar -d ~/.config/xmobar/config.hs"
   xmonad $ docks $ defaults xmproc
 
 -- A structure containing your configuration settings, overriding
