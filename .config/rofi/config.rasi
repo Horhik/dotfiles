@@ -1,0 +1,7 @@
+configuration {
+ modi: "window,drun,ssh,combi";
+ theme: "slate";
+ font: "hack 10";
+ combi-modi: "window,drun,ssh";
+ }
+
