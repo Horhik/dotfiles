@@ -36,7 +36,7 @@ yellowColor        = "#f1fa8c"
 
 
 myTerminal            = "alacritty"
-myEditor            = "nvim"
+myEditor              = "nvim"
 myFocusFollowsMouse   :: Bool
 myFocusFollowsMouse   = True
 myClickJustFocuses    :: Bool
@@ -125,15 +125,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Gaps
     , ((modm .|. controlMask, xK_g), sendMessage $ ToggleGaps)
 
-    , ((modm .|. controlMask, xK_a), sendMessage $ DecGap 10 L)
-    , ((modm .|. controlMask, xK_w), sendMessage $ DecGap 10 U)
-    , ((modm .|. controlMask, xK_d), sendMessage $ DecGap 10 D)
-    , ((modm .|. controlMask, xK_f), sendMessage $ DecGap 10 R)
+    , ((modm .|. controlMask, xK_o), sendMessage $ DecGap 10 L)
+    , ((modm .|. controlMask, xK_u), sendMessage $ DecGap 10 U)
+    , ((modm .|. controlMask, xK_i), sendMessage $ DecGap 10 D)
+    , ((modm .|. controlMask, xK_y), sendMessage $ DecGap 10 R)
 
-    , ((modm .|. shiftMask, xK_a), sendMessage $ IncGap 10 L)
-    , ((modm .|. shiftMask, xK_w), sendMessage $ IncGap 10 U)
-    , ((modm .|. shiftMask, xK_d), sendMessage $ IncGap 10 D)
-    , ((modm .|. shiftMask, xK_f), sendMessage $ IncGap 10 R)
+    , ((modm .|. shiftMask, xK_o), sendMessage $ IncGap 10 L)
+    , ((modm .|. shiftMask, xK_u), sendMessage $ IncGap 10 U)
+    , ((modm .|. shiftMask, xK_i), sendMessage $ IncGap 10 D)
+    , ((modm .|. shiftMask, xK_y), sendMessage $ IncGap 10 R)
 
     -- flameshot gui
     , ((modm .|. shiftMask, xK_s ),  spawn "flameshot gui")
@@ -296,14 +296,14 @@ myEventHook = mempty
 xbb = backgroundColor -- xmobar background color
 myLogHook xmproc = dynamicLogWithPP $ xmobarPP { -- XMobar
             ppOutput     = hPutStrLn     xmproc
-          , ppTitle      = xmobarColor   orangeColor     ""
+          , ppTitle      = xmobarColor   orangeColor     ""   . shorten 40
           , ppLayout     = xmobarColor   purpleColor     ""
           , ppCurrent    = xmobarColor   greenColor      ""   .  wrap "(" ")"
           , ppUrgent     = xmobarColor   redColor        ""   .  wrap "[" "]"
           , ppHidden     = xmobarColor   foregroundColor ""   .  noScratchPad
-          , ppSep        = xmobarColor   foregroundColor ""           "}--------------{"
+          , ppSep        = xmobarColor   foregroundColor ""           "}-----{"
           , ppWsSep      =                                            "}-{"
-          , ppOrder      = \(ws:l:t:ex)  -> [ws]++ex++[t] -- show only workspaces and title
+          , ppOrder      = \(ws:l:t:ex)  -> [ws]++ex++[t,l] -- show only workspaces and title
       }
 
       where
