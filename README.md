@@ -1,12 +1,19 @@
 # Horhik's dotfiles
 
-![desktop screenshot](https://github.com/Horhik/dotfiles/blob/master/github/desktop-preview.png)
-
-```
-Theme      = Dracula
-WM         = XMonad or i3-gaps
-Bar        = XMobar or Polybar (depend by WM)
-Terminal   = alacritty
-Wallpapers = variety
+#### XMonad/XMobar 
+![xmonad screenshot](https://raw.githubusercontent.com/Horhik/dotfiles/master/github/xmonad-xmobar.png)
+---
+#### i3/Polybar
+![XMonad/XMobar  screenshot](https://raw.githubusercontent.com/Horhik/dotfiles/master/github/i3-polybar.png)
+### Info
+``` bash
+Theme         = Dracula
+WM            = XMonad or i3-gaps
+Bar           = XMobar or Polybar # (depend by WM)
+Terminal      = alacritty
+Wallpapers    = variety
+Shell         = oh-my-zsh or oh-my-fish
+Editor        = nvim or doom-emacs
+Notifications = dunst
 ```
 
