@@ -1,0 +1,108 @@
+{
+    "border": "pixel",
+    "layout": "splith",
+    "current_border_width": 3,
+    "floating": "user_off",
+  /*  "geometry": {
+       "height": 600,
+       "width": 800,
+       "x": 0,
+       "y": 0
+    },*/
+    "name": "@cgDISVMfxT:T | Работа для фрилансеров на Freelancehunt — список всех доступных проектов для фрилансера в Украине",
+    "percent": 0.5,
+    "swallows": [
+    ],
+    "type": "con"
+}
+
+/*
+{
+    // splitv split container with 2 children
+    "border": "normal",
+    "floating": "auto_off",
+    "layout": "splitv",
+    "percent": 0.333333333333333,
+    "type": "con",
+    "nodes": [
+        {
+            "border": "pixel",
+            "current_border_width": 3,
+            "floating": "user_off",
+            "geometry": {
+               "height": 600,
+               "width": 800,
+               "x": 0,
+               "y": 0
+            },
+            "name": "@cgDISVMfxT:T | Создание проекта на бирже фриланса Weblancer",
+            "percent": 0.5,
+            "swallows": [
+            ],
+            "type": "con"
+        },
+        {
+            // splith split container with 2 children
+            "border": "normal",
+            "floating": "auto_off",
+            "layout": "splith",
+            "percent": 0.5,
+            "type": "con",
+            "nodes": [
+                {
+                    "border": "pixel",
+                    "current_border_width": 3,
+                    "floating": "user_off",
+                    "geometry": {
+                       "height": 600,
+                       "width": 800,
+                       "x": 0,
+                       "y": 0
+                    },
+                    "name": "@cgDISVMfxT:T | Фриланс: Удаленная работа на дому - Вакансии фриланс услуг в Украине, России и др. странах СНГ - Weblancer",
+                    "percent": 0.5,
+                    "swallows": [
+                    ],
+                    "type": "con"
+                },
+                {
+                    "border": "pixel",
+                    "current_border_width": 3,
+                    "floating": "user_off",
+                    "geometry": {
+                       "height": 600,
+                       "width": 800,
+                       "x": 0,
+                       "y": 0
+                    },
+                    "name": "@cgDISVMfxT:T | Бот для работы с instagram — Фриланс-заказ №1052926 для веб-программиста",
+                    "percent": 0.5,
+                    "swallows": [
+                    ],
+                    "type": "con"
+                }
+            ]
+        }
+    ]
+}
+*/
+{
+    "border": "pixel",
+    "current_border_width": 3,
+    "layout": "splith",
+    "floating": "user_off",
+    /*
+    "geometry": {
+       "height": 600,
+       "width": 800,
+       "x": 0,
+       "y": 0
+    },*/
+    "name": "@cgDISVMfxT:T | Заказы — Хабр Фриланс",
+    "percent": 0.5,
+    "swallows": [
+       
+    ],
+    "type": "con"
+}
+

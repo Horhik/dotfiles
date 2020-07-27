@@ -1,0 +1,3 @@
+#1/bin/bash
+
+alacritty -t dropdown

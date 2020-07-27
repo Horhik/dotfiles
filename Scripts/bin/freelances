@@ -1,0 +1,19 @@
+#!/bin/bash
+
+
+# -- Freelance Habr --
+i3-msg "workspace 6; exec surf https://freelance.habr.com/tasks?categories=development_frontend"
+
+# -- FreelanceHunt --
+i3-msg "workspace 6; exec surf https://freelancehunt.com/projects?tags%5B%5D=%D0%B2%D0%B5%D1%80%D1%81%D1%82%D0%BA%D0%B0&tags%5B%5D=html+%D0%B2%D0%B5%D1%80%D1%81%D1%82%D0%BA%D0%B0&tags%5B%5D=React&tags%5B%5D=WebGL"
+
+
+# -- Weblancer --
+# Web Programming
+i3-msg "workspace 6; exec surf https://www.weblancer.net/jobs/veb-programmirovanie-31/"
+
+# HTML/CSS
+i3-msg "workspace 6; exec surf https://www.weblancer.net/jobs/html-verstka-32/"
+
+#Fl.ru
+i3-msg "workspace 6; exec surf https://www.fl.ru/projects/"
