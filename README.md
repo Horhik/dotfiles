@@ -11,6 +11,7 @@ Theme         = Dracula
 WM            = XMonad or i3-gaps
 Bar           = XMobar or Polybar # (depend by WM)
 Terminal      = alacritty
+Font          = Mononoki
 Wallpapers    = variety
 Shell         = oh-my-zsh or oh-my-fish
 Editor        = nvim or doom-emacs
