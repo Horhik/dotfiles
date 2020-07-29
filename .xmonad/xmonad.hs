@@ -72,7 +72,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
-    , ((modm,               xK_p     ), spawn "dmenu_run")
+    , ((modm,               xK_p     ), spawn ("dmenu_run -c -l 20 -fn 'Mononoki-14:bold'"))
 
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
@@ -150,19 +150,20 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- flameshot gui
     , ((modm .|. shiftMask, xK_s ),  spawn "flameshot gui")
     -- change lang
-    , ((modm              , xK_Alt_R ),  spawn "xkb-switch -n")
+    , ((controlMask      , xK_space ),  spawn "xkb-switch -n")
     -- toggle fullscreen
     , ((mod4Mask .|. shiftMask, xK_f), sendMessage ToggleStruts)
-    -- dropdown terminal
+
+    -- | Scratchpads/Dropdowns
     , ((modm                  , xK_u),  namedScratchpadAction myScratchpads "terminal")
     , ((modm .|. controlMask .|. shiftMask, xK_h), namedScratchpadAction myScratchpads "htop")
+    , ((modm .|. shiftMask    , xK_a),  namedScratchpadAction myScratchpads "anki")
 
     -- | Programs
-    , ((modm .|. shiftMask, xK_z), spawn "zathura &")                                                       -- book reader (zathura)
-    , ((modm .|. shiftMask, xK_b), spawn "firefox-developer-editioin &"                           )         -- browser
-    , ((modm .|. shiftMask, xK_b), spawn "firefox-developer-editioin &"                           )         -- browser
-    , ((modm .|. shiftMask, xK_e), spawn "emacs &"                                                )         -- editor (emacs)
-    , ((modm .|. shiftMask, xK_n), spawn "firefox-developer-edition https://www.notion.so/horhi &")         -- noteapp
+    , ((modm .|. shiftMask, xK_z), spawn "zathura &")                                                               -- book reader (zathura)
+    , ((modm .|. shiftMask, xK_b), spawn "firefox-developer-edition"                                       )        -- browser
+    , ((modm .|. controlMask, xK_e), spawn "/usr/bin/emacs &"                                                           )        -- editor (emacs)
+    , ((modm .|. shiftMask, xK_n), spawn "firefox-developer-edition --new-tab https://www.notion.so/horhi ")        -- noteapp
 
 
 
@@ -263,12 +264,13 @@ myLayout =   smartBorders . avoidStruts $ spacesAndGaps $ tiled ||| Mirror tiled
 -- 'className' and 'resource' are used below.
 --
 myManageHook = (composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , className =? "Gimp"           --> doFloat
+    [ className =? "MPlayer"                --> doFloat
+    , className =? "Gimp"                   --> doFloat
+    , title     =? "Media viewer"           --> doFloat -- Telegram image viewer
     , className =? "TerminalDropdown"       --> doFloat
-    , title =? "dropdown"       --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore
+    , title     =? "dropdown"               --> doFloat
+    , resource  =? "desktop_window"         --> doIgnore
+    , resource  =? "kdesktop"               --> doIgnore
     ])
     <+> namedScratchpadManageHook myScratchpads
 
@@ -276,8 +278,9 @@ myManageHook = (composeAll
 -- | Scratchpads | -----------------------------------------------------
 
 myScratchpads = [
-  NS "terminal" spawnTerm findTerm manageTerm,
-  NS "htop" "xterm -e htop" (title =? "htop") defaultFloating
+    NS "terminal" spawnTerm findTerm manageTerm
+  , NS "htop" "xterm -e htop" (title =? "htop") defaultFloating
+  , NS "anki" spawnAnki findAnki manageAnki
     ]
   where
     classTerm     = "terminal-dropdown"
@@ -290,6 +293,16 @@ myScratchpads = [
         w = 0.6             -- width, 50%
         t = (1 - h) / 2     -- bottom edge
         l = (1 - w) / 2     -- centered left/right
+    titleAnki     = "Anki"
+    spawnAnki     = "anki"
+    findAnki      = className =? titleAnki
+    manageAnki    = customFloating $ W.RationalRect l t w h
+      where
+        h = 0.9             -- height, 90%
+        w = 0.4             -- width, 40%
+        t = (1 - h) / 2     -- center
+        l = 0.1
+
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -345,6 +358,7 @@ myStartupHook = do
   spawnOnce "setxkbmap -layout us,ru"
   spawnOnce "$HOME/Scripts/startup/touchpad.sh"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
+  spawnOnce "xautolock -time 25 -locker 'i3lock-fancy' &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
