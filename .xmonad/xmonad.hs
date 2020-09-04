@@ -49,6 +49,8 @@ yellowColor        = "#f1fa8c"
 
 myTerminal            = "alacritty"
 myEditor              = "nvim"
+myMainDisplay         = "eDP-1"
+mySecondDisplay       = "HDMI-1"
 myFocusFollowsMouse   :: Bool
 myFocusFollowsMouse   = True
 myClickJustFocuses    :: Bool
@@ -56,7 +58,8 @@ myClickJustFocuses    = False
 myBorderWidth         = 4
 superKey              = mod4Mask
 myModMask             = superKey
-myWorkspaces          = ["home","web","code","test","tkr","task","edit", "chat","book"]
+-- myWorkspaces          = ["home 1","web 2","code 3","test 4","tkr 5","task 6","edit 7", "chat 8","book 9"]
+myWorkspaces          = ["I","II","III","IV","V","VI","VII", "VIII","IX"]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
@@ -150,7 +153,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- flameshot gui
     , ((modm .|. shiftMask, xK_s ),  spawn "flameshot gui")
     -- change lang
-    , ((controlMask      , xK_space ),  spawn "xkb-switch -n")
+    , ((controlMask      , xK_space ),  spawn "setxkbmap -layout fi,ru,us; xkb-switch -n")
     -- toggle fullscreen
     , ((mod4Mask .|. shiftMask, xK_f), sendMessage ToggleStruts)
 
@@ -231,7 +234,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 --
 defaultGapSize = 5
 defaultGaps = gaps [(U,defaultGapSize), (R,defaultGapSize), (D, defaultGapSize), (L, defaultGapSize)]
-defaultSpaces = spacingRaw True (Border 10 10 10 10) True (Border 10 10 10 10) True
+defaultSpaces = spacingRaw True (Border 5 5 5 5) True (Border 5 5 5 5) True
 spacesAndGaps = defaultSpaces . defaultGaps
 
 myLayout =   smartBorders . avoidStruts $ spacesAndGaps $ tiled ||| Mirror tiled ||| Full
@@ -268,11 +271,19 @@ myManageHook = (composeAll
     , className =? "Gimp"                   --> doFloat
     , title     =? "Media viewer"           --> doFloat -- Telegram image viewer
     , className =? "TerminalDropdown"       --> doFloat
+    , className =? "Nemo"                   --> doCenter
     , title     =? "dropdown"               --> doFloat
     , resource  =? "desktop_window"         --> doIgnore
     , resource  =? "kdesktop"               --> doIgnore
     ])
     <+> namedScratchpadManageHook myScratchpads
+  where
+    doCenter    = customFloating $ W.RationalRect l t w h
+      where
+        h = 0.6             -- height, 50%
+        w = 0.6             -- width, 50%
+        t = (1 - h) / 2     -- bottom edge
+        l = (1 - w) / 2     -- centered left/right
 
 ------------------------------------------------------------------------
 -- | Scratchpads | -----------------------------------------------------
@@ -283,9 +294,9 @@ myScratchpads = [
   , NS "anki" spawnAnki findAnki manageAnki
     ]
   where
-    classTerm     = "terminal-dropdown"
+    classTerm     = "TerminalDropdown"
     titleTerm     = "!dropdown!"
-    spawnTerm     = "alacritty  -t " ++ titleTerm
+    spawnTerm     = "alacritty  -t " ++ titleTerm ++ " --class " ++ classTerm
     findTerm      = title =? titleTerm
     manageTerm    = customFloating $ W.RationalRect l t w h
       where
@@ -327,14 +338,15 @@ myEventHook = mempty
 --
 
 xbb = backgroundColor -- xmobar background color
-myLogHook xmproc = dynamicLogWithPP $ xmobarPP { -- XMobar
-            ppOutput     = hPutStrLn     xmproc
+myLogHook (xmproc0, xmproc1) = dynamicLogWithPP $ xmobarPP { -- XMobar
+            ppOutput     = \x ->             hPutStrLn xmproc0 x
+                                         >> hPutStrLn xmproc1 x
           , ppTitle      = xmobarColor   orangeColor     ""   . shorten 40
           , ppLayout     = xmobarColor   purpleColor     ""
           , ppCurrent    = xmobarColor   greenColor      ""   .  wrap "(" ")"
           , ppUrgent     = xmobarColor   redColor        ""   .  wrap "[" "]"
           , ppHidden     = xmobarColor   foregroundColor ""   .  noScratchPad
-          , ppVisible    = xmobarColor   orangeColor     ""
+          , ppVisible    = xmobarColor   orangeColor     ""   .  wrap "(" ")"
           , ppSep        = xmobarColor   foregroundColor ""           "}-----{"
           , ppWsSep      =                                            "}-{"
           , ppOrder      = \(ws:l:t:ex)  -> [ws]++ex++[t,l] -- {workspaces}-{title}--{layout}
@@ -355,10 +367,11 @@ myStartupHook = do
   spawnOnce "variety &"
   -- spawnOnce "compton --config ~/.config/compton/compton.conf &"
   spawnOnce "picom &"
-  spawnOnce "setxkbmap -layout us,ru"
+  spawnOnce "setxkbmap -layout us,fi,ru; "
   spawnOnce "$HOME/Scripts/startup/touchpad.sh"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
-  spawnOnce "xautolock -time 25 -locker 'i3lock-fancy' &"
+  spawnOnce ("xrandr --output "++ mySecondDisplay ++ " --above " ++ myMainDisplay)
+  spawnOnce "xautolock -time 25 -locker 'i3lock-fancy' -notify 24  -notifier 'xkb-switch -s us' &"
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
@@ -366,8 +379,9 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do
-  xmproc <- spawnPipe "xmobar -d ~/.config/xmobar/config.hs"
-  xmonad $ docks $ defaults xmproc
+  bar0 <- spawnPipe "xmobar -x 0 -d ~/.config/xmobar/config.hs"
+  bar1 <- spawnPipe "xmobar -x 1 ~/.config/xmobar/config_second.hs"
+  xmonad $ docks $ defaults (bar0, bar1)
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -375,7 +389,7 @@ main = do
 --
 -- No need to modify this.
 --
-defaults xmproc = def {
+defaults (bar0, bar1) = def {
       -- simple stuff
         terminal           = myTerminal,
         focusFollowsMouse  = myFocusFollowsMouse,
@@ -394,7 +408,7 @@ defaults xmproc = def {
         layoutHook         = myLayout,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
-        logHook            = myLogHook xmproc,
+        logHook            = myLogHook (bar0, bar1),
         startupHook        = myStartupHook
     }
 
