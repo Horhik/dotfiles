@@ -1,0 +1,25 @@
+#!/bin/sh
+# depends on: xprop
+# prevent certain window classes from being fullscreen in bspwm.
+# define WM_CLASS blockers here:
+blockers='chromium libreoffice firefox Firefox firefox-developer-edition MozillaWindowClass'
+
+bspc subscribe node_state | while read msg monitorId desktopId nodeId state value; do
+    # only care about fullscreens
+    [ "$state $value" = "fullscreen on" ] || continue
+
+    # only act if the lock is off, also remove the lock if it exists.
+    if [ -f /tmp/bspcblock ]; then
+        rm /tmp/bspcblock
+        continue
+    fi
+
+    # get info
+    class=$(xprop -id $nodeId | grep "WM_CLASS" | sed 's/^[^=]*=//g')
+
+    # check all the blockers, toggle last state if encountered anywhere in WM_CLASS line.
+    IFS=' '
+    for check in $blockers; do
+        echo $class | grep -q "\"$check\"" && bspc node $nodeId -t ~fullscreen &
+    done
+done
