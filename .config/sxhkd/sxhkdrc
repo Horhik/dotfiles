@@ -45,8 +45,11 @@ super + Enter
 #
 
 # set the window state
-super + {t,shift + t,s,f}
-	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+super + {t,shift + t,s}
+	bspc node -t {tiled,pseudo_tiled,floating}
+
+super + f
+	bspc node -t fullscreen
 
 # set the node flags
 super + ctrl + {m,x,y,z}
@@ -61,7 +64,7 @@ super + {_,shift + }{h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 
 # focus the node for the given path jump
-super + {p,b,comma,period}
+super + {v,b,comma,period}
 	bspc node -f @{parent,brother,first,second}
 
 # focus the next/previous window in the current desktop
@@ -83,8 +86,8 @@ super + {o,i}
 	bspc wm -h on
 
 # focus or send to the given desktop
-super + {_,shift + }{1-9,0}
-	bspc {desktop -f,node -d} '^{1-9,10}'
+super + {_,shift + }{1-9,0,e}
+	bspc {desktop -f,node -d} '^{1-9,10,11}'
 
 #
 # preselect
@@ -122,6 +125,39 @@ super + alt + shift + {h,j,k,l}
 super + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
-# my hotkeys
+#
+# System
+#
+XF86MonBrightness{Down,Up}
+	light { -U 10,-T 10}
+
+
+
+#
+# My hotkeys
+#
+
 super + shift + a
   anki
+
+super + shift + s
+	flameshot gui
+
+
+super + u 
+	$HOME/scripts/scratchpads/dropdown.sh
+
+#
+# Applicons
+#
+
+super + alt + a 
+	anki
+super + alt + t
+	ticktick
+super + alt + d
+	duolingo-desktop
+super + alt + e
+	emacs
+
+	
