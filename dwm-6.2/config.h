@@ -52,7 +52,7 @@ static const Rule rules[] = {
 	 */
 		/* class      instance    title       tags mask     isfloating   monitor    scratch key */
 { "Gimp",     NULL,       NULL,       0,            1,           -1,        0  },
-{ "firefox",  NULL,       NULL,       0 << 2,       0,           -1,        0  },
+{ "firefox",  NULL,       NULL,       1 << 1,       0,           -1,        0  },
 { NULL,       NULL,   "scratchpad",   0,            1,           -1,       's' },
 { NULL,       NULL,   "sp_volume",   0,            1,           -1,       'v' },
 	
