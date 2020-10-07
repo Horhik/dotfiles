@@ -26,8 +26,8 @@ static const char *const autostart[] = {
 	"redshift", NULL,
 	"picom", "--experimental-backends", "--detect-rounded-corners", NULL,
 	"setxkbmap","us,ru,fi",",winkeys","grp:alt_shift_toggle", NULL,
-	"xrandr", "--output", "HDMI1", "--above", "eDP1", NULL,
 	"$HOME/.local/scripts/status/launch", NULL,
+	"enact", "--pos", "top", NULL,
 	"pulseaudio","-k", NULL,
 	NULL /* terminate */
 };
@@ -37,11 +37,11 @@ static const char *tags[] = { "ﳎ ", " ", " ", " ", "", "", "
 static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 /* launcher commands (They must be NULL terminated) */
-static const char* surf[]      = { "surf", "duckduckgo.com", NULL };
+static const char* spotify[]      = { "spotify", "spotify", NULL };
 
 static const Launcher launchers[] = {
        /* command       name to display */
-	{ surf,         "surf" },
+	{ spotify,         "spotify" },
 };
 
 

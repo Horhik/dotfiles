@@ -1,6 +1,6 @@
 #!/bin/bash
 
 while true; do
-        xsetroot -name "$(./statusbar)"
+        xsetroot -name "$($HOME/.local/scripts/status/statusbar)"
         sleep 0.5
 done &
