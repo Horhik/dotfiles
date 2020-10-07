@@ -34,6 +34,7 @@ static const char *const autostart[] = {
 
 /* tagging */
 static const char *tags[] = { "ﳎ ", " ", " ", " ", "", "", " ", " ", "龎 " };
+static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 /* launcher commands (They must be NULL terminated) */
 static const char* surf[]      = { "surf", "duckduckgo.com", NULL };
@@ -121,6 +122,7 @@ static Key keys[] = {
 	/*SCRATCHPADS*/
 	{ MODKEY,                       XK_u,  togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY|ShiftMask,             XK_m,      togglescratch,  {.v = sp_volume_control } },
+	{ MODKEY,                     XK_n,      togglealttag,   {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
