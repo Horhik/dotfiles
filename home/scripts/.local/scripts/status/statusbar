@@ -1,19 +1,72 @@
 #!/bin/bash
 
-acpi | grep -oh "[[:digit:]]*%"
 
-vol=$(awk -F"[][]" '/dB/ { print $2 }' <(amixer sget Master) | head -1| grep -oh "[0-9]*")
-RED='\033[0;31m'
+battery ()
+{
+val=$(acpi | grep -oh "[[:digit:]]*%" | grep -oh "[0-9]*")
 
-if [ $vol -ge 100 ] 
-then 
-  echo 墳$vol
-elif [ $vol -ge 50 ]
-then
-  echo 奔$vol
-elif [ $vol -ge 1 ]
-then
-  echo 奄$vol 
-else
+case $val in
+  100)
+  echo "  $val"
+  ;;
+  [5-9][0-9])
+  echo "  $val"
+  ;;
+[1-4][0-9])
+  echo "  $val"
+  ;;
+[1-9])
+  echo "  $val"
+  ;;
+0)
+  echo   
+  ;;
+esac
+}
+
+
+volume ()
+{
+val=$(amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }'| grep -oh "[0-9]*")
+case $val in
+  100)
+  echo 墳 $val%
+  ;;
+  [5-9][0-9])
+  echo 墳 $val%
+  ;;
+[1-4][0-9])
+  echo 奔 $val%
+  ;;
+[1-9])
+  echo 奄 $val%
+  ;;
+0)
   echo 婢
-fi
+  ;;
+esac
+}
+
+diskspace ()
+{
+  echo  $(df -h | grep sda5 | grep -oh "[0-9]*%")
+}
+
+wifi ()
+{
+ name=$(connmanctl services | grep  "*AO" | grep -oh "^*AO [A-Za-z]*" | grep -oh "[[:space:]][A-Za-x]*")
+if [ $name != " " ];
+  then
+    echo 直 $name
+  else
+   echo 睊 off
+  fi
+}
+
+layout () 
+{
+  echo   $(xkblayout-state print %s)
+}
+
+echo "---------{$(wifi)}--{$(battery)}--{$(volume)}--{$(layout)}--{$(diskspace)}---------"
+
