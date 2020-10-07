@@ -7,7 +7,7 @@ cd yay
 makepkg -si
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-yay -S dunst firefox dwm surf dmenu st qutebrowser pulsemixer pkg-config variety alacritty compton-tryone-git ninja meson cmake libev  libevdev uthash nerd-fonts-mononoki nerd-fonts tmux feh xorg-xsetroot
+yay -S dunst firefox dwm surf dmenu st qutebrowser pulsemixer pkg-config variety alacritty compton-tryone-git ninja meson cmake libev  libevdev uthash nerd-fonts-mononoki nerd-fonts tmux feh xorg-xsetroot xkblayout-state
 # setup compositor
 cd $HOME/Downloads/tmp
 git clone https://github.com/ibhagwan/picom

@@ -24,15 +24,16 @@ static const char *const autostart[] = {
 	"firefox", NULL,
 	"variety", NULL,
 	"redshift", NULL,
-	//"picom", "--experimental-backends", "--detect-rounded-corners", NULL,
+	"picom", "--experimental-backends", "--detect-rounded-corners", NULL,
 	"setxkbmap","us,ru,fi",",winkeys","grp:alt_shift_toggle", NULL,
+	"xrandr", "--output", "HDMI1", "--above", "eDP1", NULL,
+	"$HOME/.local/scripts/status/launch", NULL,
 	"pulseaudio","-k", NULL,
-/*	"alacritty", "-t", "sp_volume", "-e", "$HOME/scripts/volume_launch.sh", NULL*/
 	NULL /* terminate */
 };
 
 /* tagging */
-static const char *tags[] = { "ﳎ", "", "", "", "", "", "", "", "龎" };
+static const char *tags[] = { "ﳎ ", " ", " ", " ", "", "", " ", " ", "龎 " };
 
 /* launcher commands (They must be NULL terminated) */
 static const char* surf[]      = { "surf", "duckduckgo.com", NULL };

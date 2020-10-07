@@ -1,0 +1,6 @@
+#!/bin/bash
+
+while true; do
+        xsetroot -name "$(./statusbar)"
+        sleep 0.5
+done &
