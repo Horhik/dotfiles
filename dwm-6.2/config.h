@@ -27,6 +27,7 @@ static const char *const autostart[] = {
 	"picom", "--experimental-backends", "--detect-rounded-corners", NULL,
 	"setxkbmap","us,ru,fi",",winkeys","grp:alt_shift_toggle", NULL,
 	"xrandr", "--output", "HDMI1", "--above", "eDP1", NULL,
+	"$HOME/.local/scripts/status/launch", NULL,
 	"pulseaudio","-k", NULL,
 	NULL /* terminate */
 };
