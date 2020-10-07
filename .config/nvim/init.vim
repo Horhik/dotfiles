@@ -21,7 +21,8 @@ set noshowmode
 set tabstop=2
 set shiftwidth=2
 set expandtab
-set guifont="Fira Mono for Powerline"\ 14
+set guifont="Mononoki"\ 14
+"set guifont="Fira Mono for Powerline"\ 14
 set encoding=UTF-8
 set path+=**
 
@@ -56,6 +57,8 @@ Plug 'lervag/vimtex'
 Plug 'ap/vim-css-color'
 Plug 'joshdick/onedark.vim'
 Plug 'dracula/vim'
+Plug 'morhetz/gruvbox'
+Plug 'rust-lang/rust.vim'
 call plug#end()
 
 aug i3config_ft_detection
@@ -95,8 +98,9 @@ set termguicolors     " enable true colors support
 "let ayucolor="mirage" " for mirage version of theme
 let ayucolor="dark"   " for dark version of theme
 " colorscheme onedark
-colorscheme dracula
-let g:airline_theme='onedark'
+ let g:gruvbox_italic=1
+colorscheme gruvbox
+let g:airline_theme='gruvbox'
 let g:onedark_terminal_italics = 1
 
 
