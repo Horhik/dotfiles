@@ -12,7 +12,8 @@ static const char col_gray1[]       = "#282828";
 static const char col_gray2[]       = "#928374";
 static const char col_gray3[]       = "#d5c4a1";
 static const char col_gray4[]       = "#ebdbb2";
-static const char col_cyan[]        = "#d65d0e";
+static const char col_cyan[]        = "#9e7117";
+//static const char col_cyan[]        = "#d79921";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -20,7 +21,8 @@ static const char *colors[][3]      = {
 };
 
 static const char *const autostart[] = {
-	"pulsemixer", "-k", NULL,
+	//"$HOME/.dwm/autostart.sh", NULL,
+	/*"pulsemixer", "-k", NULL,
 	"firefox", NULL,
 	"variety", NULL,
 	"redshift", NULL,
@@ -29,11 +31,12 @@ static const char *const autostart[] = {
 	"$HOME/.local/scripts/status/launch", NULL,
 	"enact", "--pos", "top", NULL,
 	"pulseaudio","-k", NULL,
+	*/
 	NULL /* terminate */
 };
 
 /* tagging */
-static const char *tags[] = { "ﳎ ", " ", " ", " ", "", "", " ", " ", "龎 " };
+static const char *tags[] = { "ﳎ ", " ", " ", " ", "", "", " ", " ", "龎 " };
 static const char *tagsalt[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 /* launcher commands (They must be NULL terminated) */
@@ -41,7 +44,7 @@ static const char* spotify[]      = { "spotify", "spotify", NULL };
 
 static const Launcher launchers[] = {
        /* command       name to display */
-	{ spotify,         "spotify" },
+	{ spotify,         "阮 " },
 };
 
 
@@ -50,11 +53,13 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-		/* class      instance    title       tags mask     isfloating   monitor    scratch key */
+/* class      instance    title       tags mask     isfloating   monitor    scratch key */
 { "Gimp",     NULL,       NULL,       0,            1,           -1,        0  },
 { "firefox",  NULL,       NULL,       1 << 1,       0,           -1,        0  },
+{ "spotify",  NULL,       NULL,       7     ,       0,           -1,        0  },
 { NULL,       NULL,   "scratchpad",   0,            1,           -1,       's' },
-{ NULL,       NULL,   "sp_volume",   0,            1,           -1,       'v' },
+{ NULL,       NULL,   "sp_volume",    0,            1,           -1,       'v' },
+{ NULL,       NULL,   "ScratchEmacs", 0,            1,           -1,       'e' },
 	
 };
 
@@ -86,8 +91,11 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, "-c", "-l", "20", NULL};
 static const char *termcmd[]  = { "alacritty", NULL };
 
+static const char *flameshot[]  = { "flameshot","gui", NULL };
+
 /*First arg only serves to match against key in rules*/
 static const char *scratchpadcmd[] = {"s", "alacritty", "-t", "scratchpad", NULL};
+static const char *sp_emacs[] = {"e", "emacs", "-T", "ScratchEmacs", NULL};
 static const char *sp_volume_control[] = {"v","alacritty", "-t", "sp_volume","-e", "pulsemixer", NULL};
 
 
@@ -95,6 +103,7 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = flameshot } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -120,9 +129,10 @@ static Key keys[] = {
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 	/*SCRATCHPADS*/
-	{ MODKEY,                       XK_u,  togglescratch,  {.v = scratchpadcmd } },
+	{ MODKEY,                       XK_u,      togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY|ShiftMask,             XK_m,      togglescratch,  {.v = sp_volume_control } },
-	{ MODKEY,                     XK_n,      togglealttag,   {0} },
+	{ MODKEY,                       XK_e,      togglescratch,  {.v = sp_emacs } },
+	{ MODKEY,                       XK_n,      togglealttag,   {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
