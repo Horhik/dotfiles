@@ -68,5 +68,10 @@ layout ()
   echo   $(xkblayout-state print %s)
 }
 
-echo "         [$(wifi)]  [$(battery)]  [$(volume)]  [$(layout)]  [$(diskspace)]         "
+timeanddate ()
+{
+  echo  $(date)
+}
+
+echo " [$(wifi)]  [$(battery)]  [$(volume)]  [$(layout)]  [$(diskspace)] [$(timeanddate)] "
 
