@@ -69,7 +69,25 @@
 
 (custom-set-faces
 '(neo-dir-link-face ((t (:family "Mononoki Nerd Font" :size 12 :weight regular))))
-'(neo-file-link-face ((t (:family "Mononoki Nerd Font" :size 12 :weight regular)))))
+'(neo-file-link-face ((t (:family "Mononoki Nerd Font" :size 12 :weight regular))))
+'(default ((t ( :family "Mononoki Nerd Font" :size 12 :weight regular))))
+)
 
 (global-set-key  (kbd "C-c C-o") 'neotree-toggle)
 (setq neo-theme 'icons)
+
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+
+
+(add-hook 'racer-mode-hook #'company-mode)
+
+(require 'rust-mode)
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+(setq company-tooltip-align-annotations t)
+
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+(use-package rustic)
+(setq lsp-rust-server `rustic)
