@@ -101,3 +101,11 @@ source $ZSH/oh-my-zsh.sh
 export PATH=$HOME/.local/bin:$PATH
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$HOME/Desktop:$PATH
+export PATH=/home/horhik/code/projects/potato-notify:$PATH
+
+alias vim=nvim
+alias vi=vim
+alias libvirtdaemon="sudo start-stop-daemon --start libvirtd"
+alias virtm="sudo start-stop-daemon --start virtlogd &; sudo start-stop-daemon --start libvirtd &; virt-manager &" 
+alias clip=xclip -selection clipboard

@@ -13,11 +13,32 @@
 ;; ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 ;; ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-;; and `package-pinned-packages`. Most users will not need or want to do this.
-;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+
+
+(add-to-list 'package-archives
+         '("melpa" . "http://melpa.org/packages/"))
+
 (package-initialize)
+
+(unless package-archive-contents
+  (package-refresh-contents))
+
+
+(defvar package-list
+  '( lsp-mode rustic evil-mc rainbow-delimiters doom-themes doom-modeline lusty-explorer ac-racer auto-complete all-the-icons linum-relative neotree racer cargo flycheck-rust rust-mode gruvbox-theme evil general use-package))
+
+(dolist (p package-list)
+  (when (not (package-installed-p p))
+         (package-install p)))
+
+;;(mapc
+;; (lambda (package)
+;;   (or (package-installed-p package)
+;;     (package-install package)))
+;; '( lsp-mode rustic evil-mc rainbow-delimiters doom-themes doom-modeline lusty-explorer ac-racer auto-complete all-the-icons linum-relative neotree racer cargo flycheck-rust rust-mode gruvbox-theme evil general))
+
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -26,7 +47,7 @@
  '(custom-safe-themes
    '("8d7684de9abb5a770fbfd72a14506d6b4add9a7d30942c6285f020d41d76e0fa" "4cf9ed30ea575fb0ca3cff6ef34b1b87192965245776afa9e9e20c17d115f3fb" "b89ae2d35d2e18e4286c8be8aaecb41022c1a306070f64a66fd114310ade88aa" "aded61687237d1dff6325edb492bde536f40b048eab7246c61d5c6643c696b7f" default))
  '(package-selected-packages
-   '(lsp-mode rustic evil-mc rainbow-delimiters doom-themes doom-modeline lusty-explorer ac-racer auto-complete all-the-icons linum-relative neotree racer cargo flycheck-rust rust-mode gruvbox-theme evil ##)))
+   '(spaceline lsp-mode rustic evil-mc rainbow-delimiters doom-themes doom-modeline lusty-explorer ac-racer auto-complete all-the-icons linum-relative neotree racer cargo flycheck-rust rust-mode gruvbox-theme evil ##)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -34,7 +55,6 @@
  ;; If there is more than one, they won't work right.
  )
 (require 'use-package)
-
 
 ;; AutoComplition
 (ac-config-default)
@@ -67,8 +87,10 @@
 (require 'doom-modeline)
 (doom-modeline-mode 1)
 
+
 ;; KeyBindings
 (require 'neotree)
+
 
 
 (defun add-to-map(keys func)
@@ -113,6 +135,7 @@
 (general-evil-setup t)
 (mmap)
 
+(setq vc-follow-symlinks t)
 
 ;; Syntax
 (require 'flycheck)
@@ -126,3 +149,8 @@
 (find-file "~/.emacs")
 (setq inhibit-startup-message t) 
 (setq initial-scratch-message ";; Happy Hacking")
+
+
+
+;; Rust
+(setq lsp-rust-server 'rust-analyzer)
