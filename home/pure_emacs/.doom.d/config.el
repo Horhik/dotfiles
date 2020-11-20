@@ -89,5 +89,10 @@
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
+
+
+(setq rustic-lsp-server 'rls)
+(setq lsp-rust-analyzer-server-command '("/usr/bin/rust-analyzer"))
 (use-package rustic)
 (setq lsp-rust-server `rustic)
+

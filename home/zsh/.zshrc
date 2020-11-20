@@ -4,6 +4,9 @@
 # Path to your oh-my-zsh installation.
 export ZSH="/home/horhik/.oh-my-zsh"
 
+export CC=/usr/bin/clang
+
+export CXX=/usr/bin/clang++
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -101,3 +104,11 @@ source $ZSH/oh-my-zsh.sh
 export PATH=$HOME/.local/bin:$PATH
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$HOME/Desktop:$PATH
+export PATH=/home/horhik/code/projects/potato-notify:$PATH
+
+alias vim=nvim
+alias vi=vim
+alias libvirtdaemon="sudo start-stop-daemon --start libvirtd"
+alias virtm="sudo start-stop-daemon --start virtlogd &; sudo start-stop-daemon --start libvirtd &; virt-manager &" 
+alias clip=xclip -selection clipboard
