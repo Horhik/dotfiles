@@ -70,7 +70,8 @@ static const Rule rules[] = {
 { NULL,       NULL,   "scratchpad",   0,            1,           -1,       's' },
 { NULL,       NULL,   "sp_volume",    0,            1,           -1,       'v' },
 { NULL,       NULL,   "ScratchEmacs", 0,            1,           -1,       'e' },
-	
+{ "Evolution",       NULL,   "Tasks - Evolution", 0,            1,           -1,       't' },
+{ NULL,       NULL,   "Task - No Summary", 0,            1,           -1,       0 }
 };
 
 /* layout(s) */
@@ -100,13 +101,13 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, "-c", "-l", "20", NULL};
 static const char *termcmd[]  = { "alacritty", NULL };
-
 static const char *flameshot[]  = { "flameshot","gui", NULL };
 
 /*First arg only serves to match against key in rules*/
 static const char *scratchpadcmd[] = {"s", "alacritty", "-t", "scratchpad", NULL};
 static const char *sp_emacs[] = {"e", "emacs", "-T", "ScratchEmacs", NULL};
 static const char *sp_volume_control[] = {"v","alacritty", "-t", "sp_volume","-e", "pulsemixer", NULL};
+static const char *tasks[] = {"t","evolution", NULL};
 
 
 static Key keys[] = {
@@ -129,6 +130,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
@@ -142,6 +144,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_u,      togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY|ShiftMask,             XK_m,      togglescratch,  {.v = sp_volume_control } },
 	{ MODKEY,                       XK_e,      togglescratch,  {.v = sp_emacs } },
+	{ MODKEY,                       XK_t,      togglescratch,  {.v = tasks } },
 	{ MODKEY,                       XK_n,      togglealttag,   {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
