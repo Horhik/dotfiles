@@ -1,5 +1,5 @@
 # Horhik's dotfiles
-
+*BTW... check the `dots` branch*
 #### XMonad/XMobar 
 ![xmonad screenshot](https://raw.githubusercontent.com/Horhik/dotfiles/master/github/xmonad-xmobar.png)
 ---
