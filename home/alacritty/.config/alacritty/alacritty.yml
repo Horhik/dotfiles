@@ -107,10 +107,15 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
+
     family: Mononoki Nerd Font
+    options:
+      style: Regular
+      range:
+        start: 0
+        end: 'Z'
 
     # The `style` can be specified to pick a specific face.
-    style: Regular
 
   # Bold font face
   #bold:
