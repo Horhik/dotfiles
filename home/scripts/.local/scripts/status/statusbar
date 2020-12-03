@@ -7,22 +7,22 @@ val=$(acpi | grep -oh "[[:digit:]]*%" | grep -oh "[0-9]*")
 
 case $val in
   [1-9][0-9][0-9])
-  echo "  $val a %"
+  echo "🔋 val%"
   ;;
   [5-9][0-9])
-  echo "  $val  a%"
+  echo "  $val%"
   ;;
 [1-4][0-9])
-  echo "  $val %a"
+  echo "  $val%"
   ;;
 [1-9])
-  echo "  $val %a"
+  echo "  $val%"
   ;;
 0)
-  echo    
+  echo "   "
   ;;
 *)
-  echo "  $val %a"
+  echo "🔋 $val %"
   ;;
 esac
 }
@@ -30,37 +30,39 @@ esac
 
 volume ()
 {
-val=$(amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }'| grep -oh "[0-9]*")
+                                #maybe change to Right, Left, Mono
+val=$(amixer sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }'| grep -oh "[0-9]*")
 case $val in
   100)
-  echo 墳 $val%
+  echo 🔊 $val%
   ;;
   [5-9][0-9])
-  echo 墳 $val%
+  echo 🔉 $val%
   ;;
 [1-4][0-9])
-  echo 奔 $val%
+  echo 🔈 $val%
   ;;
 [1-9])
-  echo 奄 $val%
+  echo 🔈 $val%
   ;;
 0)
-  echo 婢
+  echo 🔇
   ;;
 esac
 }
 
 diskspace ()
 {
-  echo  $(df -h | grep sda5 | grep -oh "[0-9]*%")
+                        #might be another /dev/sda...
+  echo 💽 $(df -h | grep sda2 | grep -oh "[0-9]*%")
 }
 
 wifi ()
 {
- name=$(connmanctl services | grep  "*AO" | grep -oh "^*AO [A-Za-z]*" | grep -oh "[[:space:]][A-Za-x]*")
+ name=$(connmanctl services | grep  "*A" | grep -oh "^*A. [A-Za-z]*" | grep -oh "[[:space:]][A-Za-x]*")
 if [ $name != " " ];
   then
-    echo 直 $name
+    echo 🌐 $name
   else
    echo 睊 off
   fi
@@ -68,13 +70,19 @@ if [ $name != " " ];
 
 layout () 
 {
-  echo   $(xkblayout-state print %s)
+  echo 🎌  $(xkblayout-state print %s)
 }
 
 timeanddate ()
 {
-  echo  $(date)
+  echo 🕑 $(date +'%T') #%r
 }
 
-echo " [$(wifi)]  [$(battery)]  [$(volume)]  [$(layout)]  [$(diskspace)] [$(timeanddate)] "
+
+calendar ()
+{
+  echo 📅 $(date +'%d/%m/%Y')
+}
+
+echo "[$(wifi)] [$(battery)] [$(volume)] [$(layout)] [$(diskspace)] [$(timeanddate) $(calendar)]"
 
