@@ -11,7 +11,7 @@ export CXX=/usr/bin/clang++
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="cloud"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -112,3 +112,10 @@ alias vi=vim
 alias libvirtdaemon="sudo start-stop-daemon --start libvirtd"
 alias virtm="sudo start-stop-daemon --start virtlogd &; sudo start-stop-daemon --start libvirtd &; virt-manager &" 
 alias clip=xclip -selection clipboard
+
+# The next line updates PATH for Yandex Cloud CLI.
+if [ -f '/home/horhik/yandex-cloud/path.bash.inc' ]; then source '/home/horhik/yandex-cloud/path.bash.inc'; fi
+
+# The next line enables shell command completion for yc.
+if [ -f '/home/horhik/yandex-cloud/completion.zsh.inc' ]; then source '/home/horhik/yandex-cloud/completion.zsh.inc'; fi
+
