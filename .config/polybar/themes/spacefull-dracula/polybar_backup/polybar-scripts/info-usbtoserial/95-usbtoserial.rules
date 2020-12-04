@@ -1,4 +1,0 @@
-ACTION=="add", SUBSYSTEM=="tty"
-    RUN+="/home/user/.config/polybar/info-usbtoserial.sh --update"
-ACTION=="remove", SUBSYSTEM=="tty"
-    RUN+="/home/user/.config/polybar/info-usbtoserial.sh --update"

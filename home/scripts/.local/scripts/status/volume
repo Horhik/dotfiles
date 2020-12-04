@@ -1,0 +1,17 @@
+#!/bin/bash
+
+vol=$(awk -F"[][]" '/dB/ { print $2 }' <(amixer sget Master) | head -1| grep -oh "[0-9]*")
+RED='\033[0;31m'
+
+if [ $vol -ge 100 ] 
+then 
+  echo 墳$vol
+elif [ $vol -ge 50 ]
+then
+  echo 奔$vol
+elif [ $vol -ge 1 ]
+then
+  echo 奄$vol 
+else
+  echo 婢
+fi

@@ -1,0 +1,88 @@
+#!/bin/bash
+
+
+battery ()
+{
+val=$(acpi | grep -oh "[[:digit:]]*%" | grep -oh "[0-9]*")
+
+case $val in
+  [1-9][0-9][0-9])
+  echo "🔋 val%"
+  ;;
+  [5-9][0-9])
+  echo "  $val%"
+  ;;
+[1-4][0-9])
+  echo "  $val%"
+  ;;
+[1-9])
+  echo "  $val%"
+  ;;
+0)
+  echo "   "
+  ;;
+*)
+  echo "🔋 $val %"
+  ;;
+esac
+}
+
+
+volume ()
+{
+                                #maybe change to Right, Left, Mono
+val=$(amixer sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }'| grep -oh "[0-9]*")
+case $val in
+  100)
+  echo 🔊 $val%
+  ;;
+  [5-9][0-9])
+  echo 🔉 $val%
+  ;;
+[1-4][0-9])
+  echo 🔈 $val%
+  ;;
+[1-9])
+  echo 🔈 $val%
+  ;;
+0)
+  echo 🔇
+  ;;
+esac
+}
+
+diskspace ()
+{
+                        #might be another /dev/sda...
+  echo 💽 $(df -h | grep sda2 | grep -oh "[0-9]*%")
+}
+
+wifi ()
+{
+ name=$(connmanctl services | grep  "*A" | grep -oh "^*A. [A-Za-z]*" | grep -oh "[[:space:]][A-Za-x]*")
+if [ $name != " " ];
+  then
+    echo 🌐 $name
+  else
+   echo 睊 off
+  fi
+}
+
+layout () 
+{
+  echo 🎌  $(xkblayout-state print %s)
+}
+
+timeanddate ()
+{
+  echo 🕑 $(date +'%T') #%r
+}
+
+
+calendar ()
+{
+  echo 📅 $(date +'%d/%m/%Y')
+}
+
+echo "[$(wifi)] [$(battery)] [$(volume)] [$(layout)] [$(diskspace)] [$(timeanddate) $(calendar)]"
+

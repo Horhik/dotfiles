@@ -5,6 +5,16 @@
 ---
 #### i3/Polybar
 ![XMonad/XMobar  screenshot](https://raw.githubusercontent.com/Horhik/dotfiles/master/github/i3-polybar.png)
+
+#### dwm
+![Dwm  screenshot](https://raw.githubusercontent.com/Horhik/dotfiles/dots/github/screenshots/dwm.png)
+### Installing
+
+`
+cd dotfiles/home
+stow --adopt -vt ~ *
+`
+
 ### Info
 ``` bash
 Theme         = Dracula

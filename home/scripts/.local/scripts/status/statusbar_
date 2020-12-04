@@ -1,0 +1,80 @@
+#!/bin/bash
+
+
+battery ()
+{
+val=$(acpi | grep -oh "[[:digit:]]*%" | grep -oh "[0-9]*")
+
+case $val in
+  [1-9][0-9][0-9])
+  echo "  $val a %"
+  ;;
+  [5-9][0-9])
+  echo "  $val  a%"
+  ;;
+[1-4][0-9])
+  echo "  $val %a"
+  ;;
+[1-9])
+  echo "  $val %a"
+  ;;
+0)
+  echo    
+  ;;
+*)
+  echo "  $val %a"
+  ;;
+esac
+}
+
+
+volume ()
+{
+val=$(amixer sget Master | grep 'Right:' | awk -F'[][]' '{ print $2 }'| grep -oh "[0-9]*")
+case $val in
+  100)
+  echo 墳 $val%
+  ;;
+  [5-9][0-9])
+  echo 墳 $val%
+  ;;
+[1-4][0-9])
+  echo 奔 $val%
+  ;;
+[1-9])
+  echo 奄 $val%
+  ;;
+0)
+  echo 婢
+  ;;
+esac
+}
+
+diskspace ()
+{
+  echo  $(df -h | grep sda5 | grep -oh "[0-9]*%")
+}
+
+wifi ()
+{
+ name=$(connmanctl services | grep  "*AO" | grep -oh "^*AO [A-Za-z]*" | grep -oh "[[:space:]][A-Za-x]*")
+if [ $name != " " ];
+  then
+    echo 直 $name
+  else
+   echo 睊 off
+  fi
+}
+
+layout () 
+{
+  echo   $(xkblayout-state print %s)
+}
+
+timeanddate ()
+{
+  echo  $(date)
+}
+
+echo " [$(wifi)]  [$(battery)]  [$(volume)]  [$(layout)]  [$(diskspace)] [$(timeanddate)] "
+
