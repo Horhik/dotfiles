@@ -74,8 +74,8 @@ static const Rule rules[] = {
 { "spotify",  NULL,       NULL,       7     ,       0,           -1,        0  },
 { NULL,       NULL,   "scratchpad",   0,            1,           -1,       's' },
 { NULL,       NULL,   "sp_volume",    0,            1,           -1,       'v' },
+{ NULL,       NULL,   "Go For It!",   0,            1,           -1,       't' },
 { NULL,       NULL,   "ScratchEmacs", 0,            1,           -1,       'e' },
-{ "Evolution",       NULL,   "Tasks - Evolution", 0,            1,           -1,       't' },
 { NULL,       NULL,   "Task - No Summary", 0,            1,           -1,       0 }
 };
 // default gaps
@@ -112,7 +112,7 @@ static const char *flameshot[]  = { "flameshot","gui", NULL };
 static const char *scratchpadcmd[] = {"s", "alacritty", "-t", "scratchpad", NULL};
 static const char *sp_emacs[] = {"e", "emacs", "-T", "ScratchEmacs", NULL};
 static const char *sp_volume_control[] = {"v","alacritty", "-t", "sp_volume","-e", "pulsemixer", NULL};
-static const char *tasks[] = {"t","evolution", NULL};
+static const char *tasks[] = {"t","go-for-it", NULL};
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
@@ -163,7 +163,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_u,      togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY|ShiftMask,             XK_m,      togglescratch,  {.v = sp_volume_control } },
 	{ MODKEY,                       XK_e,      togglescratch,  {.v = sp_emacs } },
-	{ MODKEY,                       XK_t,      togglescratch,  {.v = tasks } },
+	{ MODKEY|ShiftMask,             XK_d,      togglescratch,  {.v = tasks } },
 	{ MODKEY,                       XK_n,      togglealttag,   {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
