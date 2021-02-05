@@ -7,6 +7,9 @@ export ZSH="/home/horhik/.oh-my-zsh"
 export CC=/usr/bin/clang
 
 export CXX=/usr/bin/clang++
+export _JAVA_AWT_WM_NONREPARENTING=1
+export ANDROID_SDK_ROOT=/home/horhik/Android/Sdk/
+export NDK_HOME=/home/horhik/Android/Sdk/ndk/22.0.7026061/
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -112,6 +115,7 @@ alias vi=vim
 alias libvirtdaemon="sudo start-stop-daemon --start libvirtd"
 alias virtm="sudo start-stop-daemon --start virtlogd &; sudo start-stop-daemon --start libvirtd &; virt-manager &" 
 alias clip=xclip -selection clipboard
+alias suspend="loginctl suspend"
 
 # The next line updates PATH for Yandex Cloud CLI.
 if [ -f '/home/horhik/yandex-cloud/path.bash.inc' ]; then source '/home/horhik/yandex-cloud/path.bash.inc'; fi
@@ -119,3 +123,13 @@ if [ -f '/home/horhik/yandex-cloud/path.bash.inc' ]; then source '/home/horhik/y
 # The next line enables shell command completion for yc.
 if [ -f '/home/horhik/yandex-cloud/completion.zsh.inc' ]; then source '/home/horhik/yandex-cloud/completion.zsh.inc'; fi
 
+alias rd='rustc -g --emit="obj,link"'
+
+compile_and_run() {
+     rustc -g --emit="obj,link" $1 && gdb ${1%.*}
+}
+
+alias rdr=compile_and_run
+alias aia=ankiaudio
+
+pfetch

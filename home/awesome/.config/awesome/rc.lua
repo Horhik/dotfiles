@@ -11,7 +11,7 @@ local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
-local naughty = require("naughty")
+local naughty do local old_dbus = dbus; dbus = nil; naughty = require("naughty") ; dbus = old_dbus ; end
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
@@ -176,7 +176,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({  " ﳎ", " ", " ", " ", " ", "  ", " ", " ", "龎 " }, s, awful.layout.layouts[1])
+    awful.tag({  "🏠", "🌐", " ", "🧱", " ", " ", " ", " ", "龎 " }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -589,15 +589,11 @@ ash("nitrogen --restore")
 ash("setxkbmap us,ru,fi ,winkeys grp:alt_shift_toggle")
 ash("picom &")
 
-local notify_size = 90
+local notify_size = 100
 
 local new_shape = function(cr, width, height)
     gears.shape.partially_rounded_rect(cr, 300, 100, true, false, true, true, 10)
 end
 
-beautiful.notification_height = notify_size
-beautiful.notification_margin = -20
-beautiful.notification_border_color  = "#ff0000"
-beautiful.notification_border_width = 10
-beautiful.notification_icon_size = notify_size
--- beautiful.notification_shape = new_shape
+beautiful.notification_border_width = 5
+beautiful.notification_border_color = "#ff0000"

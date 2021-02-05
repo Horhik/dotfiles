@@ -16,10 +16,10 @@ theme.font      = "Mononoki Nerd Font 10"
 
 -- {{{ Colors
 theme.fg_normal  = "#ebdbb2"
-theme.fg_focus   = "#282828"
+theme.fg_focus   = "#ebdbb2"
 theme.fg_urgent  = "#cc241d"
-theme.bg_normal  = "#282828"
-theme.bg_focus   = "#fabd2f"
+theme.bg_normal  = "#3c3836"
+theme.bg_focus   = "#665c54"
 theme.bg_urgent  = "#282828"
 theme.bg_systray = theme.bg_normal
 -- }}}
@@ -28,8 +28,8 @@ theme.bg_systray = theme.bg_normal
 theme.useless_gap   = dpi(5)
 theme.border_width  = dpi(2)
 theme.border_normal = "#282828"
-theme.border_focus  = "#fabd2f"
-theme.border_marked = "#b16286"
+theme.border_focus  = "#665c54"
+theme.border_marked = "#fabd2f"
 -- }}}
 
 -- {{{ Titlebars

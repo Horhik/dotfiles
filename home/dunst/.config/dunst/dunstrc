@@ -29,7 +29,7 @@
     # the top and down respectively.
     # The width can be negative.  In this case the actual width is the
     # screen width minus the width defined in within the geometry option.
-    geometry = "300x5-10-10"
+    geometry = "350x5-20+40"
 
     # Show how many messages are currently hidden (because of geometry).
     indicate_hidden = yes
@@ -46,22 +46,22 @@
     # The height of the entire notification.  If the height is smaller
     # than the font height and padding combined, it will be raised
     # to the font height and padding.
-    notification_height = 10
+    notification_height = 100
 
     # Draw a line of "separator_height" pixel height between two
     # notifications.
     # Set to 0 to disable.
-    separator_height = 20
+    separator_height = 5
 
     # Padding between text and separator.
-    padding = 24
+    padding = 0
 
     # Horizontal padding.
-    horizontal_padding = 8
+    horizontal_padding = 0
 
     # Defines width in pixels of frame around the notification window.
     # Set to 0 to disable.
-    frame_width = 5
+    frame_width = 3
 
     # Defines color of the frame around the notification window.
     frame_color = "#44475a"
@@ -130,7 +130,7 @@
 
     # Alignment of message text.
     # Possible values are "left", "center" and "right".
-    alignment = left
+    alignment = center
 
     # Show age of message if message is older than show_age_threshold
     # seconds.
@@ -139,11 +139,11 @@
 
     # Split notifications into multiple lines if they don't fit into
     # geometry.
-    word_wrap = yes
+    word_wrap = no
 
     # When word_wrap is set to no, specify where to make an ellipsis in long lines.
     # Possible values are "start", "middle" and "end".
-    ellipsize = middle
+    ellipsize = end
 
     # Ignore newlines '\n' in notifications.
     ignore_newline = no
@@ -163,7 +163,7 @@
     icon_position = left
 
     # Scale larger icons down to this size, set to 0 to disable
-    max_icon_size = 16
+    max_icon_size = 120
 
     # Paths to default icons.
     icon_path =  /usr/share/icons/Papirus-Dark/16x16:/usr/share/icons/Papirus/16x16:/home/horhik/Pictures/icons         
