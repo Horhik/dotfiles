@@ -74,7 +74,8 @@ static const Rule rules[] = {
 { "spotify",  NULL,       NULL,       7     ,       0,           -1,        0  },
 { NULL,       NULL,   "scratchpad",   0,            1,           -1,       's' },
 { NULL,       NULL,   "sp_volume",    0,            1,           -1,       'v' },
-{ NULL,       NULL,   "Go For It!",   0,            1,           -1,       't' },
+{ NULL,       NULL,   "Todoist",   0,            1,           -1,       't' },
+{ NULL,       NULL,   "PomoDoneApp",   0,            1,           -1,       'p' },
 { NULL,       NULL,   "ScratchEmacs", 0,            1,           -1,       'e' },
 { NULL,       NULL,   "Task - No Summary", 0,            1,           -1,       0 }
 };
@@ -107,17 +108,20 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, "-c", "-l", "20", NULL};
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *flameshot[]  = { "flameshot","gui", NULL };
+static const char *deadd_notify[]  = {  "/home/horhik/.local/scripts/deadd_notify", NULL};
 
 /*First arg only serves to match against key in rules*/
 static const char *scratchpadcmd[] = {"s", "alacritty", "-t", "scratchpad", NULL};
 static const char *sp_emacs[] = {"e", "emacs", "-T", "ScratchEmacs", NULL};
 static const char *sp_volume_control[] = {"v","alacritty", "-t", "sp_volume","-e", "pulsemixer", NULL};
-static const char *tasks[] = {"t","go-for-it", NULL};
+static const char *tasks[] = {"t","todoist", NULL};
+static const char *pomo[] = {"p","pomodone", NULL};
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_s,      spawn,          {.v = flameshot } },
+	{ MODKEY|Mod1Mask,              XK_space,  spawn,          {.v = deadd_notify } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -164,6 +168,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_m,      togglescratch,  {.v = sp_volume_control } },
 	{ MODKEY,                       XK_e,      togglescratch,  {.v = sp_emacs } },
 	{ MODKEY|ShiftMask,             XK_d,      togglescratch,  {.v = tasks } },
+	{ MODKEY,             XK_d,      togglescratch,  {.v = pomo } },
 	{ MODKEY,                       XK_n,      togglealttag,   {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
