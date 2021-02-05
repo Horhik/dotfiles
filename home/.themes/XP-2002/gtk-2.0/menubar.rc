@@ -1,0 +1,57 @@
+#################### MENUBAR ###### 47 lines ##########
+
+style "menubar"		
+{
+#  font_name = "11" # custom font size
+
+  xthickness	= 3
+  ythickness	= 2
+
+#  bg_pixmap[NORMAL] = "Menu/menubar.png"
+
+  fg[NORMAL] = "#000000"
+  text[NORMAL] = "#000000"
+  fg[PRELIGHT] = "#FFFFFF"
+  text[ACTIVE] = "#FFFFFF"
+  fg[INSENSITIVE] = "#DDE4FF"
+  text[PRELIGHT] = "#FFFFFF"
+      
+#  GtkMenuItem::horizontal-padding 	= 8
+#  GtkMenuItem::toggle-spacing 		= 6  
+
+	engine "pixmap"
+	{
+		image
+		{
+			function	= BOX
+			state 		= NORMAL
+			file		= "Menu/menubar.png"
+			border		= { 1, 1, 1, 1 }
+			stretch		= TRUE
+    		}    		
+		image
+		{
+			function	= BOX
+			state 		= INSENSITIVE
+			file		= "Menu/menubar.png"
+			border		= { 1, 1, 1, 1 }
+			stretch		= TRUE
+    		}
+    		image
+    		{
+      			function	= BOX
+      			recolorable	= TRUE
+      			state 		= PRELIGHT
+      			file		= "Menu/menubar-selected.png"
+      			border		= { 6, 1, 1, 1 }
+      			stretch		= TRUE
+    		}
+ 	}
+}
+
+class "GtkMenuBar*" 		style "menubar"
+widget_class "*MenuBar.*" 	style "menubar"
+#widget_class "*MenuBar.*MenuItem*"               style "menubar" ## uncomment if you don't use global-menubar
+
+
+

@@ -1,0 +1,328 @@
+#################### PANEL BACKGROUND ########## 306 lines #####
+style "panelbg"
+{  
+  xthickness = 0
+  ythickness = 0
+
+  bg_pixmap[NORMAL]	= "/panel-bg.png"
+
+}
+
+class 		"*Panel*" 			style "panelbg"
+class 		"*Panel*Applet*" 		style "panelbg"
+class 		"*Mail*" 			style "panelbg"
+class 		"*notif*" 			style "panelbg"
+class 		"*Notif*" 			style "panelbg"
+class 		"*Tray*" 			style "panelbg"
+class 		"*tray*" 			style "panelbg"
+class 		"Xfce*Panel*" 			style "panelbg"
+
+widget 		"*TrayIcon*" 			style "panelbg"
+widget 		"*PanelWidget*" 		style "panelbg"
+widget 		"*PanelApplet*" 		style "panelbg"
+
+widget_class 	"*Panel*GtkToggleButton" 	style "panelbg"
+#widget_class 	"*Panel*GtkButton" 		style "panelbg"
+widget_class 	"*.Panel*Button*GtkLabel" 	style "panelbg"
+widget_class 	"*.Panel*GtkLabel" 		style "panelbg"
+widget_class 	"*Netstatus*" 			style "panelbg"
+widget_class 	"*Tomboy*Tray*" 		style "panelbg"
+widget_class 	"*Mail*" 			style "panelbg"
+widget_class 	"*notif*" 			style "panelbg"
+widget_class 	"*Notif*" 			style "panelbg"
+widget_class 	"*Tray*" 			style "panelbg"
+widget_class 	"*tray*" 			style "panelbg"
+widget_class 	"*PanelToplevel*" 		style "panelbg"
+widget_class 	"*Xfce*Panel*" 			style "panelbg"
+widget_class 	"*PanelApplet*" 		style "panelbg"
+widget_class 	"*PanelWidget*" 		style "panelbg"
+widget_class 	"*Panel*" 			style "panelbg"
+
+
+##################### PANEL BUTTONS ###############################
+
+style "panelbuttons-2"
+{
+  fg[NORMAL]        = "#eeeeee" # 
+  fg[PRELIGHT]      = "#FFFFFF" # text on buttons (hover)
+  fg[ACTIVE]        = "#FFFFFF" # text on unfocused tabs
+
+#	xthickness = 2
+  	ythickness = 3
+
+	GtkWidget::focus_padding = 2
+
+	engine "pixmap" 
+	{      
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			state		= NORMAL
+			file            = "Panel/button-normal.png"
+			border          = { 4, 4, 4, 4 }
+			stretch         = TRUE			
+		}		
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			state		= PRELIGHT
+			file            = "Panel/button-prelight.png"
+			border          = { 4, 4, 4, 4 }
+			stretch         = TRUE
+		}
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			shadow		= OUT
+			state		= PRELIGHT
+			file            = "Panel/button-prelight.png"
+			border          = { 4, 4, 4, 4 }
+			stretch         = TRUE	
+		}		
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			shadow		= IN
+			state		= PRELIGHT
+			file            = "Panel/button-normal.png"
+			border          = { 4, 4, 4, 4 }
+			stretch         = TRUE			
+		}		
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			state		= ACTIVE
+			file            = "Panel/button-active.png"
+			border          = { 4, 4, 4, 4 }
+			stretch         = TRUE
+		}  
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			state		= INSENSITIVE
+			file            = "Panel/button-insensitive.png"
+			border          = { 4, 4, 4, 4 }
+			stretch         = TRUE
+		}  
+    		image
+    		{
+      			function	= HANDLE
+      			state		= NORMAL
+      			recolorable	= TRUE
+      			file		= "Others/divider-v.png"
+      			stretch         = TRUE
+			border          = { 4, 4, 4, 4 }
+      			overlay_file	= "Panel/panel-handle-v.png"
+      			overlay_stretch	= FALSE
+      			orientation	= VERTICAL
+    		}
+    		image
+    		{
+      			function	= HANDLE
+      			state		= NORMAL
+      			recolorable	= TRUE
+      			file		= "Others/divider-h.png"
+      			stretch         = TRUE
+			border          = { 4, 4, 4, 4 }
+      			overlay_file	= "Panel/panel-handle-h.png"
+      			overlay_stretch = FALSE
+     			orientation	= HORIZONTAL
+   		}   		
+	}
+}
+
+widget_class 	"*Panel*GtkButton" 		style "panelbuttons-2"
+
+##################### PANEL BUTTONS ###############################
+
+style "panelbuttons"
+{
+  fg[NORMAL]        = "#eeeeee" # 
+  fg[PRELIGHT]      = "#FFFFFF" # text on buttons (hover)
+  fg[ACTIVE]        = "#FFFFFF" # text on unfocused tabs
+
+#	xthickness = 2
+  	ythickness = 3
+
+	GtkWidget::focus_padding = 2
+
+	engine "pixmap" {
+      
+      
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			state		= NORMAL
+			file            = "Panel/panelbutton1.png"
+			border          = { 5, 5, 5, 5 }
+			stretch         = TRUE			
+		}		
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			state		= PRELIGHT
+			file            = "Panel/panelbutton1.png"
+			border          = { 5, 5, 5, 5 }
+			stretch         = TRUE
+		}
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			shadow		= OUT
+			state		= PRELIGHT
+			file            = "Panel/panelbutton1.png"
+			border          = { 5, 5, 5, 5 }
+			stretch         = TRUE	
+		}
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			shadow		= OUT
+			state		= NORMAL
+			file            = "Panel/panelbutton2.png"
+			border          = { 5, 5, 5, 5 }
+			stretch         = TRUE	
+		}		
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			shadow		= IN
+			state		= PRELIGHT
+			file            = "Panel/panelbutton3.png"
+			border          = { 5, 5, 5, 5 }
+			stretch         = TRUE			
+		}
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			shadow		= IN
+			state		= NORMAL
+			file            = "Panel/panelbutton1.png"
+			border          = { 5, 5, 5, 5 }
+			stretch         = TRUE			
+		}		
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			state		= ACTIVE
+			file            = "Panel/panelbutton2.png"
+			border          = { 5, 5, 5, 5 }
+			stretch         = TRUE
+		}  
+		image
+		{
+			function        = BOX
+			recolorable     = TRUE
+			state		= INSENSITIVE
+			file            = "Panel/panelbutton2.png"
+			border          = { 5, 5, 5, 5 }
+			stretch         = TRUE
+		}  
+    		image
+    		{
+      			function	= HANDLE
+      			state		= NORMAL
+      			recolorable	= TRUE
+      			file		= "Others/divider-v.png"
+      			stretch         = TRUE
+			border          = { 4, 4, 4, 4 }      			
+      			overlay_file	= "Panel/panel-handle-v.png"
+      			overlay_stretch	= FALSE
+      			orientation	= VERTICAL
+    		}
+    		image
+    		{
+      			function	= HANDLE
+      			state		= NORMAL
+      			recolorable	= TRUE
+      			file		= "Others/divider-h.png"
+			stretch         = TRUE
+			border          = { 4, 4, 4, 4 }			
+      			overlay_file	= "Panel/panel-handle-h.png"
+      			overlay_stretch = FALSE
+     			orientation	= HORIZONTAL
+   		}
+	}
+}
+
+
+
+widget 		"*PanelWidget*" 			style "panelbuttons"
+widget 		"*PanelApplet*" 			style "panelbuttons"
+widget_class 	"*PanelButton*." 			style "panelbuttons"
+
+class 		"PanelApplet" 				style "panelbg"
+class 		"GtkPanel*MenuBar" 			style "panelbg"
+class 		"GtkPanel*GtkToolBar*ToggleButton" 	style "panelbg"
+widget 		"*PanelApplet*" 			style "panelbg"
+widget_class 	"*PanelApplet*" 			style "panelbg"
+widget_class 	"*Panel*" 				style "panelbg"
+
+#################
+
+widget_class 	"*Panel*GtkToggleButton" 		style "panelbuttons"
+widget 		"*.tasklist-button" 			style "panelbuttons"
+widget_class 	"*PanelToplevel*Button" 		style "panelbuttons"
+widget_class 	"*Xfce*Panel*.GtkToggleButton" 		style "panelbuttons"
+widget_class 	"*Xfce*NetkTasklist*GtkToggleButton" 	style "panelbuttons"
+
+################################################################################
+# main-menu item fix
+################################################################################
+
+widget_class "*Panel*Menu*" style "panelbuttons"
+#############################################################
+# FIXES THE STANDARD SHUTDOWN-DIALOG OF GNOME
+#############################################################
+
+style "fix"
+{
+	xthickness 	= 0
+	ythickness 	= 0
+
+ 	bg[NORMAL]	= "#ffffff"
+}
+
+class 	"*Panel*" 	style "fix"
+
+#############################################################
+#########################################
+
+style "handle" 
+{
+    engine "pixmap"
+    {    
+        image
+        {
+            function 	= HANDLE
+            file 	= "panel-bg.png"
+            border 	= { 0, 0, 0, 0 }
+            stretch 	= TRUE
+            orientation = VERTICAL
+        }    
+        image
+        {
+            function 	= HANDLE
+            file 	= "panel-bg.png"
+            border 	= { 0, 0, 0, 0 }
+            stretch 	= TRUE
+            orientation = HORIZONTAL
+        }
+    }
+}
+
+class "PanelAppletFrame" style "handle"
+

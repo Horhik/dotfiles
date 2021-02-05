@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="4.5513916mm"
+   height="9.5753069mm"
+   viewBox="0 0 4.5513917 9.5753068"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="entry-border-active-notebook.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#575757"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.190988"
+     inkscape:cx="13.252786"
+     inkscape:cy="18.726592"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="720"
+     inkscape:window-x="0"
+     inkscape:window-y="22"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(34.198816,-152.18416)">
+    <rect
+       ry="0"
+       y="152.23854"
+       x="-34.144432"
+       height="9.4665413"
+       width="4.4426227"
+       id="rect816"
+       style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke-width:0.2433853" />
+    <rect
+       ry="1.2927256"
+       y="152.23854"
+       x="-34.144432"
+       height="9.4665394"
+       width="4.4426241"
+       id="rect1448"
+       style="opacity:1;fill:#b3b3b3;fill-opacity:1;stroke:#3e3e3e;stroke-width:0.10876755;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:132.85038757;stroke-opacity:1;paint-order:markers fill stroke" />
+  </g>
+</svg>
