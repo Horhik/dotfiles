@@ -59,7 +59,7 @@ diskspace ()
 
 wifi ()
 {
- name=$(connmanctl services | grep  "*A" | grep -oh "^*A. [A-Za-z]*" | grep -oh "[[:space:]][A-Za-x]*")
+ name=$(connmanctl services | grep  "*A" | grep -oh "^*A. [A-Za-z]*" | grep -oh "[[:space:]][A-Za-x]*" | head -n 1)
 if [ $name != " " ];
   then
     echo 🌐 $name

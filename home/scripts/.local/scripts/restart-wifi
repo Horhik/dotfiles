@@ -1,0 +1,7 @@
+!#/bin/sh
+
+connmanctl disable wifi
+connmanctl enable wifi
+connmanctl scan wifi
+connmanctl agent on
+
