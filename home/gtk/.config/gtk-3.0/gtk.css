@@ -189,3 +189,7 @@ GtkTreeMenu .menuitem * {
 }
 
 /* menu-on */
+
+.deadd-noti-center {
+    font-family: 'Mononoki';
+}

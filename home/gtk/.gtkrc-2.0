@@ -1,13 +1,13 @@
 # -- THEME AUTO-WRITTEN DO NOT EDIT
-include "/usr/share/themes/Gruvbox-Material-Dark/gtk-2.0/gtkrc"
+include "/home/horhik/.themes/darkink/gtk-2.0/gtkrc"
 
 style "user-font" {
-	font_name = "Terminus 12"
+	font_name = "Mononoki 12"
 }
 
 widget_class "*" style "user-font"
 
-gtk-font-name="Terminus 12"
+gtk-font-name="Mononoki 12"
 
 include "/home/horhik/.gtkrc.mine"
 
