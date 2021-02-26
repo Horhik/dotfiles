@@ -71,7 +71,7 @@ static const Rule rules[] = {
 /* class      instance    title       tags mask     isfloating   monitor    scratch key */
 { "Gimp",     NULL,       NULL,       0,            1,           -1,        0  },
 { "firefox",  NULL,       NULL,       1 << 1,       0,           -1,        0  },
-{ "spotify",  NULL,       NULL,       7     ,       0,           -1,        0  },
+{ "Spotify Premium",  NULL,       NULL,       7     ,       0,           -1,        0  },
 { NULL,       NULL,   "scratchpad",   0,            1,           -1,       's' },
 { NULL,       NULL,   "sp_volume",    0,            1,           -1,       'v' },
 { NULL,       NULL,   "Todoist",   0,            1,           -1,       't' },
@@ -168,7 +168,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_m,      togglescratch,  {.v = sp_volume_control } },
 	{ MODKEY,                       XK_e,      togglescratch,  {.v = sp_emacs } },
 	{ MODKEY|ShiftMask,             XK_d,      togglescratch,  {.v = tasks } },
-	{ MODKEY,             XK_d,      togglescratch,  {.v = pomo } },
+	{ MODKEY|ShiftMask,    					XK_e,      togglescratch,  {.v = pomo } },
 	{ MODKEY,                       XK_n,      togglealttag,   {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
