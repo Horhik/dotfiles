@@ -52,7 +52,7 @@ Config {
                              , "--High"     , "5000"       -- units: B/s
                              , "--low"      , "#8ec07c"
                              , "--normal"   , "#fabd2f"
-                             , "--high"     , "#cc241d"
+                             , "--high"     , "#fb4934"
                              ] 10
 
         -- cpu activity monitor
@@ -61,7 +61,7 @@ Config {
                              , "--High"     , "85"         -- units: %
                              , "--low"      , "#8ec07c"
                              , "--normal"   , "#fabd2f"
-                             , "--high"     , "#cc241d"
+                             , "--high"     , "#fb4934"
                              ] 10
 
         -- cpu core temperature monitor
@@ -70,7 +70,7 @@ Config {
                              , "--High"     , "80"        -- units: °C
                              , "--low"      , "#8ec07c"
                              , "--normal"   , "#fabd2f"
-                             , "--high"     , "#cc241d"
+                             , "--high"     , "#fb4934"
                              ] 50
 
         -- memory usage monitor
@@ -79,7 +79,7 @@ Config {
                              , "--High"     , "90"        -- units: %
                              , "--low"      , "#8ec07c"
                              , "--normal"   , "#fabd2f"
-                             , "--high"     , "#cc241d"
+                             , "--high"     , "#fb4934"
                              ] 10
 
         -- battery monitor
@@ -105,7 +105,7 @@ Config {
 
         -- keyboard layout indicator
         , Run Kbd            [ ("us" , "<fc=#83a598>EN</fc>")
-                             , ("ru"         , "<fc=#cc241d>RU</fc>")
+                             , ("ru"         , "<fc=#fb4934>RU</fc>")
                              ]
         , Run StdinReader
         , Run Brightness
