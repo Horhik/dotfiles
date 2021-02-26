@@ -1,4 +1,5 @@
-" vim: filetype=vifm :
+"    map > :!vifmimg inc<CR>
+    map < :!vifmimg dec<CR> vim: filetype=vifm :
 " Sample configuration file for vifm (last updated: 2 June, 2019)
 " You can edit this file by hand.
 " The " character at the beginning of a line comments out the line.
@@ -211,6 +212,7 @@ fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
           \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
           \*.as[fx]
          \ ffprobe -pretty %c 2>&1
+
 
 " Web
 filextype *.html,*.htm
@@ -481,3 +483,47 @@ nnoremap <f8> :delete<cr>
 "     vifm --server-name "$VIFM_SERVER_NAME" --remote +"cd '$PWD'"
 "
 " let $VIFM_SERVER_NAME = v:servername
+
+    fileviewer *.pdf
+        \ vifmimg pdfpreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.epub
+        \ vifmimg epubpreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
+        \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+        \ vifmimg videopreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.xpm
+        \ vifmimg draw %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.gif
+        \ vifmimg gifpreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.ico
+        \ vifmimg magickpreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+        
+    fileviewer <audio/*>
+        \ vifmimg audiopreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+        
+    fileviewer <font/*>
+        \ vifmimg fontpreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    map > :!vifmimg inc<CR>
+    map < :!vifmimg dec<CR>
