@@ -141,6 +141,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- flameshot gui
     , ((modm .|. shiftMask, xK_s ),  spawn "flameshot gui")
+    , ((modm .|. controlMask, xK_space ),  spawn "$HOME/.local/scripts/deadd_notify")
     -- change lang
     , ((controlMask      , xK_space ),  spawn "setxkbmap -layout fi,ru,us; xkb-switch -n")
     -- toggle fullscreen
@@ -151,12 +152,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. controlMask .|. shiftMask, xK_h), namedScratchpadAction myScratchpads "htop")
     , ((modm .|. shiftMask    , xK_a),  namedScratchpadAction myScratchpads "anki")
     , ((modm .|. shiftMask    , xK_m),  namedScratchpadAction myScratchpads "pulse")
+    , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
+    , ((modm .|. shiftMask    , xK_e),  namedScratchpadAction myScratchpads "pomo")
 
     -- | Programs
-    , ((modm .|. shiftMask, xK_z), spawn "zathura &")                                                               -- book reader (zathura)
-    , ((modm .|. shiftMask, xK_b), spawn "firefox"                                       )        -- browser
+    , ((modm .|. shiftMask, xK_z), spawn "zathura &")                                                                            -- book reader (zathura)
+    , ((modm .|. shiftMask, xK_b), spawn "firefox"                                       )                                       -- browser
     , ((modm .|. controlMask, xK_e), spawn "/usr/bin/emacs &"                                                           )        -- editor (emacs)
-    , ((modm .|. shiftMask, xK_n), spawn "firefox --new-tab https://www.notion.so/horhi ")        -- noteapp
+    , ((modm .|. shiftMask, xK_n), spawn "firefox --new-tab https://www.notion.so/horhi ")                                       -- noteapp
 
 
 
@@ -182,7 +185,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     --
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_less, xK_greater, xK_r] [0..]
+        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
      ++
@@ -280,9 +283,11 @@ myManageHook = (composeAll
 
 myScratchpads = [
     NS "terminal" spawnTerm findTerm manageTerm
-  , NS "htop" "xterm -e htop" (title =? "htop") defaultFloating
+  , NS "htop" "alacritty -t htop -e htop " (title =? "htop") defaultFloating
+  , NS "pomo" "pomodone" (title =? "PomoDoneApp") defaultFloating
   , NS "anki" spawnAnki findAnki manageAnki
   , NS "pulse" spawnPulse findPulse managePulse
+  , NS "todoist" spawnTodoist findTodoist manageTodoist
     ]
   where
     classTerm     = "TerminalDropdown"
@@ -314,6 +319,18 @@ myScratchpads = [
         w = 0.6             -- width, 50%
         t = (1 - h) / 2     -- bottom edge
         l = (1 - w) / 2     -- centered left/right
+
+    classTodoist     = "TodoistDropdown"
+    titleTodoist     = "Todoist"
+    spawnTodoist     = "todoist"
+    findTodoist      = title =? titleTodoist
+    manageTodoist    = customFloating $ W.RationalRect l t w h
+      where
+        h = 0.7             -- height, 50%
+        w = 0.4             -- width, 50%
+        t = (1 - h) / 2     -- bottom edge
+        l = (1 - w) / 2     -- centered left/right
+
 
 
 
@@ -369,6 +386,7 @@ myStartupHook = do
   spawnOnce "nitrogen --restore &"
   -- spawnOnce "compton --config ~/.config/compton/compton.conf &"
   spawnOnce "picom &"
+  spawnOnce "deadd-notification-center"
   spawnOnce "setxkbmap us,ru, grp:alt_shift_toggle"
   spawnOnce "$HOME/Scripts/startup/touchpad.sh"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
