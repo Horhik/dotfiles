@@ -1,0 +1,16 @@
+#!/bin/dash
+path=/tmp/redshift-toggl
+file=$(cat $path)
+text="off"
+
+if [ "$file" = "$text" ]
+then
+connmanctl enable wifi
+notify-send "wifi is on"
+echo "on" > $path
+else
+connmanctl disable wifi
+notify-send "wifi is off"
+echo "off" > $path
+fi
+

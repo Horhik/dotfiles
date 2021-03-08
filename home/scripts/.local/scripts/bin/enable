@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo ln -s $HOME/.local/scripts/bin/*Toggle /usr/bin/

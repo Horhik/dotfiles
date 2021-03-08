@@ -1,0 +1,14 @@
+#!/bin/dash
+path=/tmp/redshift-toggl
+file=$(cat $path)
+text="off"
+
+if [ "$file" = "$text" ]
+then
+connmanctl enable wifi
+echo "on" > $path
+else
+connmanctl disable wifi
+echo "off" > $path
+fi
+

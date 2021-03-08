@@ -1,10 +1,10 @@
 Config {
 
    -- appearance
-     font =         "xft:Mononoki Nerd Font-14:bold:antialias=true:hinting=true"
+     font =         "xft:Mononoki Nerd Font-11:bold:antialias=true:hinting=true"
    , additionalFonts = [
-                         "xft:EmojiOne:bold:antialias=true:hinting=true"
-                         ,"xft:FontAwesome:bold:antialias=true:hinting=true"
+                         "xft:Fira Code-10:bold:antialias=true:hinting=True"
+                       , "xft:Mononoki-10:bold:antialias=true:hinting=True"
                        ]
    , bgColor =      "#282828"
    , fgColor =      "#ebdbb2"
@@ -16,7 +16,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "]["  -- separator between left-right alignment
-   , template = "--{%StdinReader%}<fc=#83a598>---------------------------------------------------------------------------------------------------------------------------------</fc>][%xmobarstatus%"
+   , template = "<fc=#83a598>--{</fc>%StdinReader%<fc=#83a598>}————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</fc>][%xmobarstatus2%"
 
    -- general behavior
    , lowerOnStart =     False    -- send to bottom of window stack on start
@@ -45,7 +45,6 @@ Config {
         -- weather monitor
         [ Run Weather "RJTT" [ "--template", "<skyCondition> | <fc=#458588><tempC></fc>°C | <fc=#458588><rh></fc>% | <fc=#458588><pressure></fc>hPa"
                              ] 36000
-        , Run Com "xmobarstatus" [] "" 10
 
         -- network activity monitor (dynamic interface resolution)
         , Run DynNetwork     [ "--template" , "<dev>: <tx>kB/s|<rx>kB/s"

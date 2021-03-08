@@ -1,0 +1,15 @@
+#!/bin/dash
+
+file=$(cat /tmp/redshift-toggl)
+text="off"
+
+if [ "$file" = "$text" ]
+then
+killall redshift
+redshift -O 3000
+echo "on" > /tmp/redshift-toggl 
+else
+redshift -x
+echo "off" > /tmp/redshift-toggl 
+fi
+

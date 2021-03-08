@@ -1,0 +1,2 @@
+#!/bin/sh
+dmenu_path | qutebrowser "https://duckduckgo.com/?q=$(dmenu "$@")"

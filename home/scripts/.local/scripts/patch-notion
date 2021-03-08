@@ -1,0 +1,3 @@
+#!/bin/sh
+
+echo "setInterval(() => {document.title = 'Notion'}, 3000)" | sudo tee -a /usr/share/notion-app-nativefier/lib/preload.js

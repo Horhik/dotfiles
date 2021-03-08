@@ -34,6 +34,7 @@ import qualified Data.Map        as M
 import GruvboxColors as Colors 
 
 
+home                  = "/home/horhik/"
 myTerminal            = "alacritty"
 myEditor              = "nvim"
 myMainDisplay         = "eDP-1"
@@ -141,9 +142,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- flameshot gui
     , ((modm .|. shiftMask, xK_s ),  spawn "flameshot gui")
-    , ((modm .|. controlMask, xK_space ),  spawn "$HOME/.local/scripts/deadd_notify")
+    , ((modm .|. mod1Mask         , xK_space ),  spawn "$HOME/.local/scripts/deadd_notify")
     -- change lang
-    , ((controlMask      , xK_space ),  spawn "setxkbmap -layout fi,ru,us; xkb-switch -n")
+    , ((modm, xK_Control_R)       , spawn "xkblayout-state set +1")
     -- toggle fullscreen
     , ((mod4Mask .|. shiftMask, xK_f), sendMessage ToggleStruts)
 
@@ -152,14 +153,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. controlMask .|. shiftMask, xK_h), namedScratchpadAction myScratchpads "htop")
     , ((modm .|. shiftMask    , xK_a),  namedScratchpadAction myScratchpads "anki")
     , ((modm .|. shiftMask    , xK_m),  namedScratchpadAction myScratchpads "pulse")
+    , ((modm .|. shiftMask    , xK_n),  namedScratchpadAction myScratchpads "notion")
     , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
-    , ((modm .|. shiftMask    , xK_e),  namedScratchpadAction myScratchpads "pomo")
+    , ((modm                  , xK_d),  namedScratchpadAction myScratchpads "pomo")
 
     -- | Programs
     , ((modm .|. shiftMask, xK_z), spawn "zathura &")                                                                            -- book reader (zathura)
     , ((modm .|. shiftMask, xK_b), spawn "firefox"                                       )                                       -- browser
     , ((modm .|. controlMask, xK_e), spawn "/usr/bin/emacs &"                                                           )        -- editor (emacs)
-    , ((modm .|. shiftMask, xK_n), spawn "firefox --new-tab https://www.notion.so/horhi ")                                       -- noteapp
 
 
 
@@ -185,7 +186,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     --
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+        | (key, sc) <- zip [xK_comma, xK_period, xK_r] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
      ++
@@ -225,9 +226,9 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-defaultGapSize = 5
+defaultGapSize = 10
 defaultGaps = gaps [(U,defaultGapSize), (R,defaultGapSize), (D, defaultGapSize), (L, defaultGapSize)]
-defaultSpaces = spacingRaw True (Border 5 5 5 5) True (Border 5 5 5 5) True
+defaultSpaces = spacingRaw True (Border 10 10 10 10) True (Border 10 10 10 10) True
 spacesAndGaps = defaultSpaces . defaultGaps
 
 myLayout =   smartBorders . avoidStruts $ spacesAndGaps $ tiled ||| Mirror tiled ||| Full
@@ -285,6 +286,7 @@ myScratchpads = [
     NS "terminal" spawnTerm findTerm manageTerm
   , NS "htop" "alacritty -t htop -e htop " (title =? "htop") defaultFloating
   , NS "pomo" "pomodone" (title =? "PomoDoneApp") defaultFloating
+  , NS "notion" "notion" (title =? "Notion") defaultFloating
   , NS "anki" spawnAnki findAnki manageAnki
   , NS "pulse" spawnPulse findPulse managePulse
   , NS "todoist" spawnTodoist findTodoist manageTodoist
@@ -366,8 +368,8 @@ myLogHook (xmproc0, xmproc1) = dynamicLogWithPP $ xmobarPP { -- XMobar
           , ppUrgent     = xmobarColor   redColor        ""   .  wrap "[" "]"
           , ppHidden     = xmobarColor   foregroundColor ""   .  noScratchPad
           , ppVisible    = xmobarColor   orangeColor     ""   .  wrap "(" ")"
-          , ppSep        = xmobarColor   foregroundColor ""           "}-----{"
-          , ppWsSep      =                                            "}-{"
+          , ppSep        = xmobarColor   cyanColor ""           "}—————{"
+          , ppWsSep      = xmobarColor   cyanColor ""                 "}—{"
           , ppOrder      = \(ws:l:t:ex)  -> [ws]++ex++[t,l] -- {workspaces}-{title}--{layout}
       }
 
@@ -386,14 +388,16 @@ myStartupHook = do
   spawnOnce "nitrogen --restore &"
   -- spawnOnce "compton --config ~/.config/compton/compton.conf &"
   spawnOnce "picom &"
-  spawnOnce "deadd-notification-center"
-  spawnOnce "setxkbmap us,ru, grp:alt_shift_toggle"
-  spawnOnce "$HOME/Scripts/startup/touchpad.sh"
+  spawnOnce "deadd-notification-center &"
+  spawnOnce "setxkbmap us,ru &"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
-  spawnOnce ("enact --pos top --watch")
-  spawnOnce ("xrandr --output HDMI1 --above eDP1")
-  spawnOnce ("$HOME/.local/scripts/status/launch&; $HOME/.local/scripts/touchpad.sh")
-  spawnOnce "xautolock -time 25 -locker 'i3lock-fancy' -notify 24  -notifier 'xkb-switch -s us' &"
+  spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa"
+  spawnOnce ("enact --pos top --watch &")
+  spawnOnce ("xrandr --output HDMI1 --above eDP1&")
+  spawnOnce (home ++ ".local/scripts/status/launch &")
+  spawnOnce (home ++ ".local/scripts/touchpad.sh &")
+  spawnOnce ("cd /home/horhik/Freenet/downloads/fms; ./fms --daemon &")
+  spawnOnce "xautolock -time 25 -locker i3lock-fancy-multimonitor -notifier 'xkb-switch -s us' &"
   spawnOnce "sleep 10; pulseaudio -k"
 
 ------------------------------------------------------------------------

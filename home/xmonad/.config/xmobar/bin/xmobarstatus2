@@ -1,7 +1,5 @@
 #!/bin/bash
 
-module GruvboxColors where
-
 backgroundColor="#282828"
 currentLineColor="#fabd2f"
 selectionColor="#665c54"
@@ -25,17 +23,17 @@ battery ()
 val=$(acpi | grep -oh "[[:digit:]]*%" | grep -oh "[0-9]*")
 
 case $val in
-  [1-9][0-9][0-9])
+  [1—9][0—9][0—9])
   echo "<fc=$greenColor>—{  </fc>$val<fc=$greenColor>%}</fc>"
   ;;
-  [5-9][0-9])
+  [5—9][0—9])
       echo "<fc=$greenColor>—{  </fc>$val<fc=$greenColor>%}</fc>"
   ;;
-[1-4][0-9])
+[1—4][0—9])
     echo "<fc=$yellowColor>—{  </fc>$val<fc=$yellowColor>%}</fc>"
   ;;
 [1-9])
-    echo "<fc=$orangeColor>—{  </fc>$val<fc=$orangeColor>%}</fc>"
+    echo "<fc=$redColor>—{  </fc>$val<fc=$redColor>%}</fc>"
   ;;
 0)
     echo "<fc=$redColor>  </fc>"
@@ -56,16 +54,16 @@ case $val in
       echo "<fc=$redColor>—{ $val%}</fc>"
 ;;  
   [5-9][0-9])
-      echo "<fc=$orangeColor>—{  $val%}</fc>"
+      echo "<fc=$yellowColor>—{ $val%}</fc>"
   ;;
 [1-4][0-9])
-  echo "<fc=$yellowColor>—{ $val%}</fc>"
+  echo "<fc=$pinkColor>—{ $val%}</fc>"
   ;;
 [1-9])
     echo "<fc=$greenDarkerColor>—{ $val%}</fc>"
   ;;
 0)
-  echo "<fc=$currentLineColor>—{}</fc>"
+  echo "<fc=$selectionColor>—{0%}</fc>"
   ;;
 *)
     echo "<fc=$redColor>—{ $val%}</fc>"
@@ -94,7 +92,6 @@ layout ()
 }
 timeanddate ()
 {
-  
     echo "<fc=$yellowColor>—{</fc>" "<fc=$yellowColor>$(date +'%T')}</fc>" 
 }
 calendar ()
@@ -102,6 +99,6 @@ calendar ()
     echo   "<fc=$greenDarkerColor> </fc>"$(date +'%d/%m/%Y')
 }
 
-echo "$(wifi)$(battery)$(volume)$(layout)$(diskspace)$(timeanddate)<fc=$greenDarkerColor>—{</fc>$(calendar)<fc=$greenDarkerColor>}—-</fc>"
+echo "$(wifi)$(battery)$(volume)$(layout)$(diskspace)$(timeanddate)<fc=$greenDarkerColor>—{</fc>$(calendar)<fc=$greenDarkerColor>}——</fc>"
 
 #echo "                                          "
