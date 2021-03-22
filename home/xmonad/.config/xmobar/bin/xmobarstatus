@@ -101,7 +101,18 @@ calendar ()
 {
     echo   "<fc=$greenDarkerColor> </fc>"$(date +'%d/%m/%Y')
 }
+toggl_timer () {
+toggl=$($HOME/.local/scripts/toggl-current)
+toggl_duration=$(echo $toggl | jq -r '.data .duration')
+toggl_description=$(echo $toggl | jq -r '.data .description')
+curr_time=$(date +%s)
+duration_sec=$((curr_time + toggl_duration))
+duration=$(echo $((duration_sec / (60 * 60))):$((duration_sec / 60  - duration_sec / (60 * 60) * 60)):$((duration_sec % 60)))
+echo   "<fc=$greenDarkerColor>—{$toggl_description(</fc>"$duration"<fc=$greenDarkerColor>)}</fc>"
+}
 
-echo "$(wifi)$(battery)$(volume)$(layout)$(diskspace)$(timeanddate)<fc=$greenDarkerColor>—{</fc>$(calendar)<fc=$greenDarkerColor>}—-</fc>"
+
+
+echo "$(toggl_timer)$(wifi)$(battery)$(volume)$(layout)$(diskspace)$(timeanddate)<fc=$greenDarkerColor>—{</fc>$(calendar)<fc=$greenDarkerColor>}—-</fc>"
 
 #echo "                                          "

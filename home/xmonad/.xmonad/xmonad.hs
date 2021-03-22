@@ -387,7 +387,7 @@ myLogHook (xmproc0, xmproc1) = dynamicLogWithPP $ xmobarPP { -- XMobar
 myStartupHook = do
   spawnOnce "nitrogen --restore &"
   -- spawnOnce "compton --config ~/.config/compton/compton.conf &"
-  spawnOnce "picom &"
+  spawnOnce "picom --experimental-backends &"
   spawnOnce "deadd-notification-center &"
   spawnOnce "setxkbmap us,ru &"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
@@ -396,8 +396,9 @@ myStartupHook = do
   spawnOnce ("xrandr --output HDMI1 --above eDP1&")
   spawnOnce (home ++ ".local/scripts/status/launch &")
   spawnOnce (home ++ ".local/scripts/touchpad.sh &")
-  spawnOnce ("cd /home/horhik/Freenet/downloads/fms; ./fms --daemon &")
+  -- spawnOnce ("cd /home/horhik/Freenet/downloads/fms; ./fms --daemon &")
   spawnOnce "xautolock -time 25 -locker i3lock-fancy-multimonitor -notifier 'xkb-switch -s us' &"
+  spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa &"
   spawnOnce "sleep 10; pulseaudio -k"
 
 ------------------------------------------------------------------------
