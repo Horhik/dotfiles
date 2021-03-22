@@ -74,7 +74,8 @@ ZSH_THEME="cloud"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git colorize colored-man-pages emoji rustup sudo)
+plugins=(git colorize colored-man-pages emoji rustup sudo zsh-syntax-highlighting zsh-autosuggestions zsh-completions)
+autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
 
@@ -109,6 +110,8 @@ export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$HOME/Desktop:$PATH
 export PATH=/home/horhik/code/projects/potato-notify:$PATH
+export PATH="/root/.deno/bin:$PATH"
+
 
 alias vim=nvim
 alias vi=vim
@@ -131,5 +134,6 @@ compile_and_run() {
 
 alias rdr=compile_and_run
 alias aia=ankiaudio
+alias picom="killall picom; picom --experimental-backends &;"
 
 pfetch
