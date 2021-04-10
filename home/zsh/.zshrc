@@ -135,5 +135,9 @@ compile_and_run() {
 alias rdr=compile_and_run
 alias aia=ankiaudio
 alias picom="killall picom; picom --experimental-backends &;"
+alias cc="cargo check"
+alias ct="cargo test"
+alias gc="git clone"
+alias gs="git status"
 
 pfetch

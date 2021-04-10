@@ -1,0 +1,2 @@
+#!/bin/sh
+a=echo ${($(~/.config/eww/scripts/gettasks | sed -n '1p')):0:40}

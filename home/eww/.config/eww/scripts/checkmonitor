@@ -1,0 +1,2 @@
+#!/bin/bash
+if [ $(xrandr | grep 'HDMI1 connected' -c) = 1 ]; then echo 1; else echo 0; fi;

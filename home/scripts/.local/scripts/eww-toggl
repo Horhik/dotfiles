@@ -1,0 +1,11 @@
+#!/bin/sh
+eww
+
+mon=$(~/.config/eww/scripts/checkmonitor);
+if [  $(cat /tmp/eww_open)  ]; then eww open redshift  --monitor $mon;
+                                    eww open player  --monitor $mon;
+                                    # eww open calendar_full  --monitor $mon;
+                                    rm /tmp/eww_open;
+else eww close-all;
+     echo true > /tmp/eww_open;
+fi;

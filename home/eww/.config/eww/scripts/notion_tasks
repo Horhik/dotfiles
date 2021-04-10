@@ -1,0 +1,40 @@
+#!/bin/python3
+from datetime import datetime
+import datetime as dt
+from notion.client import NotionClient
+import os;
+import json;
+token = os.getenv('NOTION_TERMINAL')
+# Obtain the `token_v2` value by inspecting your browser cookies on a logged-in (non-guest) session on Notion.so
+client = NotionClient(token_v2=token)
+
+# Replace this URL with the URL of the page you want to edit
+tasks_page = client.get_collection_view("https://www.notion.so/horhi/27aec2f782da43dd9068642032deb790?v=3196bac2fc7140439d37e614b950359c")
+tasks = []
+today_tasks = []
+curr_datetime = datetime.now()
+curr_date  = curr_datetime.date()
+
+
+for task in tasks_page.collection.get_rows():
+    tasks.append(task)
+    deadline = task.deadline
+    if(hasattr(deadline, 'start')):
+        if (hasattr(deadline, 'start') and not task.status):
+            curr_dead = deadline.start
+            if (curr_date >= datetime.combine(curr_dead, dt.time.max).date()):
+                props = task.get_all_properties()
+                _task = {
+                    'title': task.title,
+                    'state': props['status'],
+                    'date': datetime.combine(curr_dead, dt.time.max).date().strftime('%Y-%m-%d'),
+                    'time': props['time'],
+                    'url' : task.get_browseable_url()
+                }
+                today_tasks.append(_task)
+
+print(json.dumps(today_tasks))
+# Note: You can use Markdown! We convert on-the-fly to Notion's internal formatted text data structure.
+#page.title = "Tasks"
+
+# + format(prop("time")) + " 🍅", if((end(prop("Deadline")) > now() or empty(prop("Deadline"))) and empty(prop("time")), "📥", if(prop("time") > 0, format(prop("time")) + " 🍅", "🔥"))

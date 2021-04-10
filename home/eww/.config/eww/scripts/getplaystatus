@@ -1,0 +1,6 @@
+#!/bin/sh
+a=$(spotifystatus)
+if [ $a = 'Paused' ];
+   then echo '';
+   else echo ' ';
+fi

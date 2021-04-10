@@ -1,0 +1,3 @@
+#!/bin/bash
+fl=$(echo $(cat "/tmp/redshift"))
+echo ${fl%.*}  | tr -d '%' 

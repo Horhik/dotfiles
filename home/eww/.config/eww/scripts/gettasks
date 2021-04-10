@@ -1,0 +1,3 @@
+#!/bin/bash
+#~/.config/eww/scripts/notion_tasks > /tmp/notion
+cat /tmp/notion | jq '.[] .title '
