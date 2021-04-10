@@ -11,8 +11,10 @@
  '(jdee-db-requested-breakpoint-face-colors (cons "#0d1011" "#b8bb26"))
  '(jdee-db-spec-breakpoint-face-colors (cons "#0d1011" "#928374"))
  '(objed-cursor-color "#fb4934")
+ '(org-agenda-files (list org-directory))
+ '(org-directory "~/Nextcloud")
  '(package-selected-packages
-   '(lsp-mode rustic company racer gruvbox-theme neotree rust-mode))
+   '(org-evil emojify-logos linum-relative evil-mc lsp-mode rustic company racer gruvbox-theme neotree rust-mode))
  '(rustic-ansi-faces
    ["#282828" "#fb4934" "#b8bb26" "#fabd2f" "#83a598" "#cc241d" "#8ec07c" "#ebdbb2"])
  '(vc-annotate-background "#282828")

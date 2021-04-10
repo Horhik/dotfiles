@@ -19,13 +19,15 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+ (setq doom-font (font-spec :family "Mononoki" :size 12)
+       doom-variable-pitch-font (font-spec :family "Mononoki" :size 13)
+       doom-unicode-font (font-spec :family "Joypixels" :size 13)
+       )
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-gruvbox)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -36,6 +38,11 @@
 (setq display-line-numbers-type t)
 
 
+(custom-set-variables
+ '(org-directory "~/Nextcloud")
+ '(org-agenda-files (list org-directory))
+
+ )
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
@@ -52,47 +59,20 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+(setq emojify-display-style 'image)
+(setq emojify-emoji-set "twemoji-v2")
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
 
-(require 'rust-mode)
+(add-to-list 'load-path "~/.emacs.d/manual-addons")
 
+;; !!! это надо делать в конце файла, иначе модули перетирают настройки метода ввода
+(if (eq system-type 'darwin)
+    (setq russian-input-method "russian-no-windows")
+  (setq russian-input-method "russian-computer"))
+(setq-default default-input-method russian-input-method)
+(setq default-input-method russian-input-method)
+(set-input-method russian-input-method)
 
-
-
-;; Rust
-(add-hook 'rust-mode-hook
-          (lambda () (setq indent-tabs-mode nil)))
-
-(setq rust-format-on-save t)
-
-(define-key rust-mode-map (kbd "C-c C-c") 'rust-run)
-
-
-(custom-set-faces
-'(neo-dir-link-face ((t (:family "Mononoki Nerd Font" :size 12 :weight regular))))
-'(neo-file-link-face ((t (:family "Mononoki Nerd Font" :size 12 :weight regular))))
-'(default ((t ( :family "Mononoki Nerd Font" :size 12 :weight regular))))
-)
-
-(global-set-key  (kbd "C-c C-o") 'neotree-toggle)
-(setq neo-theme 'icons)
-
-(add-hook 'rust-mode-hook #'racer-mode)
-(add-hook 'racer-mode-hook #'eldoc-mode)
-
-
-(add-hook 'racer-mode-hook #'company-mode)
-
-(require 'rust-mode)
-(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-(setq company-tooltip-align-annotations t)
-
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
-
-
-(setq rustic-lsp-server 'rls)
-(setq lsp-rust-analyzer-server-command '("/usr/bin/rust-analyzer"))
-(use-package rustic)
-(setq lsp-rust-server `rustic)
-
+(global-set-key (kbd "M-SPC") 'toggle-input-method)
+(define-key isearch-mode-map (kbd "M-SPC") 'toggle-input-method)
