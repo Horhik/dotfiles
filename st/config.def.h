@@ -6,7 +6,7 @@
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
 static char *font = "Mononoki:pixelsize=16:antialias=true:autohint=true";
-static char *font2 = "Apple Color Emoji:pixelsize=16:antialias=true:autohint=true"; 
+static char *font2 = "Joypixels:pixelsize=16:antialias=true:autohint=true"; 
 
 static int borderpx = 2;
 
