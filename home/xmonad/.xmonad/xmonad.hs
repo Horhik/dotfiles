@@ -22,6 +22,7 @@ import XMonad.Layout.Gaps
 import XMonad.Util.EZConfig
 import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
+import XMonad.Layout.Tabbed
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.Scratchpad
 import XMonad.Util.NamedScratchpad
@@ -53,7 +54,7 @@ myWorkspaces          = ["I","II","III","IV","V","VI","VII", "VIII","IX"]
 -- Border colors for unfocused and focused windows, respectively.
 --
 myNormalBorderColor  = backgroundColor
-myFocusedBorderColor = currentLineColor
+myFocusedBorderColor = grayColor
 
 
 ------------------------------------------------------------------------
@@ -64,12 +65,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
-    , ((modm,               xK_p     ), spawn ("dmenu_run " ++ " -fn '" ++ myDmenuFont ++ "' -nb '" ++  backgroundColor ++  "' -nf '" ++ selectionColor ++ "' -sb '"++ selectionColor ++"' -sf '"++foregroundSecondColor++"' -shb '"++ greenDarkerColor ++ "' -c "++" -l "++" 20 "))
+--    , ((modm,               xK_p     ), spawn ("dmenu_run " ++ " -fn '" ++ myDmenuFont ++ "' -nb '" ++  backgroundColor ++  "' -nf '" ++ selectionColor ++ "' -sb '"++ selectionColor ++"' -sf '"++foregroundSecondColor++"' -shb '"++ greenDarkerColor ++ "' -c "++" -l "++" 20 "))
+    -- launch emoji picker
+    , ((modm              , xK_e     ), spawn "emoji-menu")
+    , ((modm              , xK_p     ), spawn "rofi -show drun")
 
+    , ((modm .|. shiftMask , xK_p     ), spawn "rofi -show window")
   
-    -- launch gmrun
-    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
-
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
 
@@ -145,6 +147,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. mod1Mask         , xK_space ),  spawn "$HOME/.local/scripts/deadd_notify")
     -- change lang
     , ((modm, xK_Control_R)       , spawn "xkblayout-state set +1")
+    , ((modm, xK_d)               , spawn "eww-toggl")
     -- toggle fullscreen
     , ((mod4Mask .|. shiftMask, xK_f), sendMessage ToggleStruts)
 
@@ -155,7 +158,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask    , xK_m),  namedScratchpadAction myScratchpads "pulse")
     , ((modm .|. shiftMask    , xK_n),  namedScratchpadAction myScratchpads "notion")
     , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
-    , ((modm                  , xK_d),  namedScratchpadAction myScratchpads "pomo")
 
     -- | Programs
     , ((modm .|. shiftMask, xK_z), spawn "zathura &")                                                                            -- book reader (zathura)
@@ -231,7 +233,7 @@ defaultGaps = gaps [(U,defaultGapSize), (R,defaultGapSize), (D, defaultGapSize),
 defaultSpaces = spacingRaw True (Border 10 10 10 10) True (Border 10 10 10 10) True
 spacesAndGaps = defaultSpaces . defaultGaps
 
-myLayout =   smartBorders . avoidStruts $ spacesAndGaps $ tiled ||| Mirror tiled ||| Full
+myLayout =   smartBorders . avoidStruts $ spacesAndGaps $ tiled ||| Mirror tiled ||| Full ||| simpleTabbed 
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -390,10 +392,12 @@ myStartupHook = do
   spawnOnce "picom --experimental-backends &"
   spawnOnce "deadd-notification-center &"
   spawnOnce "setxkbmap us,ru &"
+  spawnOnce "eww daemon"
+  spawnOnce "nextcloud"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
   spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa"
-  spawnOnce ("enact --pos top --watch &")
-  spawnOnce ("xrandr --output HDMI1 --above eDP1&")
+  spawnOnce ("enact --pos left --watch &")
+  spawnOnce ("xrandr --output HDMI1 --left-of eDP1&")
   spawnOnce (home ++ ".local/scripts/status/launch &")
   spawnOnce (home ++ ".local/scripts/touchpad.sh &")
   -- spawnOnce ("cd /home/horhik/Freenet/downloads/fms; ./fms --daemon &")

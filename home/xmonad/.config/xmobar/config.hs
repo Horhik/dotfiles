@@ -17,7 +17,7 @@ Config {
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "]["  -- separator between left-right alignment
    
-   , template = "<fc=#83a598>——{</fc>%StdinReader%<fc=#83a598>}—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</fc>][%xmobarstatus%"
+   , template = "<fc=#a89984>——{</fc>%StdinReader%<fc=#a89984>}—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</fc>][%xmobarstatus%"
 
    -- general behavior
    , lowerOnStart =     False    -- send to bottom of window stack on start
@@ -106,7 +106,7 @@ Config {
         , Run Date           "<fc=#b16286>%F (%a) %T</fc>" "date" 10
 
         -- keyboard layout indicator
-        , Run Kbd            [ ("us" , "<fc=#83a598>EN</fc>")
+        , Run Kbd            [ ("us" , "<fc=#a89984>EN</fc>")
                              , ("ru"         , "<fc=#fb4934>RU</fc>")
                              ]
         , Run StdinReader

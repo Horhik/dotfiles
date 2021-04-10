@@ -14,5 +14,6 @@ pinkColor          = "#d3869b"
 purpleColor        = "#b16286"
 redColor           = "#cc241d"
 yellowColor        = "#fabd2f"
+grayColor          = "#a89984"
 
 
