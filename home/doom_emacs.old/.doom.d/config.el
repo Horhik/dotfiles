@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
-(setq user-full-name "Horhik"
-      user-mail-address "horhik@tuta.io")
+(setq user-full-name "John Doe"
+      user-mail-address "john@doe.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -19,10 +19,11 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-  (setq doom-font (font-spec :family "Mononoki" :size 12)
+ (setq doom-font (font-spec :family "Mononoki" :size 12)
        doom-variable-pitch-font (font-spec :family "Mononoki" :size 13)
-       doom-unicode-font (font-spec :family "Twemoji")
+       doom-unicode-font (font-spec :family "Joypixels" :size 13)
        )
+
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
@@ -30,12 +31,15 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Brain/")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+
+(custom-set-variables
+ '(org-directory "~/KB")
+ '(org-agenda-files (list org-directory)))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -53,58 +57,15 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-
-(setq org-roam-directory "~/Brain")
 (setq emojify-display-style 'image)
 (setq emojify-emoji-set "twemoji-v2")
 (use-package emojify
-  :hook (after-init . global-emojify-mode)
+  :hook (after-init . global-emojify-mode))
+
+
+
+(use-package org-notifications
+  :hook (after-init . org-notifications-start)
   )
 
-;; (use-package treemacs-evil
-;;   :after (treemacs evil)
-;;   :ensure t)
-
-;; (use-package treemacs-icons-dired
-;;   :after (treemacs dired)
-;;   :ensure t
-;;   :config (treemacs-icons-dired-mode))
-
-;; (use-package treemacs-magit
-;;   :after (treemacs magit)
-;;   :ensure t)
-
-(use-package all-the-icons)
-(use-package treemacs-all-the-icons)
-(treemacs-load-theme "all-the-icon")
-(setq doom-themes-treemacs-theme "doom-colors")
-
-
-(use-package org-roam-server
-  :ensure t
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 5034
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
-
-(defun org-roam-server-open ()
-    "Ensure the server is active, then open the roam graph."
-    (interactive)
-    (smartparens-global-mode -1)
-    (org-roam-server-mode 1)
-    (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port))
-    (smartparens-global-mode 1))
-
-;; automatically enable server-mode
-(after! org-roam
-  (smartparens-global-mode -1)
-  (org-roam-server-mode)
-  (smartparens-global-mode 1))
+(setq org-timer-default-timer 25)
