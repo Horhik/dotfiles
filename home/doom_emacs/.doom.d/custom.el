@@ -12,9 +12,12 @@
  '(jdee-db-spec-breakpoint-face-colors (cons "#0d1011" "#928374"))
  '(objed-cursor-color "#fb4934")
  '(org-agenda-files (list org-directory))
- '(org-directory "~/Nextcloud")
+ '(org-directory "~/KB")
+ '(org-manage-directory-org "~/KB")
+ '(org-roam-complete-everywhere t)
+ '(org-roam-directory "~/KB/B-roam")
  '(package-selected-packages
-   '(org-evil emojify-logos linum-relative evil-mc lsp-mode rustic company racer gruvbox-theme neotree rust-mode))
+   '(org-mind-map ctable nroam org-roam with-editor transient org-alert org-notifications org-evil emojify-logos linum-relative evil-mc lsp-mode rustic company racer gruvbox-theme neotree rust-mode))
  '(rustic-ansi-faces
    ["#282828" "#fb4934" "#b8bb26" "#fabd2f" "#83a598" "#cc241d" "#8ec07c" "#ebdbb2"])
  '(vc-annotate-background "#282828")
@@ -47,3 +50,13 @@
  '(default ((t (:family "Mononoki Nerd Font" :size 12 :weight regular))))
  '(neo-dir-link-face ((t (:family "Mononoki Nerd Font" :size 12 :weight regular))))
  '(neo-file-link-face ((t (:family "Mononoki Nerd Font" :size 12 :weight regular)))))
+
+
+
+(defun writeFile (name content)
+    (with-open-file (stream name
+        :direction :output
+        :if-exists :overwrite
+        :if-does-not-exist :create)
+    (format stream content)))
+(writeFile "/tmp/timer" "Test...")

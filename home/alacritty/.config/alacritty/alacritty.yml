@@ -100,7 +100,7 @@ padding:
 # Font configuration
 
 font:
-    size: 10
+    size: 12
     normal:
         family: Mononoki Nerd Font 
         style: Medium
@@ -112,9 +112,6 @@ font:
         style: Italic
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
-    offset:
-        # x: -1
-        y: -1
 
     glyph_offset:
         x: 0

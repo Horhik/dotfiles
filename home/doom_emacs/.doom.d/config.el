@@ -31,7 +31,6 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -39,10 +38,9 @@
 
 
 (custom-set-variables
- '(org-directory "~/Nextcloud")
- '(org-agenda-files (list org-directory))
+ '(org-directory "~/KB")
+ '(org-agenda-files (list org-directory)))
 
- )
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
@@ -64,15 +62,10 @@
 (use-package emojify
   :hook (after-init . global-emojify-mode))
 
-(add-to-list 'load-path "~/.emacs.d/manual-addons")
 
-;; !!! это надо делать в конце файла, иначе модули перетирают настройки метода ввода
-(if (eq system-type 'darwin)
-    (setq russian-input-method "russian-no-windows")
-  (setq russian-input-method "russian-computer"))
-(setq-default default-input-method russian-input-method)
-(setq default-input-method russian-input-method)
-(set-input-method russian-input-method)
 
-(global-set-key (kbd "M-SPC") 'toggle-input-method)
-(define-key isearch-mode-map (kbd "M-SPC") 'toggle-input-method)
+(use-package org-notifications
+  :hook (after-init . org-notifications-start)
+  )
+
+(setq org-timer-default-timer 25)

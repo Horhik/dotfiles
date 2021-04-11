@@ -108,6 +108,7 @@ source $ZSH/oh-my-zsh.sh
 export PATH=$HOME/.local/bin:$PATH
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$HOME/.emacs.d/bin:$PATH
 export PATH=$HOME/Desktop:$PATH
 export PATH=/home/horhik/code/projects/potato-notify:$PATH
 export PATH="/root/.deno/bin:$PATH"
