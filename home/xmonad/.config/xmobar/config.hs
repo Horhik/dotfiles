@@ -17,7 +17,7 @@ Config {
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "]["  -- separator between left-right alignment
    
-   , template = "<fc=#a89984>——{</fc>%StdinReader%<fc=#a89984>}—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</fc>][%xmobarstatus%"
+   , template = "<fc=#83a598>——{</fc>%StdinReader%<fc=#83a598>}—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</fc>][%xmobarstatus%"
 
    -- general behavior
    , lowerOnStart =     False    -- send to bottom of window stack on start

@@ -158,11 +158,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask    , xK_m),  namedScratchpadAction myScratchpads "pulse")
     , ((modm .|. shiftMask    , xK_n),  namedScratchpadAction myScratchpads "notion")
     , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
+    , ((modm .|. controlMask, xK_e),    namedScratchpadAction myScratchpads "emacs")
 
     -- | Programs
     , ((modm .|. shiftMask, xK_z), spawn "zathura &")                                                                            -- book reader (zathura)
     , ((modm .|. shiftMask, xK_b), spawn "firefox"                                       )                                       -- browser
-    , ((modm .|. controlMask, xK_e), spawn "/usr/bin/emacs &"                                                           )        -- editor (emacs)
 
 
 
@@ -292,6 +292,7 @@ myScratchpads = [
   , NS "anki" spawnAnki findAnki manageAnki
   , NS "pulse" spawnPulse findPulse managePulse
   , NS "todoist" spawnTodoist findTodoist manageTodoist
+  , NS "emacs" spawnEmacs findEmacs manageEmacs
     ]
   where
     classTerm     = "TerminalDropdown"
@@ -334,6 +335,19 @@ myScratchpads = [
         w = 0.4             -- width, 50%
         t = (1 - h) / 2     -- bottom edge
         l = (1 - w) / 2     -- centered left/right
+
+    classEmacs     = "EmacsDropDown"
+    titleEmacs     = "emacs@dropdown"
+    spawnEmacs     = "emacs --title emacs@dropdown "
+    findEmacs      = title =? titleEmacs
+    manageEmacs    = customFloating $ W.RationalRect l t w h
+      where
+        h = 0.7             -- height, 50%
+        w = 0.6             -- width, 50%
+        t = (1 - h) / 2     -- bottom edge
+        l = (1 - w) / 2     -- centered left/right
+
+
 
 
 
@@ -394,6 +408,7 @@ myStartupHook = do
   spawnOnce "setxkbmap us,ru &"
   spawnOnce "eww daemon"
   spawnOnce "nextcloud"
+  spawnOnce "syncthing"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
   spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa"
   spawnOnce ("enact --pos left --watch &")
