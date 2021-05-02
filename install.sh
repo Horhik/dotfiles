@@ -7,7 +7,7 @@ cd yay
 makepkg -si
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-yay -S dunst firefox dwm surf dmenu st qutebrowser pulsemixer pkg-config variety alacritty compton-tryone-git ninja meson cmake libev  libevdev uthash nerd-fonts-mononoki nerd-fonts tmux feh xorg-xsetroot xkblayout-state flameshot cava rustfmt emacs playerctl rofi eww ttf-twemoji 
+yay -S dunst firefox dwm surf dmenu st qutebrowser pulsemixer pkg-config variety alacritty compton-tryone-git ninja meson cmake libev  libevdev uthash nerd-fonts-mononoki nerd-fonts tmux feh xorg-xsetroot xkblayout-state flameshot cava rustfmt emacs playerctl rofi eww ttf-twemoji ttf-twemoji-color ttf-twemoji alacritty-themes anki clang xkblayout-state-git zathura redshift rustup pfetch xclip tree
 # setup compositor
 cd $HOME/Downloads/tmp
 git clone https://github.com/ibhagwan/picom
@@ -23,3 +23,13 @@ sudo ninja -C build install
 
  sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
 	        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+sudo ln -s $HOME/.local/scripts/bin/* /usr/bin
+
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions
+
+git clone https://github.com/elkowar/eww /tmp/eww
+cd /tmp/eww
+cargo build --release
