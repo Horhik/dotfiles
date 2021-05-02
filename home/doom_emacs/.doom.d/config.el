@@ -32,6 +32,7 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Brain/")
 
+(setq org-agenda-files (list org-directory "~/Brain/Tasks"))
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
@@ -108,3 +109,10 @@
   (smartparens-global-mode -1)
   (org-roam-server-mode)
   (smartparens-global-mode 1))
+
+
+(use-package ox-hugo
+  :ensure t            ;Auto-install the package from Melpa (optional)
+  :after ox)
+
+(setq HUGO_BASE_DIR "~/Site")
