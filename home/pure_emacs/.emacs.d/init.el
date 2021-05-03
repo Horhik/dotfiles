@@ -424,7 +424,13 @@
 								    "Active Projects")))))
 				     ("n" "Next Tasks" ((todo "NEXT" ((org-agenda-overriding-header
 								       "Next Tasks")))))
+				     ("i" "Ideas" ((todo "IDEA" ((org-agenda-overriding-header
+								       "Ideas ")))))
+				     ("a" "Articles" ((todo "Article" ((org-agenda-overriding-header
+								       "Article")))))
 				     ("W" "Work Tasks" tags-todo "+work-email")
+				     ("W" "Work Tasks" tags-todo "+work-email")
+				     ("I" "ideas" tags-todo "+idea-article")
 
 				     ;; Low-effort next actions
 				     ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
