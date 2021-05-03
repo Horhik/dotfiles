@@ -227,34 +227,44 @@
 * Features
 ** Org roam 
   #+begin_src emacs-lisp
-  (use-package org-roam
-	:ensure t
-	:hook
-	(after-init . org-roam-mode)
-	:custom
-	(org-roam-directory "~/Brain")
-	:config
-	(setq
-	  org-roam-server-host "127.0.0.1"
-	  org-roam-server-port 5034
-	  org-roam-server-authenticate nil
-	  org-roam-server-export-inline-images t
-	  org-roam-server-serve-files nil
-	  org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-	  org-roam-server-network-poll t
-	  org-roam-server-network-arrows nil
-	  org-roam-server-network-label-truncate t
-	  org-roam-server-network-label-truncate-length 60
-	  org-roam-server-network-label-wrap-length 20)
-	:bind (:map org-roam-mode-map
-		(("C-c o l" . org-roam)
-		 ("C-c o f" . org-roam-find-file)
-		 ("C-c o g" . org-roam-graph)
-		 ("C-c o t" . org-roam-dailies-capture-today))
-		:map org-mode-map
-		(("C-c o i" . org-roam-insert))
-		(("C-c o I" . org-roam-insert-immediate)))
-  )
+(use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-mode)
+      :general (general-nmap
+        :prefix "SPC r"
+        ;; Org-roam keymap
+        "d" '((lambda () (interactive) (org-roam-dailies-find-today)) :which-key "roam today")
+        "t a" '(org-roam-tag-add :which-key "roam add tag")
+        "t d" '(org-roam-tag-delete :which-key "roam delete tag")
+        "a a" '(org-roam-alias-add :which-key "roam add alias")
+        "f f" '(org-roam-find-file :which-key "roam findgfile ")
+        "g" '(org-roam-graph-show :which-key "roam graph ")
+        "b b" '(org-roam-buffer-toggle-display :which-key "roam buffer toggle ")
+        "b s" '(org-roam-buffer-activate :which-key "roam buffer show ")
+        "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
+        "s" '(org-roam-server-mode :which-key "roam server ")
+        )
+      :custom
+      (org-roam-directory "~/Brain")
+      :config
+      (setq
+        org-roam-server-host "127.0.0.1"
+        org-roam-server-port 5034
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20)
+
+
+(require 'org-roam-protocol)
+)
+
 #+end_src
 ** Org roam protocol
   #+begin_src emacs-lisp

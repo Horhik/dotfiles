@@ -6,11 +6,9 @@
 (tooltip-mode -1)
 (set-fringe-mode 10)
 (visual-line-mode t)
-(visual-line-mode 1)
 
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/")
-	     '("org" . "https://orgmode.org/elpa/"))
+	 '("melpa" . "http://melpa.org/packages/"))
 
 (package-initialize)
 
@@ -30,9 +28,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
+   '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
  '(package-selected-packages
-   '(rls lsp highlight-parentheses neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
+   '(neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -57,7 +55,7 @@
   (set-fontset-font "fontset-default" 'unicode
       (font-spec :name "Twemoji" :size 14))
 
-(load-theme 'gruvbox)
+(load-theme 'gruvbox-dark-hard)
 
 ;; Emojies
 (use-package emojify
@@ -65,7 +63,8 @@
   :config
   (setq emojify-emoji-set "twemoji-v2")
   (setq emojify-set-emoji-styles 'unicode)
-  (setq emojify-display-style 'unicode))
+  (setq emojify-display-style 'unicode)
+)
 
 ;; mode line
 (require 'doom-modeline)
@@ -91,16 +90,18 @@
 :init
 (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
 (setq evil-want-keybinding nil)
-:config
+:config 
  (evil-mode 1)
  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
- (evil-global-set-key 'motion "k" 'evil-previous-visual-line))
+ (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+ )
 (use-package undo-tree
   :after evil
   :init
    (global-undo-tree-mode)
-   (evil-set-undo-system 'undo-tree))
+   (evil-set-undo-system 'undo-tree)
+)
 (use-package evil-mc
   :after evil
   :config
@@ -110,95 +111,76 @@
    :map evil-normal-state-map
    ("SPC m u" . evil-mc-undo-all-cursors)
    :map evil-visual-state-map
-    ("SPC m a" . evil-mc-make-cursor-in-visual-selection-beg)))
+    ("SPC m a" . evil-mc-make-cursor-in-visual-selection-beg)
+   )
+ )
 (use-package evil-collection
-  :ensure t
   :after evil
   :config
   (evil-collection-init))
 
 (use-package counsel)
-(use-package ivy
-  :diminish
-  :bind (
-	 ("M-x" . counsel-M-x)
-	 ("C-s" . swiper)
-	 :map ivy-minibuffer-map
-	 ("TAB" . ivy-alt-done)
-	 ("C-f" . ivy-alt-done)
-	 ("C-l" . ivy-alt-done)
-	 ("C-j" . ivy-next-line)
-	 ("C-k" . ivy-previous-line)
-	 :map ivy-switch-buffer-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-l" . ivy-done)
-	 ("C-d" . ivy-switch-buffer-kill)
-	 :map ivy-reverse-i-search-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-d" . ivy-reverse-i-search-kill))
-  :init
-  (ivy-mode 1))
- (use-package smex
-  :after counsel)
+  (use-package ivy
+    :diminish
+    :bind (
+	   ("M-x" . counsel-M-x)
+	   ("C-s" . swiper)
+	   :map ivy-minibuffer-map
+	   ("TAB" . ivy-alt-done)
+	   ("C-f" . ivy-alt-done)
+	   ("C-l" . ivy-alt-done)
+	   ("C-j" . ivy-next-line)
+	   ("C-k" . ivy-previous-line)
+	   :map ivy-switch-buffer-map
+	   ("C-k" . ivy-previous-line)
+	   ("C-l" . ivy-done)
+	   ("C-d" . ivy-switch-buffer-kill)
+	   :map ivy-reverse-i-search-map
+	   ("C-k" . ivy-previous-line)
+	   ("C-d" . ivy-reverse-i-search-kill))
+    :init
+    (ivy-mode 1))
+(use-package counsel-projectile
+  :config (counsel-projectile-mode))
 
 (defun add-to-map(keys func)
-  "Add a keybinding in evil mode from keys to func."
-  (define-key evil-normal-state-map (kbd keys) func)
-  (define-key evil-motion-state-map (kbd keys) func))
+   "Add a keybinding in evil mode from keys to func."
+   (define-key evil-normal-state-map (kbd keys) func)
+   (define-key evil-motion-state-map (kbd keys) func))
 
-(add-to-map "<SPC>" nil)
-(add-to-map "<SPC> s" 'save-buffer)
+ (add-to-map "<SPC>" nil)
+ (add-to-map "<SPC> <SPC>" 'counsel-M-x)
+;; (add-to-map "<SPC> f" 'lusty-file-explorer)
+;; (add-to-map "<SPC> b" 'lusty-buffer-explorer)
+ (add-to-map "<SPC> o" 'treemacs)
+ (add-to-map "<SPC> s" 'save-buffer)
 
-(defun open-file (file)
-  "just more shortest function for opening the file"
-  (interactive)
-  ((lambda (file) (interactive)
-		  (find-file (expand-file-name (format "%s" file)))) file ) )
+ (defun open-file (file)
+   "just more shortest function for opening the file"
+   (interactive)
+   ((lambda (file) (interactive)
+		   (find-file (expand-file-name (format "%s" file)))) file ) )
 
 
-(general-evil-setup)
-(general-define-key
-  :prefix "SPC"
-  :keymaps 'normal
-"o" '(treemacs :which-key "treemacs")
-"SPC" '(counsel-M-x :which-key "M-x")
-;; org-roam
+ (general-evil-setup)
+ (general-nmap
+   :prefix "SPC"
+   ;; dotfiles editing config
+ "f f" '(counsel-find-file :which-key "find-file")
+ "f r" '(counsel-buffer-or-recentf :which-key "recent files")
 
-;; dotfiles editing config
-"f f" '(counsel-find-file :which-key "find-file")
-"f r" '(counsel-buffer-or-recentf :which-key "recent files")
-;; switch buffer
-"b b" '(counsel-switch-buffer :which-key "switch buff")
-;; Theme
-"h" '(counsel-load-theme :which-key "switch theme")
-;; Bind  keymaps
-"p" '(:keymap projectile-command-map :package projectile)
-"w" '(:keymap evil-window-map :package evil)
-;; Edit common files
-"f e"  '(lambda() (interactive) (find-file "~/.emacs.d/config.org") :which-key "config.org")
-"f v"  '(lambda() (interactive) (find-file "~/.config/nvim/init.vim" :which-key "neovim config"          ))
-"f d"  '(lambda() (interactive) (find-file "~/dotfiles/home"  :which-key "dotfiles dired"                 ))
-"f a"  '(lambda() (interactive) (find-file "~/.config/alacritty/alacritty.yml" :which-key "alacritty"))
-"f b"  '(lambda() (interactive) (find-file "~/Brain"                           :which-key "my brain")))
+ "b b" '(counsel-switch-buffer :which-key "switch buff")
+
+ "f e"  '(lambda() (interactive) (find-file "~/.emacs.d/config.org") :which-key "config.org")
+ "f v"  '(lambda() (interactive) (find-file "~/.config/nvim/init.vim" :which-key "neovim config"          ))
+ "f d"  '(lambda() (interactive) (find-file "~/dotfiles/home"  :which-key "dotfiles dired"                 ))
+ "f a"  '(lambda() (interactive) (find-file "~/.config/alacritty/alacritty.yml" :which-key "alacritty"))
+ "f b"  '(lambda() (interactive) (find-file "~/Brain"                           :which-key "my brain")))
 
 (use-package org-roam
       :ensure t
       :hook
       (after-init . org-roam-mode)
-      :general (general-nmap
-	:prefix "SPC r"
-        ;; Org-roam keymap
-        "d" '((lambda () (interactive) (org-roam-dailies-find-today)) :which-key "roam today")
-        "t a" '(org-roam-tag-add :which-key "roam add tag")
-        "t d" '(org-roam-tag-delete :which-key "roam delete tag")
-        "a a" '(org-roam-alias-add :which-key "roam add alias")
-        "f f" '(org-roam-find-file :which-key "roam findgfile ")
-        "g" '(org-roam-graph-show :which-key "roam graph ")
-        "b b" '(org-roam-buffer-toggle-display :which-key "roam buffer toggle ")
-        "b s" '(org-roam-buffer-activate :which-key "roam buffer show ")
-        "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
-        "s" '(org-roam-server-mode :which-key "roam server ")
-        )
       :custom
       (org-roam-directory "~/Brain")
       :config
@@ -214,10 +196,17 @@
 	org-roam-server-network-label-truncate t
 	org-roam-server-network-label-truncate-length 60
 	org-roam-server-network-label-wrap-length 20)
-
+      :bind (:map org-roam-mode-map
+	      (("C-c o l" . org-roam)
+	       ("C-c o f" . org-roam-find-file)
+	       ("C-c o g" . org-roam-graph)
+	       ("C-c o t" . org-roam-dailies-capture-today))
+	      :map org-mode-map
+	      (("C-c o i" . org-roam-insert))
+	      (("C-c o I" . org-roam-insert-immediate)))
+)
 
 (require 'org-roam-protocol)
-)
 
 (use-package interaction-log
   :ensure t)
@@ -312,16 +301,14 @@
   (:map global-map
 	("M-0"       . treemacs-select-window)
 	("C-x t 1"   . treemacs-delete-other-windows)
-	("C-o"   . treemacs)
+	("C-x t t"   . treemacs)
 	("C-x t B"   . treemacs-bookmark)
 	("C-x t C-t" . treemacs-find-file)
 	("C-x t M-t" . treemacs-find-tag)))
 
 (use-package treemacs-evil
   :after (treemacs evil)
-  :ensure t
-
-)
+  :ensure t)
 
 (use-package treemacs-projectile
   :after (treemacs projectile)
@@ -344,34 +331,33 @@
 (use-package neotree
   :ensure t
   :init
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((python . t)))
 
-(use-package projectile
-  :diminish projectile-mode
-  :config (projectile-mode)
-  :init
-  (setq projectile-switch-project-action #'projectile-deired))
-
-(use-package counsel-projectile
-  :config (counsel-projectile-mode))
-
 (use-package magit)
-
 (use-package workgroups2)
 
+(find-file "~/.emacs.d/startup.org")
+
+(use-package rustic
+ :ensure t
+ :init
+ (setq rustic-lsp-server 'rls)
+)
+
 (defun my/org-mode-setup() 
-	     (org-indend-mode) 
-	     (variable-pitch-mode 1) 
-	     (auto-fill-mode 0) 
-	     (visual-line-mode 1) 
-	     (setq evil-auto indent 1)
-	     (my/org-agenda)
-	     ) 
-     (use-package org 
+		 (org-indend-mode) 
+		 (variable-pitch-mode 1) 
+		 (auto-fill-mode 0) 
+		 (visual-line-mode 1) 
+		 (setq evil-auto indent 1)
+		 (my/org-agenda)
+		 ) 
+(use-package org 
 	  :hook (org-mode . my/org-mode-setup)
 	  :config
 	  (setq org-agenda-files `("~/Brain" "~/Brain/Tasks/Tasks.org"))
@@ -393,9 +379,6 @@
 		    "a" 'org-agenda
 		    )
 	   )
-
-
- 
 
 (defun my/org-agenda () (
 (setq org-todo-keywords
@@ -454,41 +437,40 @@
 	     (org-agenda-files org-agenda-files)))))))
   ))
 
-
 (use-package org-bullets 
-       :after org
-       :hook
-	 (org-mode . org-bullets-mode))
-       (set-face-attribute 'org-document-title nil :font "hack" :weight 'bold :height 1.3)
-       (dolist (face '((org-level-1 . 1.3)
-		   (org-level-2 . 1.2)
-		   (org-level-3 . 1.05)
-		   (org-level-4 . 1.0)
-		   (org-level-5 . 1.1)
-		   (org-level-6 . 1.1)
-		   (org-level-7 . 1.1)
-		   (org-level-8 . 1.1)))
-     (set-face-attribute (car face) nil :font "hack" :weight 'bold :height (cdr face)))
-     (require 'org-indent)
- (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :font "mononoki" )
- (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
- (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
- (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
- (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
- (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
- (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
- (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
- (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+  :after org
+  :hook
+  (org-mode . org-bullets-mode))
+(set-face-attribute 'org-document-title nil :font "hack" :weight 'bold :height 1.3)
+(dolist (face '((org-level-1 . 1.3)
+		(org-level-2 . 1.2)
+		(org-level-3 . 1.05)
+		(org-level-4 . 1.0)
+		(org-level-5 . 1.1)
+		(org-level-6 . 1.1)
+		(org-level-7 . 1.1)
+		(org-level-8 . 1.1)))
+  (set-face-attribute (car face) nil :font "hack" :weight 'bold :height (cdr face)))
+(require 'org-indent)
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :font "mononoki" )
+(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
 
- ;; Get rid of the background on column views
- (set-face-attribute 'org-column nil :background nil)
- (set-face-attribute 'org-column-title nil :background nil)
- (setq org-src-fontify-natively t)
+;; Get rid of the background on column views
+(set-face-attribute 'org-column nil :background nil)
+(set-face-attribute 'org-column-title nil :background nil)
+(setq org-src-fontify-natively t)
 (defun my/visual-fill ()
- (setq visual-fill-column-width 140
-     visual-fill-column-center-text t)
+  (setq visual-fill-column-width 140
+	visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
- (use-package visual-fill-column
+(use-package visual-fill-column
   :defer t
   :hook (org-mode . my/visual-fill))
 
@@ -500,11 +482,6 @@
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
 (add-to-list 'org-structure-template-alist '("json" . "src json"))
-
-(use-package rustic
- :ensure t
- :init
- (setq rustic-lsp-server 'rls))
 
 (treemacs-create-theme "Material"
   :icon-directory (treemacs-join-path treemacs-dir "/home/horhik/.emacs.d/icons")
@@ -562,8 +539,7 @@
     (treemacs-create-icon :file "zip.png"                :fallback "🗃️"     :extensions ("zip" "tar" "tar.xz" "xz" "xfv" "7z"))
     (treemacs-create-icon :file "todo.png"               :fallback "🗃️"     :extensions ("TODO" "todo" "Tasks" ))
     (treemacs-create-icon :file "webassembly"            :fallback "🗃️"     :extensions ("wasm" "webasm" "webassembly"))
-    (treemacs-create-icon :file "python"                 :fallback "🗃️"     :extensions ("py" "python"))))
-
+    (treemacs-create-icon :file "python"                 :fallback "🗃️"     :extensions ("py" "python"))
+    )
+)
 (treemacs-load-theme 'Material)
-
-(find-file "~/.emacs.d/startup.org")
