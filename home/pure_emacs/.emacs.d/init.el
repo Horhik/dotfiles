@@ -8,7 +8,7 @@
 (visual-line-mode t)
 
 (add-to-list 'package-archives
-	 '("melpa" . "http://melpa.org/packages/"))
+	     '("melpa" . "http://melpa.org/packages/"))
 
 (package-initialize)
 
@@ -21,7 +21,8 @@
 
 (dolist (p package-list)
   (when (not (package-installed-p p))
-	 (package-install p)))
+    (package-install p)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -31,6 +32,7 @@
    '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
  '(package-selected-packages
    '(neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -42,33 +44,24 @@
 (setq use-package-always-ensure t)
 
 ;; Default fonts
-  (add-to-list 'default-frame-alist '(font . "Mononoki Nerd Font" ))
-  (set-face-attribute 'default t :font "Mononoki Nerd Font" )
-  (use-package unicode-fonts
-    :init
-    (unicode-fonts-setup))
+(add-to-list 'default-frame-alist '(font . "Mononoki Nerd Font" ))
+(set-face-attribute 'default t :font "Mononoki Nerd Font" )
+(use-package unicode-fonts
+  :init
+  (unicode-fonts-setup))
 
-  (set-fontset-font "fontset-startup" 'unicode
-      (font-spec :name "Mononoki Nerd Font" :size 14))
+(set-fontset-font "fontset-startup" 'unicode
+		  (font-spec :name "Mononoki Nerd Font" :size 14))
 
 ;; Fallback for emojies
-  (set-fontset-font "fontset-default" 'unicode
-      (font-spec :name "Twemoji" :size 14))
-
+(set-fontset-font "fontset-default" 'unicode
+		  (font-spec :name "Twemoji" :size 14))
 (load-theme 'gruvbox-dark-hard)
 
-;; Emojies
-(use-package emojify
-  :hook (after-init . global-emojify-mode)
-  :config
-  (setq emojify-emoji-set "twemoji-v2")
-  (setq emojify-set-emoji-styles 'unicode)
-  (setq emojify-display-style 'unicode)
-)
 
-;; mode line
-(require 'doom-modeline)
-(doom-modeline-mode 1)
+(use-package doom-modeline
+  :init
+  (doom-modeline-mode 1))
 
 ;; Line numbers
 (column-number-mode)
@@ -78,148 +71,159 @@
 		prog-mode-hook
 		conf-mode-hook))
   (add-hook mode (lambda ()
-	(display-line-numbers-mode 1)
-	(setq display-line-numbers 'relative))))
+		   (display-line-numbers-mode 1)
+		   (setq display-line-numbers 'relative))))
 
 ;; Override some modes which derive from the above
 (dolist (mode '(org-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-(use-package evil
-:ensure t
-:init
-(setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-(setq evil-want-keybinding nil)
-:config 
- (evil-mode 1)
- (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
- (evil-global-set-key 'motion "j" 'evil-next-visual-line)
- (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
- )
-(use-package undo-tree
-  :after evil
-  :init
-   (global-undo-tree-mode)
-   (evil-set-undo-system 'undo-tree)
-)
-(use-package evil-mc
-  :after evil
+(use-package emojify
+  :hook (after-init . global-emojify-mode)
   :config
-  (evil-mc-mode  1) ;; enable
-  (global-set-key (kbd "<secape>") 'keyboard-escape-quit)
-  :bind (
-   :map evil-normal-state-map
-   ("SPC m u" . evil-mc-undo-all-cursors)
-   :map evil-visual-state-map
-    ("SPC m a" . evil-mc-make-cursor-in-visual-selection-beg)
-   )
- )
+  (setq emojify-emoji-set "twemoji-v2")
+  (setq emojify-set-emoji-styles 'unicode)
+  (setq emojify-display-style 'unicode))
+
+
+;; Evil mode
+(use-package evil
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  :config
+  (evil-mode 1)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+  ;; Use visual line motions even outside of visual-line-mode buffers
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+
+
 (use-package evil-collection
   :after evil
+  :init
   :config
   (evil-collection-init))
 
 (use-package counsel)
-  (use-package ivy
-    :diminish
-    :bind (
-	   ("M-x" . counsel-M-x)
-	   ("C-s" . swiper)
-	   :map ivy-minibuffer-map
-	   ("TAB" . ivy-alt-done)
-	   ("C-f" . ivy-alt-done)
-	   ("C-l" . ivy-alt-done)
-	   ("C-j" . ivy-next-line)
-	   ("C-k" . ivy-previous-line)
-	   :map ivy-switch-buffer-map
-	   ("C-k" . ivy-previous-line)
-	   ("C-l" . ivy-done)
-	   ("C-d" . ivy-switch-buffer-kill)
-	   :map ivy-reverse-i-search-map
-	   ("C-k" . ivy-previous-line)
-	   ("C-d" . ivy-reverse-i-search-kill))
-    :init
-    (ivy-mode 1))
+(use-package ivy
+  :diminish
+  :bind (
+	 ("M-x" . counsel-M-x)
+	 ("C-s" . swiper)
+	 :map ivy-minibuffer-map
+	 ("TAB" . ivy-alt-done)
+	 ("C-f" . ivy-alt-done)
+	 ("C-l" . ivy-alt-done)
+	 ("C-j" . ivy-next-line)
+	 ("C-k" . ivy-previous-line)
+	 :map ivy-switch-buffer-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-l" . ivy-done)
+	 ("C-d" . ivy-switch-buffer-kill)
+	 :map ivy-reverse-i-search-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-d" . ivy-reverse-i-search-kill))
+  :init
+  (ivy-mode 1))
 (use-package counsel-projectile
   :config (counsel-projectile-mode))
 
-(defun add-to-map(keys func)
-   "Add a keybinding in evil mode from keys to func."
-   (define-key evil-normal-state-map (kbd keys) func)
-   (define-key evil-motion-state-map (kbd keys) func))
 
- (add-to-map "<SPC>" nil)
- (add-to-map "<SPC> <SPC>" 'counsel-M-x)
+;; Keybindings
+
+(defun add-to-map(keys func)
+  "Add a keybinding in evil mode from keys to func."
+  (define-key evil-normal-state-map (kbd keys) func)
+  (define-key evil-motion-state-map (kbd keys) func))
+
+;;(add-to-map "<SPC>" nil)
+;;(add-to-map "<SPC> <SPC>" 'counsel-M-x)
 ;; (add-to-map "<SPC> f" 'lusty-file-explorer)
 ;; (add-to-map "<SPC> b" 'lusty-buffer-explorer)
- (add-to-map "<SPC> o" 'treemacs)
- (add-to-map "<SPC> s" 'save-buffer)
+;;(add-to-map "<SPC> o" 'treemacs)
+;;(add-to-map "<SPC> s" 'save-buffer)
 
- (defun open-file (file)
-   "just more shortest function for opening the file"
-   (interactive)
-   ((lambda (file) (interactive)
-		   (find-file (expand-file-name (format "%s" file)))) file ) )
+(defun open-file (file)
+  "just more shortest function for opening the file"
+  (interactive)
+  ((lambda (file) (interactive)
+     (find-file (expand-file-name (format "%s" file)))) file ) )
 
 
- (general-evil-setup)
- (general-nmap
-   :prefix "SPC"
-   ;; dotfiles editing config
- "f f" '(counsel-find-file :which-key "find-file")
- "f r" '(counsel-buffer-or-recentf :which-key "recent files")
+(general-evil-setup)
+(general-nmap
+  :prefix "SPC"
+  ;; dotfiles editing config
+  "SPC" '(counsel-M-x :which-key "M-x")
+  "o"   '(treemacs :which-key "treemacs")
+  "f f" '(counsel-find-file :which-key "find-file")
+  "f r" '(counsel-buffer-or-recentf :which-key "recent files")
 
- "b b" '(counsel-switch-buffer :which-key "switch buff")
+  "b b" '(counsel-switch-buffer :which-key "switch buff")
 
- "f e"  '(lambda() (interactive) (find-file "~/.emacs.d/config.org") :which-key "config.org")
- "f v"  '(lambda() (interactive) (find-file "~/.config/nvim/init.vim" :which-key "neovim config"          ))
- "f d"  '(lambda() (interactive) (find-file "~/dotfiles/home"  :which-key "dotfiles dired"                 ))
- "f a"  '(lambda() (interactive) (find-file "~/.config/alacritty/alacritty.yml" :which-key "alacritty"))
- "f b"  '(lambda() (interactive) (find-file "~/Brain"                           :which-key "my brain")))
+  "f e"  '(lambda() (interactive) (find-file "~/.emacs.d/config.org") :which-key "config.org")
+  "f v"  '(lambda() (interactive) (find-file "~/.config/nvim/init.vim" :which-key "neovim config"          ))
+  "f d"  '(lambda() (interactive) (find-file "~/dotfiles/home"  :which-key "dotfiles dired"                 ))
+  "f a"  '(lambda() (interactive) (find-file "~/.config/alacritty/alacritty.yml" :which-key "alacritty"))
+  "f b"  '(lambda() (interactive) (find-file "~/Brain"                           :which-key "my brain")))
 
+
+;; Org roam
 (use-package org-roam
-      :ensure t
-      :hook
-      (after-init . org-roam-mode)
-      :custom
-      (org-roam-directory "~/Brain")
-      :config
-      (setq
-	org-roam-server-host "127.0.0.1"
-	org-roam-server-port 5034
-	org-roam-server-authenticate nil
-	org-roam-server-export-inline-images t
-	org-roam-server-serve-files nil
-	org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-	org-roam-server-network-poll t
-	org-roam-server-network-arrows nil
-	org-roam-server-network-label-truncate t
-	org-roam-server-network-label-truncate-length 60
-	org-roam-server-network-label-wrap-length 20)
-      :bind (:map org-roam-mode-map
-	      (("C-c o l" . org-roam)
-	       ("C-c o f" . org-roam-find-file)
-	       ("C-c o g" . org-roam-graph)
-	       ("C-c o t" . org-roam-dailies-capture-today))
-	      :map org-mode-map
-	      (("C-c o i" . org-roam-insert))
-	      (("C-c o I" . org-roam-insert-immediate)))
-)
+  :ensure t
+  :hook
+  (after-init . org-roam-mode)
+  :general (general-nmap
+             :prefix "SPC r"
+             ;; Org-roam keymap
+             "d" '((lambda () (interactive) (org-roam-dailies-find-today)) :which-key "roam today")
+             "t a" '(org-roam-tag-add :which-key "roam add tag")
+             "t d" '(org-roam-tag-delete :which-key "roam delete tag")
+             "a a" '(org-roam-alias-add :which-key "roam add alias")
+             "f f" '(org-roam-find-file :which-key "roam findgfile ")
+             "g" '(org-roam-graph-show :which-key "roam graph ")
+             "b b" '(org-roam-buffer-toggle-display :which-key "roam buffer toggle ")
+             "b s" '(org-roam-buffer-activate :which-key "roam buffer show ")
+             "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
+             "s" '(org-roam-server-mode :which-key "roam server "))
+  :custom
+  (org-roam-directory "~/Brain")
+  :config
+  (setq
+   org-roam-server-host "127.0.0.1"
+   org-roam-server-port 5034
+   org-roam-server-authenticate nil
+   org-roam-server-export-inline-images t
+   org-roam-server-serve-files nil
+   org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+   org-roam-server-network-poll t
+   org-roam-server-network-arrows nil
+   org-roam-server-network-label-truncate t
+   org-roam-server-network-label-truncate-length 60
+   org-roam-server-network-label-wrap-length 20)
+
+
+  (require 'org-roam-protocol))
+
+
 
 (require 'org-roam-protocol)
-
-(use-package interaction-log
-  :ensure t)
-
 (use-package highlight-parentheses
-:ensure t
-:init
-(global-highlight-parentheses-mode t)
-(show-paren-mode t))			;
+  :ensure t
+  :init
+  (global-highlight-parentheses-mode t)
+  (show-paren-mode t))			;
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-
-;;Which key
 (use-package which-key
   :init (which-key-mode)
   :diminish which-key-mode
@@ -331,113 +335,19 @@
 (use-package neotree
   :ensure t
   :init
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-)
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
 
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((python . t)))
 
+
 (use-package magit)
 (use-package workgroups2)
 
-(find-file "~/.emacs.d/startup.org")
 
-(use-package rustic
- :ensure t
- :init
- (setq rustic-lsp-server 'rls)
-)
 
-(defun my/org-mode-setup() 
-		 (org-indend-mode) 
-		 (variable-pitch-mode 1) 
-		 (auto-fill-mode 0) 
-		 (visual-line-mode 1) 
-		 (setq evil-auto indent 1)
-		 (my/org-agenda)
-		 ) 
-(use-package org 
-	  :hook (org-mode . my/org-mode-setup)
-	  :config
-	  (setq org-agenda-files `("~/Brain" "~/Brain/Tasks/Tasks.org"))
-	  (setq org-ellipsis " ▸"
-	  org-hide-emphasis-markers t
-	  org-src-fontify-natively t
-	  org-src-tab-acts-natively t
-	  org-edit-src-content-indentation 2
-	  org-hide-block-startup nil
-	  org-src-preserve-indentation nil
-	  org-startup-folded 'content
-	  org-cycle-separator-lines 2)
-	  (setq org-agenda-start-with-log-mode t)
-	  (setq org-log-done 'time)
-	  (setq org-log-into-drawer t)
-	  :general (general-nmap
-		    :prefix "SPC a"
-		    :keymap 'org-agenda-mode-map
-		    "a" 'org-agenda
-		    )
-	   )
-
-(defun my/org-agenda () (
-(setq org-todo-keywords
-    '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-      (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")
-      (sequence "IDEA(i)" "DREAM(d)" "ARTICLE(a)" "|" "DONE(d!)")
-      ))
-(setq org-todo-keyword-faces
-      '(("TODO" . org-warning) ("STARTED" . "yellow") ("DREAM" . "pink") ("IDEA" . "gold") ("ARTICLE" . "lightblue")
-        ("CANCELED" . (:foreground "blue" :weight bold))))
-  (setq org-agenda-custom-commands
-   '(("d" "Dashboard"
-     ((agenda "" ((org-deadline-warning-days 7)))
-      (todo "NEXT"
-	((org-agenda-overriding-header "Next Tasks")))
-      (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
-
-    ("n" "Next Tasks"
-     ((todo "NEXT"
-	((org-agenda-overriding-header "Next Tasks")))))
-
-    ("W" "Work Tasks" tags-todo "+work-email")
-
-    ;; Low-effort next actions
-    ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-     ((org-agenda-overriding-header "Low Effort Tasks")
-      (org-agenda-max-todos 20)
-      (org-agenda-files org-agenda-files)))
-
-    ("w" "Workflow Status"
-     ((todo "WAIT"
-	    ((org-agenda-overriding-header "Waiting on External")
-	     (org-agenda-files org-agenda-files)))
-      (todo "REVIEW"
-	    ((org-agenda-overriding-header "In Review")
-	     (org-agenda-files org-agenda-files)))
-      (todo "PLAN"
-	    ((org-agenda-overriding-header "In Planning")
-	     (org-agenda-todo-list-sublevels nil)
-	     (org-agenda-files org-agenda-files)))
-      (todo "BACKLOG"
-	    ((org-agenda-overriding-header "Project Backlog")
-	     (org-agenda-todo-list-sublevels nil)
-	     (org-agenda-files org-agenda-files)))
-      (todo "READY"
-	    ((org-agenda-overriding-header "Ready for Work")
-	     (org-agenda-files org-agenda-files)))
-      (todo "ACTIVE"
-	    ((org-agenda-overriding-header "Active Projects")
-	     (org-agenda-files org-agenda-files)))
-      (todo "COMPLETED"
-	    ((org-agenda-overriding-header "Completed Projects")
-	     (org-agenda-files org-agenda-files)))
-      (todo "CANC"
-	    ((org-agenda-overriding-header "Cancelled Projects")
-	     (org-agenda-files org-agenda-files)))))))
-  ))
-
-(use-package org-bullets 
+(use-package org-bullets
   :after org
   :hook
   (org-mode . org-bullets-mode))
@@ -473,73 +383,100 @@
 (use-package visual-fill-column
   :defer t
   :hook (org-mode . my/visual-fill))
+(defun my/org-mode-setup()
+  (org-indend-mode)
+  (variable-pitch-mode 1)
+  (auto-fill-mode 0)
+  (visual-line-mode 1)
+  (setq evil-auto indent 1))
 
-(require 'org-tempo)
-(add-to-list 'org-structure-template-alist '("sh" . "src sh"))
-(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-(add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
-(add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
-(add-to-list 'org-structure-template-alist '("py" . "src python"))
-(add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
-(add-to-list 'org-structure-template-alist '("json" . "src json"))
 
-(treemacs-create-theme "Material"
-  :icon-directory (treemacs-join-path treemacs-dir "/home/horhik/.emacs.d/icons")
-  :config
-  (progn
-    (treemacs-create-icon :file "folder-core-open.png"   :fallback "📁"       :extensions (root-open))
-    (treemacs-create-icon :file "folder-core.png"        :fallback "📁"       :extensions (root-closed))
-    (treemacs-create-icon :file "folder-node-open.png"   :fallback "📂"       :extensions (dir-open))
-    (treemacs-create-icon :file "folder-node.png"        :fallback "📁"       :extensions (dir-closed))
-    (treemacs-create-icon :file "folder-test-open.png"   :fallback "📂"       :extensions ("tests"))
-    (treemacs-create-icon :file "folder-test.png"        :fallback "📁"       :extensions ("tests"))
-    (treemacs-create-icon :file "emacs.png"              :fallback "💜"     :extensions ("el" "elc" ".spacemacs" "doom" ))
-    (treemacs-create-icon :file "emacs.png"              :fallback "💜"     :extensions ("el" "elc"))
-    (treemacs-create-icon :file "markdown.png"           :fallback "📖"     :extensions ("md"))
-    (treemacs-create-icon :file "readme.png"             :fallback "📖"     :extensions ("readme.md" "README.md" "README" "readme"))
-    (treemacs-create-icon :file "editorconfig.png"       :fallback "📖"     :extensions ("editorconfig"))
-    (treemacs-create-icon :file "org.png"                :fallback "🐴"     :extensions ("org"))
-    (treemacs-create-icon :file "rust.png"               :fallback "🐴"     :extensions ("rs"))
-    (treemacs-create-icon :file "haskell.png"            :fallback "🐴"     :extensions ("hs" "haskell"))
-    (treemacs-create-icon :file "c.png"                  :fallback "🐴"     :extensions ("c"))
-    (treemacs-create-icon :file "cpp.png"                :fallback "🐴"     :extensions ("cpp" "c++"))
-    (treemacs-create-icon :file "h.png"                  :fallback "🐴"     :extensions ("h"))
-    (treemacs-create-icon :file "diff.png"               :fallback "🐴"     :extensions ("diff"))
-    (treemacs-create-icon :file "makefile.png"           :fallback "🐴"     :extensions ("mk" "make" "Makefile"))
-    (treemacs-create-icon :file "assembly.png"           :fallback "🐴"     :extensions ("bin" "so" "o"))
-    (treemacs-create-icon :file "document.png"           :fallback "🐴"     :extensions ("" "txt"))
-    (treemacs-create-icon :file "file.png"               :fallback "🐴"     :extensions (fallback))
-    (treemacs-create-icon :file "toml.png"               :fallback "🗃️"     :extensions ("toml"))
-    (treemacs-create-icon :file "json.png"               :fallback "🗃️"     :extensions ("json"))
-    (treemacs-create-icon :file "yaml.png"               :fallback "🗃️"     :extensions ("yml" "yaml"))
-    (treemacs-create-icon :file "vim.png"                :fallback "🗃️"     :extensions ("vim" "vi" "nvim"))
-    (treemacs-create-icon :file "video.png"              :fallback "🗃️"     :extensions ("mp4" "avi" "gif" "mpv"))
-    (treemacs-create-icon :file "audio.png"              :fallback "🗃️"     :extensions ("mp3" "ogg" "wav" ))
-    (treemacs-create-icon :file "image.png"              :fallback "🗃️"     :extensions ("png" "jpg"))
-    (treemacs-create-icon :file "svg.png"                :fallback "🗃️"     :extensions ("svg"))
-    (treemacs-create-icon :file "css.png"                :fallback "🗃️"     :extensions ("css"))
-    (treemacs-create-icon :file "console.png"            :fallback "🗃️"     :extensions ("bash" "sh"))
-    (treemacs-create-icon :file "certificate.png"        :fallback "🗃️"     :extensions ("cert" "LICENSE" "license" "gpl" "mit" "gpl3" "gplv3" "apache"))
-    (treemacs-create-icon :file "database.png"           :fallback "🗃️"     :extensions ("sqlite" "db" "sql"))
-    (treemacs-create-icon :file "lua.png"                :fallback "🗃️"     :extensions ("lua"))
-    (treemacs-create-icon :file "javascript.png"         :fallback "🗃️"     :extensions ("js" "javascript"))
-    (treemacs-create-icon :file "typescript.png"         :fallback "🗃️"     :extensions ("ts" "typescript"))
-    (treemacs-create-icon :file "react.png"              :fallback "🗃️"     :extensions ("jsx"))
-    (treemacs-create-icon :file "react_ts.png"           :fallback "🗃️"     :extensions ("tsx"))
-    (treemacs-create-icon :file "settings.png"           :fallback "🗃️"     :extensions ("config" "conf" "rc" "*rc"))
-    (treemacs-create-icon :file "sass.png"               :fallback "🗃️"     :extensions ("sass" "scss"))
-    (treemacs-create-icon :file "xml.png"                :fallback "🗃️"     :extensions ("xml"))
-    (treemacs-create-icon :file "less.png"               :fallback "🗃️"     :extensions ("less"))
-    (treemacs-create-icon :file "pdf.png"                :fallback "🗃️"     :extensions ("pdf"))
-    (treemacs-create-icon :file "tex.png"                :fallback "🗃️"     :extensions ("tex" "latex" ))
-    (treemacs-create-icon :file "log.png"                :fallback "🗃️"     :extensions ("log" ))
-    (treemacs-create-icon :file "word.png"               :fallback "🗃️"     :extensions ("docs" "docx" "word" ))
-    (treemacs-create-icon :file "powerpoint.png"         :fallback "🗃️"     :extensions ("ppt" "pptx" ))
-    (treemacs-create-icon :file "html.png"               :fallback "🗃️"     :extensions ("html"))
-    (treemacs-create-icon :file "zip.png"                :fallback "🗃️"     :extensions ("zip" "tar" "tar.xz" "xz" "xfv" "7z"))
-    (treemacs-create-icon :file "todo.png"               :fallback "🗃️"     :extensions ("TODO" "todo" "Tasks" ))
-    (treemacs-create-icon :file "webassembly"            :fallback "🗃️"     :extensions ("wasm" "webasm" "webassembly"))
-    (treemacs-create-icon :file "python"                 :fallback "🗃️"     :extensions ("py" "python"))
-    )
-)
-(treemacs-load-theme 'Material)
+
+(use-package org 
+  :hook (org-mode . my/org-mode-setup) 
+  :config (setq org-agenda-files `("~/Brain" "~/Brain/Tasks/Tasks.org")) 
+  (org-bullets-mode) 
+  (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
+	org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
+	org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
+  (setq org-agenda-start-with-log-mode t) 
+  (setq org-log-done 'time) 
+  (setq org-log-into-drawer t)
+  (setq org-todo-keyword-faces '(("TODO" . org-warning) 
+				 ("STARTED" . "yellow") 
+				 ("DREAM" . "pink") 
+				 ("IDEA" . "gold") 
+				 ("ARTICLE" . "lightblue") 
+				 ("CANCELED" . 
+				  (:foreground "blue" 
+					       :weight bold))))
+
+  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)") 
+			    (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)"
+				      "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)") 
+			    (sequence "IDEA(i)" "DREAM(d)" "ARTICLE(a)" "|" "DONE(d!)")))
+
+  (setq org-agenda-custom-commands '(("d" "Dashboard" ((agenda "" ((org-deadline-warning-days 7))) 
+						       (todo "NEXT" ((org-agenda-overriding-header
+								      "Next Tasks"))) 
+						       (tags-todo "agenda/ACTIVE"
+								  ((org-agenda-overriding-header
+								    "Active Projects")))))
+				     ("n" "Next Tasks" ((todo "NEXT" ((org-agenda-overriding-header
+								       "Next Tasks")))))
+				     ("W" "Work Tasks" tags-todo "+work-email")
+
+				     ;; Low-effort next actions
+				     ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+				      ((org-agenda-overriding-header "Low Effort Tasks") 
+				       (org-agenda-max-todos 20) 
+				       (org-agenda-files org-agenda-files)))
+				     ("w" "Workflow Status" ((todo "WAIT"
+								   ((org-agenda-overriding-header
+								     "Waiting on External") 
+								    (org-agenda-files
+								     org-agenda-files))) 
+							     (todo "REVIEW"
+								   ((org-agenda-overriding-header
+								     "In Review") 
+								    (org-agenda-files
+								     org-agenda-files))) 
+							     (todo "PLAN"
+								   ((org-agenda-overriding-header
+								     "In Planning") 
+								    (org-agenda-todo-list-sublevels
+								     nil) 
+								    (org-agenda-files
+								     org-agenda-files))) 
+							     (todo "BACKLOG"
+								   ((org-agenda-overriding-header
+								     "Project Backlog") 
+								    (org-agenda-todo-list-sublevels
+								     nil) 
+								    (org-agenda-files
+								     org-agenda-files))) 
+							     (todo "READY"
+								   ((org-agenda-overriding-header
+								     "Ready for Work") 
+								    (org-agenda-files
+								     org-agenda-files))) 
+							     (todo "ACTIVE"
+								   ((org-agenda-overriding-header
+								     "Active Projects") 
+								    (org-agenda-files
+								     org-agenda-files))) 
+							     (todo "COMPLETED"
+								   ((org-agenda-overriding-header
+								     "Completed Projects") 
+								    (org-agenda-files
+								     org-agenda-files))) 
+							     (todo "CANC"
+								   ((org-agenda-overriding-header
+								     "Cancelled Projects") 
+								    (org-agenda-files
+								     org-agenda-files)))))))
+
+
+  :general (general-nmap :prefix "SPC a" 
+	     :keymap 'org-agenda-mode-map 
+	     "a" 'org-agenda))
