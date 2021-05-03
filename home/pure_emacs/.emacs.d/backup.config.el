@@ -178,10 +178,6 @@
 	   ("C-d" . ivy-reverse-i-search-kill))
     :init
     (ivy-mode 1))
-(use-package counsel-projectile
-  :config (counsel-projectile-mode))
-
-
 #+end_src
 
 #+RESULTS:
@@ -291,109 +287,109 @@
 #+end_src
 ** Treemacs (file tree)
 #+begin_src emacs-lisp
-  (use-package all-the-icons)
-  (use-package treemacs-all-the-icons)
-  (use-package treemacs
-    :after all-the-icons
-    :ensure t
-    :defer t
-    :init
-    (with-eval-after-load 'winum
-      (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-    :config
-    (progn
-      (setq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
-	    treemacs-deferred-git-apply-delay      0.5
-	    treemacs-directory-name-transformer    #'identity
-	    treemacs-display-in-side-window        t
-	    treemacs-eldoc-display                 t
-	    treemacs-file-event-delay              5000
-	    treemacs-file-extension-regex          treemacs-last-period-regex-value
-	    treemacs-file-follow-delay             0.2
-	    treemacs-file-name-transformer         #'identity
-	    treemacs-follow-after-init             t
-	    treemacs-git-command-pipe              ""
-	    treemacs-goto-tag-strategy             'refetch-index
-	    treemacs-indentation                   2
-	    treemacs-indentation-string            " "
-	    treemacs-is-never-other-window         nil
-	    treemacs-max-git-entries               5000
-	    treemacs-missing-project-action        'ask
-	    treemacs-move-forward-on-expand        nil
-	    treemacs-no-png-images                 nil
-	    treemacs-no-delete-other-windows       t
-	    treemacs-project-follow-cleanup        nil
-	    treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-	    treemacs-position                      'left
-	    treemacs-read-string-input             'from-child-frame
-	    treemacs-recenter-distance             0.1
-	    treemacs-recenter-after-file-follow    nil
-	    treemacs-recenter-after-tag-follow     nil
-	    treemacs-recenter-after-project-jump   'always
-	    treemacs-recenter-after-project-expand 'on-distance
-	    treemacs-show-cursor                   nil
-	    treemacs-show-hidden-files             t
-	    treemacs-silent-filewatch              nil
-	    treemacs-silent-refresh                nil
-	    treemacs-sorting                       'alphabetic-asc
-	    treemacs-space-between-root-nodes      t
-	    treemacs-tag-follow-cleanup            t
-	    treemacs-tag-follow-delay              1.5
-	    treemacs-user-mode-line-format         nil
-	    treemacs-user-header-line-format       nil
-	    treemacs-width                         35
-	    treemacs-workspace-switch-cleanup      nil)
+(use-package all-the-icons)
+(use-package treemacs-all-the-icons)
+(use-package treemacs
+  :after all-the-icons
+  :ensure t
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :config
+  (progn
+    (setq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
+          treemacs-deferred-git-apply-delay      0.5
+          treemacs-directory-name-transformer    #'identity
+          treemacs-display-in-side-window        t
+          treemacs-eldoc-display                 t
+          treemacs-file-event-delay              5000
+          treemacs-file-extension-regex          treemacs-last-period-regex-value
+          treemacs-file-follow-delay             0.2
+          treemacs-file-name-transformer         #'identity
+          treemacs-follow-after-init             t
+          treemacs-git-command-pipe              ""
+          treemacs-goto-tag-strategy             'refetch-index
+          treemacs-indentation                   2
+          treemacs-indentation-string            " "
+          treemacs-is-never-other-window         nil
+          treemacs-max-git-entries               5000
+          treemacs-missing-project-action        'ask
+          treemacs-move-forward-on-expand        nil
+          treemacs-no-png-images                 nil
+          treemacs-no-delete-other-windows       t
+          treemacs-project-follow-cleanup        nil
+          treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-position                      'left
+          treemacs-read-string-input             'from-child-frame
+          treemacs-recenter-distance             0.1
+          treemacs-recenter-after-file-follow    nil
+          treemacs-recenter-after-tag-follow     nil
+          treemacs-recenter-after-project-jump   'always
+          treemacs-recenter-after-project-expand 'on-distance
+          treemacs-show-cursor                   nil
+          treemacs-show-hidden-files             t
+          treemacs-silent-filewatch              nil
+          treemacs-silent-refresh                nil
+          treemacs-sorting                       'alphabetic-asc
+          treemacs-space-between-root-nodes      t
+          treemacs-tag-follow-cleanup            t
+          treemacs-tag-follow-delay              1.5
+          treemacs-user-mode-line-format         nil
+          treemacs-user-header-line-format       nil
+          treemacs-width                         35
+          treemacs-workspace-switch-cleanup      nil)
 
-      ;; The default width and height of the icons is 22 pixels. If you are
-      ;; using a Hi-DPI display, uncomment this to double the icon size.
-      ;;(treemacs-resize-icons 44)
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    ;;(treemacs-resize-icons 44)
 
-      (treemacs-follow-mode t)
-      (treemacs-filewatch-mode t)
-      (treemacs-load-theme 'all-the-icons)
-      (treemacs-fringe-indicator-mode 'always)
-      (pcase (cons (not (null (executable-find "git")))
-		   (not (null treemacs-python-executable)))
-	(`(t . t)
-	 (treemacs-git-mode 'deferred))
-	(`(t . _)
-	 (treemacs-git-mode 'simple))))
-    :bind
-    (:map global-map
-	  ("M-0"       . treemacs-select-window)
-	  ("C-x t 1"   . treemacs-delete-other-windows)
-	  ("C-x t t"   . treemacs)
-	  ("C-x t B"   . treemacs-bookmark)
-	  ("C-x t C-t" . treemacs-find-file)
-	  ("C-x t M-t" . treemacs-find-tag)))
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-load-theme 'all-the-icons)
+    (treemacs-fringe-indicator-mode 'always)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple))))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
 
-  (use-package treemacs-evil
-    :after (treemacs evil)
-    :ensure t)
+(use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
 
-  (use-package treemacs-projectile
-    :after (treemacs projectile)
-    :ensure t)
+(use-package treemacs-projectile
+  :after (treemacs projectile)
+  :ensure t)
 
-  (use-package treemacs-icons-dired
-    :after (treemacs dired)
-    :ensure t
-    :config (treemacs-icons-dired-mode))
+(use-package treemacs-icons-dired
+  :after (treemacs dired)
+  :ensure t
+  :config (treemacs-icons-dired-mode))
 
-  (use-package treemacs-magit
-    :after (treemacs magit)
-    :ensure t)
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :ensure t)
 
-  (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
-    :after (treemacs persp-mode) ;;or perspective vs. persp-mode
-    :ensure t
-    :config (treemacs-set-scope-type 'Perspectives))
+(use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
+  :after (treemacs persp-mode) ;;or perspective vs. persp-mode
+  :ensure t
+  :config (treemacs-set-scope-type 'Perspectives))
 
-  (use-package neotree
-    :ensure t
-    :init
-    (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-  )
+(use-package neotree
+  :ensure t
+  :init
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+)
 #+end_src
 ** Literate programming
 #+begin_src emacs-lisp
@@ -401,11 +397,6 @@
  'org-babel-load-languages
  '((python . t)))
 #+end_src
-** Magit
-   #+begin_src emacs-lisp
-     (use-package magit)
-     (use-package workgroups2)
-   #+end_src
 ** StartPage
 #+begin_src emacs-lisp
 (find-file "~/.emacs.d/startup.org")
@@ -420,161 +411,6 @@
      (setq rustic-lsp-server 'rls)
     )
 #+end_src
-* Org mode
-  #+begin_src emacs-lisp
-    (defun my/org-mode-setup() 
-		 (org-indend-mode) 
-		 (variable-pitch-mode 1) 
-		 (auto-fill-mode 0) 
-		 (visual-line-mode 1) 
-		 (setq evil-auto indent 1)
-		 (my/org-agenda)
-		 ) 
-(use-package org 
-	  :hook (org-mode . my/org-mode-setup)
-	  :config
-	  (setq org-agenda-files `("~/Brain" "~/Brain/Tasks/Tasks.org"))
-	  (setq org-ellipsis " ▸"
-	  org-hide-emphasis-markers t
-	  org-src-fontify-natively t
-	  org-src-tab-acts-natively t
-	  org-edit-src-content-indentation 2
-	  org-hide-block-startup nil
-	  org-src-preserve-indentation nil
-	  org-startup-folded 'content
-	  org-cycle-separator-lines 2)
-	  (setq org-agenda-start-with-log-mode t)
-	  (setq org-log-done 'time)
-	  (setq org-log-into-drawer t)
-	  :general (general-nmap
-		    :prefix "SPC a"
-		    :keymap 'org-agenda-mode-map
-		    "a" 'org-agenda
-		    )
-	   )
-
-
-  #+end_src
-** Org Agenda
-*** Todos
-    #+begin_src emacs-lisp
-(defun my/org-agenda () (
-(setq org-todo-keywords
-    '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)")
-      (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)" "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)")
-      (sequence "IDEA(i)" "DREAM(d)" "ARTICLE(a)" "|" "DONE(d!)")
-      ))
-(setq org-todo-keyword-faces
-      '(("TODO" . org-warning) ("STARTED" . "yellow") ("DREAM" . "pink") ("IDEA" . "gold") ("ARTICLE" . "lightblue")
-        ("CANCELED" . (:foreground "blue" :weight bold))))
-  (setq org-agenda-custom-commands
-   '(("d" "Dashboard"
-     ((agenda "" ((org-deadline-warning-days 7)))
-      (todo "NEXT"
-	((org-agenda-overriding-header "Next Tasks")))
-      (tags-todo "agenda/ACTIVE" ((org-agenda-overriding-header "Active Projects")))))
-
-    ("n" "Next Tasks"
-     ((todo "NEXT"
-	((org-agenda-overriding-header "Next Tasks")))))
-
-    ("W" "Work Tasks" tags-todo "+work-email")
-
-    ;; Low-effort next actions
-    ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-     ((org-agenda-overriding-header "Low Effort Tasks")
-      (org-agenda-max-todos 20)
-      (org-agenda-files org-agenda-files)))
-
-    ("w" "Workflow Status"
-     ((todo "WAIT"
-	    ((org-agenda-overriding-header "Waiting on External")
-	     (org-agenda-files org-agenda-files)))
-      (todo "REVIEW"
-	    ((org-agenda-overriding-header "In Review")
-	     (org-agenda-files org-agenda-files)))
-      (todo "PLAN"
-	    ((org-agenda-overriding-header "In Planning")
-	     (org-agenda-todo-list-sublevels nil)
-	     (org-agenda-files org-agenda-files)))
-      (todo "BACKLOG"
-	    ((org-agenda-overriding-header "Project Backlog")
-	     (org-agenda-todo-list-sublevels nil)
-	     (org-agenda-files org-agenda-files)))
-      (todo "READY"
-	    ((org-agenda-overriding-header "Ready for Work")
-	     (org-agenda-files org-agenda-files)))
-      (todo "ACTIVE"
-	    ((org-agenda-overriding-header "Active Projects")
-	     (org-agenda-files org-agenda-files)))
-      (todo "COMPLETED"
-	    ((org-agenda-overriding-header "Completed Projects")
-	     (org-agenda-files org-agenda-files)))
-      (todo "CANC"
-	    ((org-agenda-overriding-header "Cancelled Projects")
-	     (org-agenda-files org-agenda-files)))))))
-  ))
-
-
-    #+end_src
-
-
-*** Fonts
-    #+begin_src emacs-lisp
-      (use-package org-bullets 
-	:after org
-	:hook
-	(org-mode . org-bullets-mode))
-      (set-face-attribute 'org-document-title nil :font "hack" :weight 'bold :height 1.3)
-      (dolist (face '((org-level-1 . 1.3)
-		      (org-level-2 . 1.2)
-		      (org-level-3 . 1.05)
-		      (org-level-4 . 1.0)
-		      (org-level-5 . 1.1)
-		      (org-level-6 . 1.1)
-		      (org-level-7 . 1.1)
-		      (org-level-8 . 1.1)))
-	(set-face-attribute (car face) nil :font "hack" :weight 'bold :height (cdr face)))
-      (require 'org-indent)
-      (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :font "mononoki" )
-      (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-      (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-      (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-      (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-      (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-      (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-      (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-      (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-
-      ;; Get rid of the background on column views
-      (set-face-attribute 'org-column nil :background nil)
-      (set-face-attribute 'org-column-title nil :background nil)
-      (setq org-src-fontify-natively t)
-      (defun my/visual-fill ()
-	(setq visual-fill-column-width 140
-	      visual-fill-column-center-text t)
-	(visual-fill-column-mode 1))
-      (use-package visual-fill-column
-	:defer t
-	:hook (org-mode . my/visual-fill))
-
-
-    #+end_src 
-*** Completition
-    #+begin_src emacs-lisp
-
-      (require 'org-tempo)
-      (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
-      (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-      (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
-      (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
-      (add-to-list 'org-structure-template-alist '("py" . "src python"))
-      (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
-      (add-to-list 'org-structure-template-alist '("json" . "src json"))
-
-
-    #+end_src
-
 * Themes
 ** Treemacs
    #+begin_src emacs-lisp
@@ -639,4 +475,3 @@
      )
      (treemacs-load-theme 'Material)
    #+end_src
-   
