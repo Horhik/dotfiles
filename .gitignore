@@ -1,4 +1,5 @@
 home/xmonad/.xmonad/xmonad-x86_64-linux
+home/tmux/.config/tmux/plugins/
 *.hi
 *.o
 *~

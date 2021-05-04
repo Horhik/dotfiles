@@ -33,3 +33,7 @@ git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zs
 git clone https://github.com/elkowar/eww /tmp/eww
 cd /tmp/eww
 cargo build --release
+
+echo "installing tmp (tmux package manager)"
+git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+
