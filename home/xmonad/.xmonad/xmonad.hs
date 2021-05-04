@@ -411,8 +411,9 @@ myStartupHook = do
   spawnOnce "syncthing"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
   spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa"
-  spawnOnce ("enact --pos left --watch &")
-  spawnOnce ("xrandr --output HDMI1 --left-of eDP1&")
+  spawnOnce ("$HOME/.cargo/bin/enact  --watch --pos left")
+  spawnOnce ("sleep 1; $HOME/.cargo/bin/enact --pos left")
+  -- spawnOnce ("xrandr --output HDMI1 --left-of eDP1&")
   spawnOnce (home ++ ".local/scripts/status/launch &")
   spawnOnce (home ++ ".local/scripts/touchpad.sh &")
   -- spawnOnce ("cd /home/horhik/Freenet/downloads/fms; ./fms --daemon &")

@@ -75,7 +75,7 @@ esac
 diskspace ()
 {
                         #might be another /dev/sda...
-    echo "<fc=$pinkColor>—{ </fc>"$(df -h | grep sda2 | grep -oh "[0-9]*%")"<fc=$pinkColor>}</fc>"
+    echo "<fc=$pinkColor>—{ </fc>"$(df -h | grep $MAIN_DISK | grep -oh "[0-9]*%")"<fc=$pinkColor>}</fc>"
 }
 
 wifi ()

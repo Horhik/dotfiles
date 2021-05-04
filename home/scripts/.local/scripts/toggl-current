@@ -1,7 +1,6 @@
 #!/bin/sh
 
 #your toggl api token
-TOGGL_API_TOKEN=7b42e9971bd0e27f68f9270a446ed7d2
 res=$(curl -u $TOGGL_API_TOKEN:api_token \
   -X GET https://api.track.toggl.com/api/v8/time_entries/current)
 echo $res
