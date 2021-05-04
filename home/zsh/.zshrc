@@ -140,5 +140,8 @@ alias cc="cargo check"
 alias ct="cargo test"
 alias gc="git clone"
 alias gs="git status"
+eval $(thefuck --alias)
 
 pfetch
+
+eval $(thefuck --alias)

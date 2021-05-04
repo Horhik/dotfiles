@@ -6,6 +6,8 @@
 (tooltip-mode -1)
 (set-fringe-mode 10)
 (visual-line-mode t)
+(global-visual-line-mode 1)
+(global-visual-line-mode)
 
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/"))
@@ -50,12 +52,12 @@
   :init
   (unicode-fonts-setup))
 
-(set-fontset-font "fontset-startup" 'unicode
-		  (font-spec :name "Mononoki Nerd Font" :size 14))
+;;(set-fontset-font "fontset-startup" 'unicode
+;;		  (font-spec :name "Mononoki Nerd Font" :size 14))
 
 ;; Fallback for emojies
 (set-fontset-font "fontset-default" 'unicode
-		  (font-spec :name "Twemoji" :size 14))
+		  (font-spec :name "Twemoji" :size 16))
 (load-theme 'gruvbox-dark-hard)
 
 
@@ -82,8 +84,8 @@
   :hook (after-init . global-emojify-mode)
   :config
   (setq emojify-emoji-set "twemoji-v2")
-  (setq emojify-set-emoji-styles 'unicode)
-  (setq emojify-display-style 'unicode))
+  (setq emojify-set-emoji-styles 'image)
+  (setq emojify-display-style 'image))
 
 
 ;; Evil mode
@@ -93,7 +95,9 @@
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
+  (global-undo-tree-mode)
   :config
+  (evil-set-undo-system 'undo-tree)
   (evil-mode 1)
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
@@ -174,7 +178,8 @@
   "f v"  '(lambda() (interactive) (find-file "~/.config/nvim/init.vim" :which-key "neovim config"          ))
   "f d"  '(lambda() (interactive) (find-file "~/dotfiles/home"  :which-key "dotfiles dired"                 ))
   "f a"  '(lambda() (interactive) (find-file "~/.config/alacritty/alacritty.yml" :which-key "alacritty"))
-  "f b"  '(lambda() (interactive) (find-file "~/Brain"                           :which-key "my brain")))
+  "f b"  '(lambda() (interactive) (find-file "~/Brain")                           :which-key "my brain")
+  )
 
 
 ;; Org roam
@@ -185,7 +190,7 @@
   :general (general-nmap
              :prefix "SPC r"
              ;; Org-roam keymap
-             "d" '((lambda () (interactive) (org-roam-dailies-find-today)) :which-key "roam today")
+             "d" '(org-roam-dailies-find-today :which-key "roam today")
              "t a" '(org-roam-tag-add :which-key "roam add tag")
              "t d" '(org-roam-tag-delete :which-key "roam delete tag")
              "a a" '(org-roam-alias-add :which-key "roam add alias")
@@ -345,20 +350,51 @@
 (use-package magit)
 (use-package workgroups2)
 
+(set-face-attribute 'variable-pitch nil
+                    ;; :font "Cantarell"
+                    :font "Mononoki Nerd Font"
+                    :height 1.3
+                    :weight 'light)
 
+(set-face-attribute 'org-document-title nil :font "ubuntu" :weight 'bold :height 1.3)
+(dolist (face '((org-level-1 . 1.3)
+		(org-level-2 . 1.2)
+		(org-level-3 . 1.05)
+		(org-level-4 . 1.0)
+		(org-level-5 . 1.1)
+		(org-level-6 . 1.1)
+		(org-level-7 . 1.1)
+		(org-level-8 . 1.1)))
+  (set-face-attribute (car face) nil :font "ubuntu" :weight 'bold :height (cdr face)))
+(require 'org-indent)
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :font "mononoki" )
+(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
+;; Get rid of the background on column views
+(set-face-attribute 'org-column nil :background nil)
+(set-face-attribute 'org-column-title nil :background nil)
+(setq org-src-fontify-natively t)
 
 
 (defun my/org-mode-setup()
-  (org-indend-mode)
-  (variable-pitch-mode 1)
   (auto-fill-mode 0)
   (visual-line-mode 1)
-  (setq evil-auto indent 1))
-
+  (setq evil-auto-indent 1)
+  (variable-pitch-mode t)
+  )
 
 
 (use-package org 
-  :hook (org-mode . my/org-mode-setup) 
+  :hook ((org-mode . my/org-mode-setup)
+	 (org-mode . variable-pitch-mode)
+	 )
   :config (setq org-agenda-files `("~/Brain" "~/Brain/Tasks/Tasks.org")) 
   (org-bullets-mode) 
   (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
@@ -391,7 +427,7 @@
 								       "Next Tasks")))))
 				     ("i" "Ideas" ((todo "IDEA" ((org-agenda-overriding-header
 								       "Ideas ")))))
-				     ("a" "Articles" ((todo "Article" ((org-agenda-overriding-header
+				     ("A" "Articles" ((todo "Article" ((org-agenda-overriding-header
 								       "Article")))))
 				     ("W" "Work Tasks" tags-todo "+work-email")
 				     ("W" "Work Tasks" tags-todo "+work-email")
@@ -454,33 +490,10 @@
 (use-package org-bullets
   :after org
   :hook
-  (org-mode . org-bullets-mode))
+  ((org-mode . org-bullets-mode)
+   )
+  )
 
-(set-face-attribute 'org-document-title nil :font "hack" :weight 'bold :height 1.3)
-(dolist (face '((org-level-1 . 1.3)
-		(org-level-2 . 1.2)
-		(org-level-3 . 1.05)
-		(org-level-4 . 1.0)
-		(org-level-5 . 1.1)
-		(org-level-6 . 1.1)
-		(org-level-7 . 1.1)
-		(org-level-8 . 1.1)))
-  (set-face-attribute (car face) nil :font "hack" :weight 'bold :height (cdr face)))
-(require 'org-indent)
-(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :font "mononoki" )
-(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-
-;; Get rid of the background on column views
-(set-face-attribute 'org-column nil :background nil)
-(set-face-attribute 'org-column-title nil :background nil)
-(setq org-src-fontify-natively t)
 (defun my/visual-fill ()
   (setq visual-fill-column-width 140
 	visual-fill-column-center-text t)
