@@ -19,7 +19,7 @@
 
 
 (defvar package-list
-  '( lsp-mode rustic evil-mc rainbow-delimiters doom-themes doom-modeline lusty-explorer ac-racer auto-complete all-the-icons linum-relative  racer cargo flycheck-rust rust-mode gruvbox-theme evil general use-package treemacs treemacs-all-the-icons treemacs-evil org-roam org-roam-server interaction-log))
+  '(use-package gruvbox-theme))
 
 (dolist (p package-list)
   (when (not (package-installed-p p))
@@ -33,31 +33,31 @@
  '(custom-safe-themes
    '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
  '(package-selected-packages
-   '(neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
+   '(org-roam-server visual-fill-column org-bullets workgroups2 neotree treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs-all-the-icons ivy-rich which-key rainbow-delimiters highlight-parentheses org-roam general use-package)))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  )
 ;; Setting up use-package
 (require 'use-package)
+(use-package gruvbox-theme)
 (setq use-package-always-ensure t)
 
 ;; Default fonts
 (add-to-list 'default-frame-alist '(font . "Mononoki Nerd Font" ))
 (set-face-attribute 'default t :font "Mononoki Nerd Font" )
-(use-package unicode-fonts
-  :init
-  (unicode-fonts-setup))
 
 ;;(set-fontset-font "fontset-startup" 'unicode
 ;;		  (font-spec :name "Mononoki Nerd Font" :size 14))
+(when (member "Noto Color Emoji" (font-family-list))
+  (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend))
 
+;; ☺️ ☻ 😃 😄 😅 😆 😊 😎 😇 😈 😏 🤣 🤩 🤪 🥳 😁 😀 😂 🤠 🤡 🤑 🤓 🤖 😗 😚 😘 😙 😉 🤗 😍 🥰 🤤 😋 🤔 🤨 🧐 🤭 🤫 😯 🤐 😌 😖 😕 😳 😔 🤥 🥴 😮 😲 🤯 😩 😫 🥱 😪 😴 😵 ☹️ 😦 😞 😥 😟 😢 😭 🤢 🤮 😷 🤒 🤕 🥵 🥶 🥺 😬 😓 😰 😨 😱 😒 😠 😡 😤 😣 😧 🤬 😸 😹 😺 😻 😼 😽 😾 😿 🙀 🙈 🙉 🙊 🤦 🤷 🙅 🙆 🙋 🙌 🙍 🙎 🙇 🙏 👯 💃 🕺 🤳 💇 💈 💆 🧖 🧘 🧍 🧎 👰 🤰 🤱 👶 🧒 👦 👧 👩 👨 🧑 🧔 🧓 👴 👵 👤 👥 👪 👫 👬 👭 👱 👳 👲 🧕 👸 🤴 🎅 🤶 🧏 🦻 🦮 🦯 🦺 🦼 🦽 🦾 🦿 🤵 👮 👷 💁 💂 🕴 🕵️ 🦸 🦹 🧙 🧚 🧜 🧝 🧞 🧛 🧟 👼 👿 👻 👹 👺 👽 👾 🛸 💀 ☠️ 🕱 🧠 🦴 👁 👀 👂 👃 👄 🗢 👅 🦷 🦵 🦶 💭 🗬 🗭 💬 🗨 🗩 💦 💧 💢 💫 💤 💨 💥 💪 🗲 🔥 💡 💩 💯 
 ;; Fallback for emojies
-(set-fontset-font "fontset-default" 'unicode
-		  (font-spec :name "Twemoji" :size 16))
 (load-theme 'gruvbox-dark-hard)
 
 
@@ -80,19 +80,20 @@
 (dolist (mode '(org-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-(use-package emojify
-  :hook (after-init . global-emojify-mode)
-  :config
-  (setq emojify-emoji-set "twemoji-v2")
-  (setq emojify-set-emoji-styles 'image)
-  (setq emojify-display-style 'image))
+;; (use-package emojify
+;;   :hook (after-init . global-emojify-mode)
+;;   :config
+;;   (setq emojify-emoji-set "twemoji-v2")
+;;   (setq emojify-set-emoji-styles 'image)
+;;   (setq emojify-display-style 'image))
 
 
 ;; Evil mode
+(use-package undo-tree)
 (use-package evil
   :init
-  (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
+  (setq evil-want-integration t)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump nil)
   (global-undo-tree-mode)
@@ -163,6 +164,7 @@
      (find-file (expand-file-name (format "%s" file)))) file ) )
 
 
+(use-package general)
 (general-evil-setup)
 (general-nmap
   :prefix "SPC"
@@ -183,6 +185,7 @@
 
 
 ;; Org roam
+(use-package org-roam-server)
 (use-package org-roam
   :ensure t
   :hook
@@ -352,7 +355,7 @@
 
 (set-face-attribute 'variable-pitch nil
                     ;; :font "Cantarell"
-                    :font "Mononoki Nerd Font"
+                    :font "Hack"
                     :height 1.3
                     :weight 'light)
 
@@ -367,7 +370,7 @@
 		(org-level-8 . 1.1)))
   (set-face-attribute (car face) nil :font "ubuntu" :weight 'bold :height (cdr face)))
 (require 'org-indent)
-(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :font "mononoki" )
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :font "Hack" )
 (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
 (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
 (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
@@ -396,7 +399,7 @@
 	 (org-mode . variable-pitch-mode)
 	 )
   :config (setq org-agenda-files `("~/Brain" "~/Brain/Tasks/Tasks.org")) 
-  (org-bullets-mode) 
+  (org-bullets-mode t) 
   (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
 	org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
 	org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
@@ -501,3 +504,70 @@
 (use-package visual-fill-column
   :defer t
   :hook (org-mode . my/visual-fill))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+(treemacs-create-theme "Material"
+  :icon-directory (treemacs-join-path treemacs-dir "/home/horhik/.emacs.d/icons")
+  :config
+  (progn
+    (treemacs-create-icon :file "folder-core-open.png"   :fallback "📁"       :extensions (root-open))
+    (treemacs-create-icon :file "folder-core.png"        :fallback "📁"       :extensions (root-closed))
+    (treemacs-create-icon :file "folder-node-open.png"   :fallback "📂"       :extensions (dir-open))
+    (treemacs-create-icon :file "folder-node.png"        :fallback "📁"       :extensions (dir-closed))
+    (treemacs-create-icon :file "folder-test-open.png"   :fallback "📂"       :extensions ("tests"))
+    (treemacs-create-icon :file "folder-test.png"        :fallback "📁"       :extensions ("tests"))
+    (treemacs-create-icon :file "emacs.png"              :fallback "💜"     :extensions ("el" "elc" ".spacemacs" "doom" ))
+    (treemacs-create-icon :file "emacs.png"              :fallback "💜"     :extensions ("el" "elc"))
+    (treemacs-create-icon :file "markdown.png"           :fallback "📖"     :extensions ("md"))
+    (treemacs-create-icon :file "readme.png"             :fallback "📖"     :extensions ("readme.md" "README.md" "README" "readme"))
+    (treemacs-create-icon :file "editorconfig.png"       :fallback "📖"     :extensions ("editorconfig"))
+    (treemacs-create-icon :file "org.png"                :fallback "🐴"     :extensions ("org"))
+    (treemacs-create-icon :file "rust.png"               :fallback "🐴"     :extensions ("rs"))
+    (treemacs-create-icon :file "haskell.png"            :fallback "🐴"     :extensions ("hs" "haskell"))
+    (treemacs-create-icon :file "c.png"                  :fallback "🐴"     :extensions ("c"))
+    (treemacs-create-icon :file "cpp.png"                :fallback "🐴"     :extensions ("cpp" "c++"))
+    (treemacs-create-icon :file "h.png"                  :fallback "🐴"     :extensions ("h"))
+    (treemacs-create-icon :file "diff.png"               :fallback "🐴"     :extensions ("diff"))
+    (treemacs-create-icon :file "makefile.png"           :fallback "🐴"     :extensions ("mk" "make" "Makefile"))
+    (treemacs-create-icon :file "assembly.png"           :fallback "🐴"     :extensions ("bin" "so" "o"))
+    (treemacs-create-icon :file "document.png"           :fallback "🐴"     :extensions ("" "txt"))
+    (treemacs-create-icon :file "file.png"               :fallback "🐴"     :extensions (fallback))
+    (treemacs-create-icon :file "toml.png"               :fallback "🗃️"     :extensions ("toml"))
+    (treemacs-create-icon :file "json.png"               :fallback "🗃️"     :extensions ("json"))
+    (treemacs-create-icon :file "yaml.png"               :fallback "🗃️"     :extensions ("yml" "yaml"))
+    (treemacs-create-icon :file "vim.png"                :fallback "🗃️"     :extensions ("vim" "vi" "nvim"))
+    (treemacs-create-icon :file "video.png"              :fallback "🗃️"     :extensions ("mp4" "avi" "gif" "mpv"))
+    (treemacs-create-icon :file "audio.png"              :fallback "🗃️"     :extensions ("mp3" "ogg" "wav" ))
+    (treemacs-create-icon :file "image.png"              :fallback "🗃️"     :extensions ("png" "jpg"))
+    (treemacs-create-icon :file "svg.png"                :fallback "🗃️"     :extensions ("svg"))
+    (treemacs-create-icon :file "css.png"                :fallback "🗃️"     :extensions ("css"))
+    (treemacs-create-icon :file "console.png"            :fallback "🗃️"     :extensions ("bash" "sh"))
+    (treemacs-create-icon :file "certificate.png"        :fallback "🗃️"     :extensions ("cert" "LICENSE" "license" "gpl" "mit" "gpl3" "gplv3" "apache"))
+    (treemacs-create-icon :file "database.png"           :fallback "🗃️"     :extensions ("sqlite" "db" "sql"))
+    (treemacs-create-icon :file "lua.png"                :fallback "🗃️"     :extensions ("lua"))
+    (treemacs-create-icon :file "javascript.png"         :fallback "🗃️"     :extensions ("js" "javascript"))
+    (treemacs-create-icon :file "typescript.png"         :fallback "🗃️"     :extensions ("ts" "typescript"))
+    (treemacs-create-icon :file "react.png"              :fallback "🗃️"     :extensions ("jsx"))
+    (treemacs-create-icon :file "react_ts.png"           :fallback "🗃️"     :extensions ("tsx"))
+    (treemacs-create-icon :file "settings.png"           :fallback "🗃️"     :extensions ("config" "conf" "rc" "*rc"))
+    (treemacs-create-icon :file "sass.png"               :fallback "🗃️"     :extensions ("sass" "scss"))
+    (treemacs-create-icon :file "xml.png"                :fallback "🗃️"     :extensions ("xml"))
+    (treemacs-create-icon :file "less.png"               :fallback "🗃️"     :extensions ("less"))
+    (treemacs-create-icon :file "pdf.png"                :fallback "🗃️"     :extensions ("pdf"))
+    (treemacs-create-icon :file "tex.png"                :fallback "🗃️"     :extensions ("tex" "latex" ))
+    (treemacs-create-icon :file "log.png"                :fallback "🗃️"     :extensions ("log" ))
+    (treemacs-create-icon :file "word.png"               :fallback "🗃️"     :extensions ("docs" "docx" "word" ))
+    (treemacs-create-icon :file "powerpoint.png"         :fallback "🗃️"     :extensions ("ppt" "pptx" ))
+    (treemacs-create-icon :file "html.png"               :fallback "🗃️"     :extensions ("html"))
+    (treemacs-create-icon :file "zip.png"                :fallback "🗃️"     :extensions ("zip" "tar" "tar.xz" "xz" "xfv" "7z"))
+    (treemacs-create-icon :file "todo.png"               :fallback "🗃️"     :extensions ("TODO" "todo" "Tasks" ))
+    (treemacs-create-icon :file "webassembly"            :fallback "🗃️"     :extensions ("wasm" "webasm" "webassembly"))
+    (treemacs-create-icon :file "python"                 :fallback "🗃️"     :extensions ("py" "python"))))
+
+(treemacs-load-theme 'Material)

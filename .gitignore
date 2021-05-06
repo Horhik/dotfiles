@@ -4,3 +4,9 @@ home/tmux/.config/tmux/plugins/
 *.o
 *~
 
+home/pure_emacs/.emacs.d/.cache/
+home/pure_emacs/.emacs.d/elpa/
+home/pure_emacs/.emacs.d/org-roam.db
+home/pure_emacs/.emacs.d/projectile-bookmarks.eld
+home/pure_emacs/.emacs.d/recentf
+home/pure_emacs/.emacs.d/transient/
