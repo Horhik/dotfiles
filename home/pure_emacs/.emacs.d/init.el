@@ -25,6 +25,9 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+(require 'use-package)
+(use-package gruvbox-theme)
+(setq use-package-always-ensure t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -43,9 +46,6 @@
 ;;  ;; If there is more than one, they won't work right.
 ;;  )
 ;; Setting up use-package
-(require 'use-package)
-(use-package gruvbox-theme)
-(setq use-package-always-ensure t)
 
 ;; Default fonts
 (add-to-list 'default-frame-alist '(font . "Mononoki Nerd Font" ))
@@ -510,6 +510,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(require 'org-tempo)
+(add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
+(add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+(add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
+(add-to-list 'org-structure-template-alist '("json" . "src json"))
 
 
 (treemacs-create-theme "Material"
