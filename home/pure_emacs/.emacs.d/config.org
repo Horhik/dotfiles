@@ -27,7 +27,7 @@
 
 
 (defvar package-list
-  '(use-package gruvbox-theme))
+  '(use-package doom-themes))
 
 (dolist (p package-list)
   (when (not (package-installed-p p))
@@ -52,20 +52,20 @@
 ** Theme
 #+begin_src emacs-lisp
   (require 'use-package)
-  (use-package gruvbox-theme)
+  (use-package doom-themes)
   (setq use-package-always-ensure t)
   (custom-set-variables
    ;; custom-set-variables was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
-   '(custom-safe-themes
-     '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
+;   '(custom-safe-themes
+;     '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
    '(package-selected-packages
      '(org-roam-server visual-fill-column org-bullets workgroups2 neotree treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs-all-the-icons ivy-rich which-key rainbow-delimiters highlight-parentheses org-roam general use-package)))
 
 
-  (load-theme 'gruvbox-dark-hard)
+  (load-theme 'doom-gruvbox)
 #+end_src
 ** Modeline
 #+begin_src emacs-lisp
@@ -418,50 +418,6 @@
 
 #+end_src
 * Org
-** Org roam
-#+begin_src emacs-lisp
-(use-package org-roam-server)
-(use-package org-roam
-  :ensure t
-  :hook
-  (after-init . org-roam-mode)
-  :general (general-nmap
-             :prefix "SPC r"
-             ;; Org-roam keymap
-             "d" '(org-roam-dailies-find-today :which-key "roam today")
-             "t a" '(org-roam-tag-add :which-key "roam add tag")
-             "t d" '(org-roam-tag-delete :which-key "roam delete tag")
-             "a a" '(org-roam-alias-add :which-key "roam add alias")
-             "f f" '(org-roam-find-file :which-key "roam findgfile ")
-             "g" '(org-roam-graph-show :which-key "roam graph ")
-             "b b" '(org-roam-buffer-toggle-display :which-key "roam buffer toggle ")
-             "b s" '(org-roam-buffer-activate :which-key "roam buffer show ")
-             "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
-             "s" '(org-roam-server-mode :which-key "roam server "))
-  :custom
-  (org-roam-directory "~/Brain")
-  :config
-  (setq
-   org-roam-server-host "127.0.0.1"
-   org-roam-server-port 5034
-   org-roam-server-authenticate nil
-   org-roam-server-export-inline-images t
-   org-roam-server-serve-files nil
-   org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-   org-roam-server-network-poll t
-   org-roam-server-network-arrows nil
-   org-roam-server-network-label-truncate t
-   org-roam-server-network-label-truncate-length 60
-   org-roam-server-network-label-wrap-length 20)
-
-
-  (require 'org-roam-protocol))
-
-
-
-(require 'org-roam-protocol)
-
-#+end_src
 ** Fonts
 #+begin_src emacs-lisp
 
@@ -502,116 +458,117 @@
 ** Org mode
 #+begin_src emacs-lisp
 
-(defun my/org-mode-setup()
-  (auto-fill-mode 0)
-  (visual-line-mode 1)
-  (setq evil-auto-indent 1)
-  (variable-pitch-mode t)
-  )
+  (defun my/org-mode-setup()
+    (auto-fill-mode 0)
+    (visual-line-mode 1)
+    (setq evil-auto-indent 1)
+    (variable-pitch-mode t)
+    )
 
 
-(use-package org 
-  :hook ((org-mode . my/org-mode-setup)
-	 (org-mode . variable-pitch-mode)
-	 )
-  :config (setq org-agenda-files `("~/Brain" "~/Brain/Tasks/Tasks.org")) 
-  (org-bullets-mode t) 
-  (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
-	org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
-	org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
-  (setq org-agenda-start-with-log-mode t) 
-  (setq org-log-done 'time) 
-  (setq org-log-into-drawer t)
-  (setq org-todo-keyword-faces '(("TODO" . org-warning) 
-				 ("STARTED" . "yellow") 
-				 ("DREAM" . "pink") 
-				 ("IDEA" . "gold") 
-				 ("ARTICLE" . "lightblue") 
-				 ("CANCELED" . 
-				  (:foreground "blue" 
-					       :weight bold))))
+  (use-package org 
+    :hook ((org-mode . my/org-mode-setup)
+	   (org-mode . variable-pitch-mode)
+	   )
+    :config (setq org-agenda-files `("~/Brain" "~/Brain/Tasks/Tasks.org")) 
+    (org-bullets-mode t) 
+    (org-indent-mode t)
+    (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
+	  org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
+	  org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
+    (setq org-agenda-start-with-log-mode t) 
+    (setq org-log-done 'time) 
+    (setq org-log-into-drawer t)
+    (setq org-todo-keyword-faces '(("TODO" . org-warning) 
+				   ("STARTED" . "yellow") 
+				   ("DREAM" . "pink") 
+				   ("IDEA" . "gold") 
+				   ("ARTICLE" . "lightblue") 
+				   ("CANCELED" . 
+				    (:foreground "blue" 
+						 :weight bold))))
 
-  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)") 
-			    (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)"
-				      "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)") 
-			    (sequence "IDEA(i)" "DREAM(d)" "ARTICLE(a)" "|" "DONE(d!)")))
+    (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)") 
+			      (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)"
+					"WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)") 
+			      (sequence "IDEA(i)" "DREAM(d)" "ARTICLE(a)" "|" "DONE(d!)")))
 
-  (setq org-agenda-custom-commands '(("d" "Dashboard" ((agenda "" ((org-deadline-warning-days 7))) 
-						       (todo "NEXT" ((org-agenda-overriding-header
-								      "Next Tasks"))) 
-						       (tags-todo "agenda/ACTIVE"
-								  ((org-agenda-overriding-header
-								    "Active Projects")))))
-				     ("n" "Next Tasks" ((todo "NEXT" ((org-agenda-overriding-header
-								       "Next Tasks")))))
-				     ("i" "Ideas" ((todo "IDEA" ((org-agenda-overriding-header
-								       "Ideas ")))))
-				     ("A" "Articles" ((todo "Article" ((org-agenda-overriding-header
-								       "Article")))))
-				     ("W" "Work Tasks" tags-todo "+work-email")
-				     ("W" "Work Tasks" tags-todo "+work-email")
-				     ("I" "ideas" tags-todo "+idea-article")
+    (setq org-agenda-custom-commands '(("d" "Dashboard" ((agenda "" ((org-deadline-warning-days 7))) 
+							 (todo "NEXT" ((org-agenda-overriding-header
+									"Next Tasks"))) 
+							 (tags-todo "agenda/ACTIVE"
+								    ((org-agenda-overriding-header
+								      "Active Projects")))))
+				       ("n" "Next Tasks" ((todo "NEXT" ((org-agenda-overriding-header
+									 "Next Tasks")))))
+				       ("i" "Ideas" ((todo "IDEA" ((org-agenda-overriding-header
+									 "Ideas ")))))
+				       ("A" "Articles" ((todo "Article" ((org-agenda-overriding-header
+									 "Article")))))
+				       ("W" "Work Tasks" tags-todo "+work-email")
+				       ("W" "Work Tasks" tags-todo "+work-email")
+				       ("I" "ideas" tags-todo "+idea-article")
 
-				     ;; Low-effort next actions
-				     ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-				      ((org-agenda-overriding-header "Low Effort Tasks") 
-				       (org-agenda-max-todos 20) 
-				       (org-agenda-files org-agenda-files)))
-				     ("w" "Workflow Status" ((todo "WAIT"
-								   ((org-agenda-overriding-header
-								     "Waiting on External") 
-								    (org-agenda-files
-								     org-agenda-files))) 
-							     (todo "REVIEW"
-								   ((org-agenda-overriding-header
-								     "In Review") 
-								    (org-agenda-files
-								     org-agenda-files))) 
-							     (todo "PLAN"
-								   ((org-agenda-overriding-header
-								     "In Planning") 
-								    (org-agenda-todo-list-sublevels
-								     nil) 
-								    (org-agenda-files
-								     org-agenda-files))) 
-							     (todo "BACKLOG"
-								   ((org-agenda-overriding-header
-								     "Project Backlog") 
-								    (org-agenda-todo-list-sublevels
-								     nil) 
-								    (org-agenda-files
-								     org-agenda-files))) 
-							     (todo "READY"
-								   ((org-agenda-overriding-header
-								     "Ready for Work") 
-								    (org-agenda-files
-								     org-agenda-files))) 
-							     (todo "ACTIVE"
-								   ((org-agenda-overriding-header
-								     "Active Projects") 
-								    (org-agenda-files
-								     org-agenda-files))) 
-							     (todo "COMPLETED"
-								   ((org-agenda-overriding-header
-								     "Completed Projects") 
-								    (org-agenda-files
-								     org-agenda-files))) 
-							     (todo "CANC"
-								   ((org-agenda-overriding-header
-								     "Cancelled Projects") 
-								    (org-agenda-files
-								     org-agenda-files)))))))
+				       ;; Low-effort next actions
+				       ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+					((org-agenda-overriding-header "Low Effort Tasks") 
+					 (org-agenda-max-todos 20) 
+					 (org-agenda-files org-agenda-files)))
+				       ("w" "Workflow Status" ((todo "WAIT"
+								     ((org-agenda-overriding-header
+								       "Waiting on External") 
+								      (org-agenda-files
+								       org-agenda-files))) 
+							       (todo "REVIEW"
+								     ((org-agenda-overriding-header
+								       "In Review") 
+								      (org-agenda-files
+								       org-agenda-files))) 
+							       (todo "PLAN"
+								     ((org-agenda-overriding-header
+								       "In Planning") 
+								      (org-agenda-todo-list-sublevels
+								       nil) 
+								      (org-agenda-files
+								       org-agenda-files))) 
+							       (todo "BACKLOG"
+								     ((org-agenda-overriding-header
+								       "Project Backlog") 
+								      (org-agenda-todo-list-sublevels
+								       nil) 
+								      (org-agenda-files
+								       org-agenda-files))) 
+							       (todo "READY"
+								     ((org-agenda-overriding-header
+								       "Ready for Work") 
+								      (org-agenda-files
+								       org-agenda-files))) 
+							       (todo "ACTIVE"
+								     ((org-agenda-overriding-header
+								       "Active Projects") 
+								      (org-agenda-files
+								       org-agenda-files))) 
+							       (todo "COMPLETED"
+								     ((org-agenda-overriding-header
+								       "Completed Projects") 
+								      (org-agenda-files
+								       org-agenda-files))) 
+							       (todo "CANC"
+								     ((org-agenda-overriding-header
+								       "Cancelled Projects") 
+								      (org-agenda-files
+								       org-agenda-files)))))))
 
 
-  :general (general-nmap :prefix "SPC a" 
-	     :keymap 'org-agenda-mode-map 
-	     "a" 'org-agenda))
-(use-package org-bullets
-  :after org
-  :hook
-  ((org-mode . org-bullets-mode)
-   )
-  )
+    :general (general-nmap :prefix "SPC a" 
+	       :keymap 'org-agenda-mode-map 
+	       "a" 'org-agenda))
+  (use-package org-bullets
+    :after org
+    :hook
+    ((org-mode . org-bullets-mode)
+     )
+    )
 
 
 #+end_src
@@ -639,5 +596,53 @@
 (add-to-list 'org-structure-template-alist '("json" . "src json"))
 
 
+
+#+end_src
+
+** Org roam
+#+begin_src emacs-lisp
+  (use-package org-roam-server)
+  (use-package org-roam
+    :ensure t
+    :hook
+    (after-init . org-roam-mode)
+    :general (general-nmap
+	       :prefix "SPC r"
+	       ;; Org-roam keymap
+	       "d" '(org-roam-dailies-find-today :which-key "roam today")
+	       "t a" '(org-roam-tag-add :which-key "roam add tag")
+	       "t d" '(org-roam-tag-delete :which-key "roam delete tag")
+	       "a a" '(org-roam-alias-add :which-key "roam add alias")
+	       "f f" '(org-roam-find-file :which-key "roam findgfile ")
+	       "g" '(org-roam-graph-show :which-key "roam graph ")
+	       "b b" '(org-roam-buffer-toggle-display :which-key "roam buffer toggle ")
+	       "b s" '(org-roam-buffer-activate :which-key "roam buffer show ")
+	       "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
+	       "s" '(org-roam-server-mode :which-key "roam server "))
+    :custom
+    (org-roam-directory "~/Brain")
+    :config
+    (setq
+     org-roam-server-host "127.0.0.1"
+     org-roam-server-port 5034
+     org-roam-server-authenticate nil
+     org-roam-server-export-inline-images t
+     org-roam-server-serve-files nil
+     org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+     org-roam-server-network-poll t
+     org-roam-server-network-arrows nil
+     org-roam-server-network-label-truncate t
+     org-roam-server-network-label-truncate-length 60
+     org-roam-server-network-label-wrap-length 20)
+
+
+    (require 'org-roam-protocol)
+    (org-roam-server-mode t)
+    (server-start t)
+    )
+
+
+
+  (require 'org-roam-protocol)
 
 #+end_src

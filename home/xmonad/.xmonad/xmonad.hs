@@ -156,8 +156,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. controlMask .|. shiftMask, xK_h), namedScratchpadAction myScratchpads "htop")
     , ((modm .|. shiftMask    , xK_a),  namedScratchpadAction myScratchpads "anki")
     , ((modm .|. shiftMask    , xK_m),  namedScratchpadAction myScratchpads "pulse")
-    , ((modm .|. shiftMask    , xK_n),  namedScratchpadAction myScratchpads "notion")
     , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
+    , ((modm .|. shiftMask    , xK_n),  namedScratchpadAction myScratchpads "rss_news")
     , ((modm .|. controlMask, xK_e),    namedScratchpadAction myScratchpads "emacs")
 
     -- | Programs
@@ -293,6 +293,7 @@ myScratchpads = [
   , NS "pulse" spawnPulse findPulse managePulse
   , NS "todoist" spawnTodoist findTodoist manageTodoist
   , NS "emacs" spawnEmacs findEmacs manageEmacs
+  , NS "rss_news" spawnRSS findRSS manageRSS
     ]
   where
     classTerm     = "TerminalDropdown"
@@ -346,6 +347,19 @@ myScratchpads = [
         w = 0.6             -- width, 50%
         t = (1 - h) / 2     -- bottom edge
         l = (1 - w) / 2     -- centered left/right
+
+    classRSS     = "RSSDropDown"
+    titleRSS     = "rss@news"
+    spawnRSS     = "alacritty -t rss@news -e newsboat"
+    findRSS      = title =? titleRSS
+    manageRSS    = customFloating $ W.RationalRect l t w h
+      where
+        h = 0.5             -- height, 50%
+        w = 0.5             -- width, 50%
+        t = (1 - h) / 2     -- bottom edge
+        l = (1 - w) / 2     -- centered left/right
+
+
 
 
 
