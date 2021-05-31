@@ -18,10 +18,12 @@
       ./modules/discord.nix
       ./modules/gtk.nix
       ./modules/hosts.nix
-      ./modules/picom.nix
+      #./modules/picom.nix
       ./modules/sound.nix
       ./modules/steam.nix
       ./modules/zsh.nix
+      ./fonts.nix
+
 
     ];
   # Use the systemd-boot EFI boot loader.
@@ -111,7 +113,8 @@
   environment.systemPackages = with pkgs; [
     papirus-icon-theme pop-gtk-theme 
     wget git vim neovim emacs alacritty xterm zsh tmux stow  dunst
-    # haskellPackages.xmonad haskellPackages.xmobar haskellPackages.xmonad-contrib haskellPackages.xmonad-utils
+    # haskellPackages.xmonad haskellPackages.xmonad-contrib haskellPackages.xmonad-utils
+    haskellPackages.xmobar 
     i3 surf dmenu st qutebrowser 
     lightdm rofi nitrogen rofi-emoji
     mononoki fontmatrix
@@ -124,7 +127,6 @@
     killall audacity  thefuck
     polkit etcher gsettings-qt appimage-run pamixer unzip qjackctl gnome3.nautilus bluez pkgconfig pavucontrol bpytop 
     #nur.repos.reedrw.picom-next-ibhagwan
-    picom
     spotify obsidian discord
   ];
 
