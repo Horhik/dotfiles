@@ -1,8 +1,0 @@
-https://dwm.suckless.org/patches/alternativetags/
-https://dwm.suckless.org/patches/bottomstack/
-https://dwm.suckless.org/patches/centeredwindowname/
-https://dwm.suckless.org/patches/cfacts/
-https://dwm.suckless.org/patches/colorbar/
-https://dwm.suckless.org/patches/cropwindows/
-https://dwm.suckless.org/status_monitor/
-

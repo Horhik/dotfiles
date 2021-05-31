@@ -5,6 +5,7 @@ rounded-corners-exclude = [
   "class_g *= 'dwm'",
 	"class_g = 'Xmobar'",
 	"class_g = 'xmobar'",
+	"class_g = 'firefox'",
 	"name = 'xmobar'",
 	"name *= 'emacs'",
 	"class_g = 'emacs'"
@@ -15,6 +16,7 @@ rounded-corners-rule = [
 
 	"0:class_g = 'awesome'",
 	"0:name = 'xmobar'",
+	"0:name = 'firefox'",
 	"0:class_g = 'Xmobar'",
 	"0:name = 'Xmobar'",
 	"0:class_g = 'xmonad'",
@@ -22,12 +24,8 @@ rounded-corners-rule = [
 	"5:class_g = 'Deadd-notification-center'",
 	"5:class_g = 'emacs'",
   "50:name = 'video0'",
-  "50:class_g     = 'firefox'"
 
 ];
-corner-radius-rule = [
-  "50:class_g     = 'firefox'"
-]
 corner-radius = 5;
 round-borders = 5;
 round-borders-exclude = [
@@ -40,6 +38,7 @@ round-borders-rule = [
   "3:class_g     = 'Alacritty'",
   "3:class_g     = 'eww'",
   "0:name     = 'xmobar'",
+  "0:name     = 'firefox'",
 	"0:class_g = 'Xmobar'",
   "0:class_g     = 'xmonad'",
   "5:class_g     = 'Dunst'",
@@ -47,9 +46,9 @@ round-borders-rule = [
   "5:class_g     = 'Signal'",
   "5:class_g     = 'Deadd-notification-center'",
 ];
-shadow = false;
+shadow = true;
 shadow-radius = 5;
-shadow-opacity = 0.4 
+shadow-opacity = 0.4; 
 shadow-offset-x = -1;
 shadow-offset-y = -1;
 shadow-exclude = [
@@ -68,45 +67,45 @@ shadow-exclude = [
 ];
 
 
-fading = false
+fading = true;
 
 fade-out-step = 0.03;
 inactive-opacity = 1;
 frame-opacity = 1;
 inactive-opacity-override = false;
-inactive-dim = 0
+inactive-dim = 0;
 focus-exclude = [ "class_g = 'Cairo-clock'" ];
-opacity-rule = [
-"00:name *= 'blur_full'",
-"80:name = 'emacs@dropdown'",
-"75:class_g *= 'Spotify'",
-"85:class_g *= 'Anki'",
-
- "85:class_g *= 'Go-for-it'",
- "95:class_g *= 'notion'",
- "95:class_g = 'Emacs'",
- "90:class_g *= 'Alacritty'",
- "78:class_g *= 'Zathura'",
- "80:class_g = 'dropdown'",
- "50:class_g = 'Firefox'",
- "90:class_g *= 'emacs'",
- "90:class_g = 'dmenu'",
- "90:class_g = 'Evolution'",
- "98:name *= 'alacritty'",
- "90:name = 'emacs'",
- "95:class_g = 'Polybar'",
- "85:name *= 'scratchpad'",
- "85:class_g= 'Dunst'",
- "85:name *= 'Rust Programming Language'",
- "95:class_g = 'Deadd-notification-center'",
- "85:class_g *= 'ticktick'"
- ]
+  opacity-rule = [
+  "00:name *= 'blur_full'",
+#  "80:name = 'emacs@dropdown'",
+#  "75:class_g *= 'Spotify'",
+#  "85:class_g *= 'Anki'",
+# 
+#  "85:class_g *= 'Go-for-it'",
+#  "95:class_g *= 'notion'",
+#  "95:class_g = 'Emacs'",
+  "90:class_g *= 'Alacritty'",
+#  "78:class_g *= 'Zathura'",
+#  "80:class_g = 'dropdown'",
+#  "50:class_g = 'Firefox'",
+#  "90:class_g *= 'emacs'",
+#  "90:class_g = 'dmenu'",
+#  "90:class_g = 'Evolution'",
+#  "98:name *= 'alacritty'",
+#  "90:name = 'emacs'",
+#  "95:class_g = 'Polybar'",
+#  "85:name *= 'scratchpad'",
+#  "85:class_g= 'Dunst'",
+#  "85:name *= 'Rust Programming Language'",
+#  "95:class_g = 'Deadd-notification-center'",
+#  "85:class_g *= 'ticktick'"
+  ]
 
 
 blur:
 {
 	method = "kawase";
-	size = 50;
+	size = 30;
 	deviation = 9.0;
 };
 
@@ -121,6 +120,7 @@ blur-background-exclude = [
 
 
 backend = "glx";
+glx-no-stencli = true;
 vsync = true
 
 mark-wmwin-focused = true;

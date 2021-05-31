@@ -45,7 +45,7 @@ myFocusFollowsMouse   :: Bool
 myFocusFollowsMouse   = True
 myClickJustFocuses    :: Bool
 myClickJustFocuses    = False
-myBorderWidth         = 3
+myBorderWidth         = 0
 superKey              = mod4Mask
 myModMask             = superKey
 -- myWorkspaces          = ["home 1","web 2","code 3","test 4","tkr 5","task 6","edit 7", "chat 8","book 9"]
@@ -67,7 +67,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch dmenu
 --    , ((modm,               xK_p     ), spawn ("dmenu_run " ++ " -fn '" ++ myDmenuFont ++ "' -nb '" ++  backgroundColor ++  "' -nf '" ++ selectionColor ++ "' -sb '"++ selectionColor ++"' -sf '"++foregroundSecondColor++"' -shb '"++ greenDarkerColor ++ "' -c "++" -l "++" 20 "))
     -- launch emoji picker
-    , ((modm              , xK_e     ), spawn "emoji-menu")
+    , ((modm              , xK_e     ), spawn "rofimoji")
     , ((modm              , xK_p     ), spawn "rofi -show drun")
 
     , ((modm .|. shiftMask , xK_p     ), spawn "rofi -show window")
@@ -156,7 +156,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. controlMask .|. shiftMask, xK_h), namedScratchpadAction myScratchpads "htop")
     , ((modm .|. shiftMask    , xK_a),  namedScratchpadAction myScratchpads "anki")
     , ((modm .|. shiftMask    , xK_m),  namedScratchpadAction myScratchpads "pulse")
-    , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
+--    , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
     , ((modm .|. shiftMask    , xK_n),  namedScratchpadAction myScratchpads "rss_news")
     , ((modm .|. controlMask, xK_e),    namedScratchpadAction myScratchpads "emacs")
 
@@ -228,9 +228,9 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-defaultGapSize = 10
+defaultGapSize = 0
 defaultGaps = gaps [(U,defaultGapSize), (R,defaultGapSize), (D, defaultGapSize), (L, defaultGapSize)]
-defaultSpaces = spacingRaw True (Border 10 10 10 10) True (Border 10 10 10 10) True
+defaultSpaces = spacingRaw True (Border 0 0 0 0) True (Border 0 0 0 0) True
 spacesAndGaps = defaultSpaces . defaultGaps
 
 myLayout =   smartBorders . avoidStruts $ spacesAndGaps $ tiled ||| Mirror tiled ||| Full ||| simpleTabbed 
@@ -327,8 +327,8 @@ myScratchpads = [
         l = (1 - w) / 2     -- centered left/right
 
     classTodoist     = "TodoistDropdown"
-    titleTodoist     = "Todoist"
-    spawnTodoist     = "todoist"
+    titleTodoist     = "Super Productivity"
+    spawnTodoist     = "super-productivity"
     findTodoist      = title =? titleTodoist
     manageTodoist    = customFloating $ W.RationalRect l t w h
       where
@@ -418,7 +418,6 @@ myStartupHook = do
   spawnOnce "nitrogen --restore &"
   -- spawnOnce "compton --config ~/.config/compton/compton.conf &"
   spawnOnce "picom --experimental-backends &"
-  spawnOnce "deadd-notification-center &"
   spawnOnce "setxkbmap us,ru &"
   spawnOnce "eww daemon"
   spawnOnce "nextcloud"
@@ -433,7 +432,7 @@ myStartupHook = do
   -- spawnOnce ("cd /home/horhik/Freenet/downloads/fms; ./fms --daemon &")
   spawnOnce "xautolock -time 25 -locker i3lock-fancy-multimonitor -notifier 'xkb-switch -s us' &"
   spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa &"
-  spawnOnce "sleep 10; pulseaudio -k"
+  spawnOnce "xrandr --output HDMI-A-0 --left-of eDP &" 
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.

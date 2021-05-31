@@ -4,6 +4,10 @@ home/tmux/.config/tmux/plugins/
 *.o
 *~
 
+*.db
+*.db.lock
+*#
+*~
 home/pure_emacs/.emacs.d/.cache/
 home/pure_emacs/.emacs.d/elpa/
 home/pure_emacs/.emacs.d/org-roam.db

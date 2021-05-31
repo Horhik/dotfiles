@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 backgroundColor="#282828"
 currentLineColor="#fabd2f"

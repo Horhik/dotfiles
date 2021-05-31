@@ -1,3 +1,4 @@
+(require 'package)
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/"))
 
@@ -26,21 +27,27 @@
 (global-visual-line-mode)
 
 (require 'use-package)
-  (use-package doom-themes)
-  (setq use-package-always-ensure t)
-  
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" default))
- '(package-selected-packages
-   '(org-roam-server visual-fill-column org-bullets workgroups2 neotree treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs-all-the-icons ivy-rich which-key rainbow-delimiters highlight-parentheses org-roam general use-package)))
+   (use-package doom-themes)
+'(custom-enabled-themes '(gruvbox))
+'(custom-safe-themes
+  '("d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" default))
 
 
-  (load-theme 'doom-gruvbox)
+   (use-package gruvbox-theme
+     :ensure t
+     :config
+     (load-theme 'gruvbox-dark-hard)
+    )
+   (setq use-package-always-ensure t)
+   (custom-set-variables
+    ;; custom-set-variables was added by Custom.
+    ;; If you edit it by hand, you could mess it up, so be careful.
+    ;; Your init file should contain only one such instance.
+    ;; If there is more than one, they won't work right.
+ ;   '(custom-safe-themes
+ ;     '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
+    '(package-selected-packages
+      '(org-roam-server visual-fill-column org-bullets workgroups2 neotree treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs-all-the-icons ivy-rich which-key rainbow-delimiters highlight-parentheses org-roam general use-package)))
 
 (use-package doom-modeline
   :init
@@ -55,8 +62,8 @@
 
 ;;(set-fontset-font "fontset-startup" 'unicode
 ;;		  (font-spec :name "Mononoki Nerd Font" :size 14))
-(when (member "Noto Color Emoji" (font-family-list))
-  (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend))
+(when (member "Twitter Color Emoji" (font-family-list))
+  (set-fontset-font t 'unicode "Twitter Color Emoji" nil 'prepend))
 
 ;; ☺️ ☻ 😃 😄 😅 😆 😊 😎 😇 😈 😏 🤣 🤩 🤪 🥳 😁 😀 😂 🤠 🤡 🤑 🤓 🤖 😗 😚 😘 😙 😉 🤗 😍 🥰 🤤 😋 🤔 🤨 🧐 🤭 🤫 😯 🤐 😌 😖 😕 😳 😔 🤥 🥴 😮 😲 🤯 😩 😫 🥱 😪 😴 😵 ☹️ 😦 😞 😥 😟 😢 😭 🤢 🤮 😷 🤒 🤕 🥵 🥶 🥺 😬 😓 😰 😨 😱 😒 😠 😡 😤 😣 😧 🤬 😸 😹 😺 😻 😼 😽 😾 😿 🙀 🙈 🙉 🙊 🤦 🤷 🙅 🙆 🙋 🙌 🙍 🙎 🙇 🙏 👯 💃 🕺 🤳 💇 💈 💆 🧖 🧘 🧍 🧎 👰 🤰 🤱 👶 🧒 👦 👧 👩 👨 🧑 🧔 🧓 👴 👵 👤 👥 👪 👫 👬 👭 👱 👳 👲 🧕 👸 🤴 🎅 🤶 🧏 🦻 🦮 🦯 🦺 🦼 🦽 🦾 🦿 🤵 👮 👷 💁 💂 🕴 🕵️ 🦸 🦹 🧙 🧚 🧜 🧝 🧞 🧛 🧟 👼 👿 👻 👹 👺 👽 👾 🛸 💀 ☠️ 🕱 🧠 🦴 👁 👀 👂 👃 👄 🗢 👅 🦷 🦵 🦶 💭 🗬 🗭 💬 🗨 🗩 💦 💧 💢 💫 💤 💨 💥 💪 🗲 🔥 💡 💩 💯 
 ;; Fallback for emojies
@@ -208,9 +215,13 @@
     (treemacs-create-icon :file "editorconfig.png"       :fallback "📖"     :extensions ("editorconfig"))
     (treemacs-create-icon :file "org.png"                :fallback "🐴"     :extensions ("org"))
     (treemacs-create-icon :file "rust.png"               :fallback "🐴"     :extensions ("rs"))
+    (treemacs-create-icon :file "dart.png"               :fallback "🐴"     :extensions ("dart"))
+    (treemacs-create-icon :file "dart.png"               :fallback "🐴"     :extensions ("dt"))
     (treemacs-create-icon :file "haskell.png"            :fallback "🐴"     :extensions ("hs" "haskell"))
     (treemacs-create-icon :file "c.png"                  :fallback "🐴"     :extensions ("c"))
     (treemacs-create-icon :file "cpp.png"                :fallback "🐴"     :extensions ("cpp" "c++"))
+    (treemacs-create-icon :file "nix.png"                :fallback "🐴"     :extensions ("nix"))
+    (treemacs-create-icon :file "lock.png"                :fallback "🐴"     :extensions ("lock" "lck"))
     (treemacs-create-icon :file "h.png"                  :fallback "🐴"     :extensions ("h"))
     (treemacs-create-icon :file "diff.png"               :fallback "🐴"     :extensions ("diff"))
     (treemacs-create-icon :file "makefile.png"           :fallback "🐴"     :extensions ("mk" "make" "Makefile"))
@@ -226,7 +237,7 @@
     (treemacs-create-icon :file "image.png"              :fallback "🗃️"     :extensions ("png" "jpg"))
     (treemacs-create-icon :file "svg.png"                :fallback "🗃️"     :extensions ("svg"))
     (treemacs-create-icon :file "css.png"                :fallback "🗃️"     :extensions ("css"))
-    (treemacs-create-icon :file "console.png"            :fallback "🗃️"     :extensions ("bash" "sh"))
+    (treemacs-create-icon :file "console.png"            :fallback "🗃️"     :extensions ("bash" "sh" "install" "setup"))
     (treemacs-create-icon :file "certificate.png"        :fallback "🗃️"     :extensions ("cert" "LICENSE" "license" "gpl" "mit" "gpl3" "gplv3" "apache"))
     (treemacs-create-icon :file "database.png"           :fallback "🗃️"     :extensions ("sqlite" "db" "sql"))
     (treemacs-create-icon :file "lua.png"                :fallback "🗃️"     :extensions ("lua"))
