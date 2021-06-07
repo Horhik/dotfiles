@@ -20,7 +20,6 @@
       ./modules/hosts.nix
       #./modules/picom.nix
       ./modules/sound.nix
-      ./modules/steam.nix
       ./modules/zsh.nix
       ./fonts.nix
 
@@ -115,6 +114,7 @@
     wget git vim neovim emacs alacritty xterm zsh tmux stow  dunst
     # haskellPackages.xmonad haskellPackages.xmonad-contrib haskellPackages.xmonad-utils
     haskellPackages.xmobar 
+    tabbed
     i3 surf dmenu st qutebrowser 
     lightdm rofi nitrogen rofi-emoji
     mononoki fontmatrix

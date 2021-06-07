@@ -19,9 +19,11 @@ import XMonad.Util.SpawnOnce
 import XMonad.Util.Run
 import XMonad.Hooks.ManageDocks
 import XMonad.Layout.Gaps
+import XMonad.Layout.ToggleLayouts
+import XMonad.Util.Themes
 import XMonad.Util.EZConfig
 import XMonad.Layout.Spacing
-import XMonad.Layout.NoBorders
+import XMonad.Layout.NoBorders (noBorders, smartBorders)
 import XMonad.Layout.Tabbed
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.Scratchpad
@@ -45,7 +47,7 @@ myFocusFollowsMouse   :: Bool
 myFocusFollowsMouse   = True
 myClickJustFocuses    :: Bool
 myClickJustFocuses    = False
-myBorderWidth         = 0
+myBorderWidth         = 3
 superKey              = mod4Mask
 myModMask             = superKey
 -- myWorkspaces          = ["home 1","web 2","code 3","test 4","tkr 5","task 6","edit 7", "chat 8","book 9"]
@@ -228,12 +230,16 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-defaultGapSize = 0
+defaultGapSize = 7;
 defaultGaps = gaps [(U,defaultGapSize), (R,defaultGapSize), (D, defaultGapSize), (L, defaultGapSize)]
-defaultSpaces = spacingRaw True (Border 0 0 0 0) True (Border 0 0 0 0) True
+defaultSpaces = spacingRaw True (Border 7 7 7 7) True (Border 7 7 7 7) True
 spacesAndGaps = defaultSpaces . defaultGaps
 
-myLayout =   smartBorders . avoidStruts $ spacesAndGaps $ tiled ||| Mirror tiled ||| Full ||| simpleTabbed 
+myTabConfig = def { inactiveBorderColor = commentColor
+                  , activeTextColor = selectionColor}
+myLayout =   smartBorders . avoidStruts 
+            $ spacesAndGaps 
+            $ tiled ||| Mirror tiled ||| noBorders Full |||  simpleTabbed -- tabbed shrinkText (theme kavonAutumnTheme  )
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -421,6 +427,7 @@ myStartupHook = do
   spawnOnce "setxkbmap us,ru &"
   spawnOnce "eww daemon"
   spawnOnce "nextcloud"
+  spawnOnce "superProductivity"
   spawnOnce "syncthing"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
   spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa"

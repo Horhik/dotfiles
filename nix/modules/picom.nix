@@ -5,17 +5,20 @@
   services.picom.package = pkgs.nur.repos.reedrw.picom-next-ibhagwan;
   services.picom.shadow = true;
   services.picom.vSync = true;
-  services.picom.inactiveOpacity = "0.8";
-  services.picom.inactiveDim = "0.7";
+#  services.picom.inactiveOpacity = "0.8";
+#  services.picom.inactiveDim = "0.7";
   services.picom.backend = "glx";
   services.picom.experimentalBackends = true;
   services.picom.opacityRule = [
       "80:class_g  = 'Zathura'"
-      "80:class_g  = 'TelegramDesktop'"
       "80:class_g  = 'Discord'"
       "80:class_g  = 'Emacs'"
+      "60:class_g  = 'Anki'"
       "100:class_g = 'keynav'"
       "85:class_g = 'Alacritty'"
+  ];
+  services.picom.shadowExclude = [
+	"class_g = 'Navigator'"
   ];
   services.picom.extraOptions = ''
     #inactive-dim = 0.5;
@@ -31,15 +34,18 @@
         background-fixed = false;
     };
     blur-background-exclude = [
-        "class_g = 'keynav'"
+        "class_g = 'keynav'",
+        "class_g = 'Dunst'",
+        "class_g = 'Navigator'",
+        "class_g = 'Firefox'"
     ];
-    corner-radius = 0;
+    corner-radius = 4;
     rounded-corners-exclude = [
         "window_type = 'dock'",
         "_NET_WM_STATE@:32a *= '_NET_WM_STATE_FULLSCREEN'",
         "class_g = 'keynav'",
     ];
-    round-borders = 0;
+    round-borders = 4;
     round-borders-exclude = [
         "class_g = 'keynav'"
     ];
