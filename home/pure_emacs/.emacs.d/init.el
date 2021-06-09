@@ -47,7 +47,7 @@
  ;   '(custom-safe-themes
  ;     '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
     '(package-selected-packages
-      '(org-roam-server visual-fill-column org-bullets workgroups2 neotree treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs-all-the-icons ivy-rich which-key rainbow-delimiters highlight-parentheses org-roam general use-package)))
+      '(org-roam-server visual-fill-column org-bullets workgroups2 neotree treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil   which-key rainbow-delimiters highlight-parentheses org-roam general use-package)))
 
 (use-package doom-modeline
   :init
@@ -88,6 +88,27 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package all-the-icons)
+(use-package all-the-icons-ivy
+  :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup))
+(use-package ivy
+  :diminish
+  :bind (("C-s" . swiper)
+	 :map ivy-minibuffer-map
+	 ("TAB" . ivy-alt-done)
+	 ("C-l" . ivy-alt-done)
+	 ("C-j" . ivy-next-line)
+	 ("C-k" . ivy-previous-line)
+	 :map ivy-switch-buffer-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-l" . ivy-done)
+	 ("C-d" . ivy-switch-buffer-kill)
+	 :map ivy-reverse-i-search-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-d" . ivy-reverse-i-search-kill))
+  :config
+  (ivy-mode 1)
+  )
+
 (use-package treemacs-all-the-icons)
 (use-package treemacs
   :after all-the-icons
@@ -262,7 +283,10 @@
 
 (treemacs-load-theme 'Material)
 
-(use-package undo-tree)
+(use-package undo-tree
+:init
+(global-undo-tree-mode)
+  )
 (use-package evil
   :init
   (setq evil-want-keybinding nil)
@@ -291,70 +315,75 @@
   :config
   (evil-collection-init))
 
-(use-package counsel)
 (use-package ivy
-  :diminish
-  :bind (
-	 ("M-x" . counsel-M-x)
-	 ("C-s" . swiper)
-	 :map ivy-minibuffer-map
-	 ("TAB" . ivy-alt-done)
-	 ("C-f" . ivy-alt-done)
-	 ("C-l" . ivy-alt-done)
-	 ("C-j" . ivy-next-line)
-	 ("C-k" . ivy-previous-line)
-	 :map ivy-switch-buffer-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-l" . ivy-done)
-	 ("C-d" . ivy-switch-buffer-kill)
-	 :map ivy-reverse-i-search-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-d" . ivy-reverse-i-search-kill))
-  :init
-  (ivy-mode 1))
-(use-package counsel-projectile
-  :config (counsel-projectile-mode))
+      :diminish
+      :bind (
+	     ("M-x" . counsel-M-x)
+	     ("C-s" . swiper)
+	     :map ivy-minibuffer-map
+	     ("TAB" . ivy-alt-done)
+	     ("C-f" . ivy-alt-done)
+	     ("C-l" . ivy-alt-done)
+	     ("C-j" . ivy-next-line)
+	     ("C-k" . ivy-previous-line)
+	     :map ivy-switch-buffer-map
+	     ("C-k" . ivy-previous-line)
+	     ("C-l" . ivy-done)
+	     ("C-d" . ivy-switch-buffer-kill)
+	     :map ivy-reverse-i-search-map
+	     ("C-k" . ivy-previous-line)
+	     ("C-d" . ivy-reverse-i-search-kill))
+      :init
+      (ivy-mode 1))
+    (use-package counsel
+      :bind (("C-M-j" . 'counsel-switch-buffer)
+	     :map minibuffer-local-map
+	     ("C-r" . 'counsel-minibuffer-history))
+      :config
+      (counsel-mode 1))
+    (use-package counsel-projectile
+      :config (counsel-projectile-mode))
 
 
-;; Keybindings
+    ;; Keybindings
 
-(defun add-to-map(keys func)
-  "Add a keybinding in evil mode from keys to func."
-  (define-key evil-normal-state-map (kbd keys) func)
-  (define-key evil-motion-state-map (kbd keys) func))
+    (defun add-to-map(keys func)
+      "Add a keybinding in evil mode from keys to func."
+      (define-key evil-normal-state-map (kbd keys) func)
+      (define-key evil-motion-state-map (kbd keys) func))
 
-;;(add-to-map "<SPC>" nil)
-;;(add-to-map "<SPC> <SPC>" 'counsel-M-x)
-;; (add-to-map "<SPC> f" 'lusty-file-explorer)
-;; (add-to-map "<SPC> b" 'lusty-buffer-explorer)
-;;(add-to-map "<SPC> o" 'treemacs)
-;;(add-to-map "<SPC> s" 'save-buffer)
+    ;;(add-to-map "<SPC>" nil)
+    ;;(add-to-map "<SPC> <SPC>" 'counsel-M-x)
+    ;; (add-to-map "<SPC> f" 'lusty-file-explorer)
+    ;; (add-to-map "<SPC> b" 'lusty-buffer-explorer)
+    ;;(add-to-map "<SPC> o" 'treemacs)
+    ;;(add-to-map "<SPC> s" 'save-buffer)
+(add-to-map "TAB" 'company-indent-or-complete-common)
+    (defun open-file (file)
+      "just more shortest function for opening the file"
+      (interactive)
+      ((lambda (file) (interactive)
+	 (find-file (expand-file-name (format "%s" file)))) file ) )
 
-(defun open-file (file)
-  "just more shortest function for opening the file"
-  (interactive)
-  ((lambda (file) (interactive)
-     (find-file (expand-file-name (format "%s" file)))) file ) )
 
+    (use-package general)
+    (general-evil-setup)
+    (general-nmap
+      :prefix "SPC"
+      ;; dotfiles editing config
+      "SPC" '(counsel-M-x :which-key "M-x")
+      "o"   '(treemacs :which-key "treemacs")
+      "f f" '(counsel-find-file :which-key "find-file")
+      "f r" '(counsel-buffer-or-recentf :which-key "recent files")
 
-(use-package general)
-(general-evil-setup)
-(general-nmap
-  :prefix "SPC"
-  ;; dotfiles editing config
-  "SPC" '(counsel-M-x :which-key "M-x")
-  "o"   '(treemacs :which-key "treemacs")
-  "f f" '(counsel-find-file :which-key "find-file")
-  "f r" '(counsel-buffer-or-recentf :which-key "recent files")
+      "b b" '(counsel-switch-buffer :which-key "switch buff")
 
-  "b b" '(counsel-switch-buffer :which-key "switch buff")
-
-  "f e"  '(lambda() (interactive) (find-file "~/.emacs.d/config.org") :which-key "config.org")
-  "f v"  '(lambda() (interactive) (find-file "~/.config/nvim/init.vim" :which-key "neovim config"          ))
-  "f d"  '(lambda() (interactive) (find-file "~/dotfiles/home"  :which-key "dotfiles dired"                 ))
-  "f a"  '(lambda() (interactive) (find-file "~/.config/alacritty/alacritty.yml" :which-key "alacritty"))
-  "f b"  '(lambda() (interactive) (find-file "~/Brain")                           :which-key "my brain")
-  )
+      "f e"  '(lambda() (interactive) (find-file "~/.emacs.d/config.org") :which-key "config.org")
+      "f v"  '(lambda() (interactive) (find-file "~/.config/nvim/init.vim" :which-key "neovim config"          ))
+      "f d"  '(lambda() (interactive) (find-file "~/dotfiles/home"  :which-key "dotfiles dired"                 ))
+      "f a"  '(lambda() (interactive) (find-file "~/.config/alacritty/alacritty.yml" :which-key "alacritty"))
+      "f b"  '(lambda() (interactive) (find-file "~/Notes")                           :which-key "my brain")
+      )
 
 (use-package which-key
   :init (which-key-mode)
@@ -365,6 +394,20 @@
 (use-package ivy-rich
   :init
   (ivy-rich-mode 1))
+
+(use-package company
+  :after lsp-mode
+  :hook (lsp-mode . company-mode)
+  :bind (:map company-active-map
+         ("<tab>" . company-complete-selection))
+        (:map lsp-mode-map
+         ("<tab>" . company-indent-or-complete-common))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0))
+
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 
 (set-face-attribute 'variable-pitch nil
                     ;; :font "Cantarell"
@@ -410,7 +453,7 @@
   :hook ((org-mode . my/org-mode-setup)
 	 (org-mode . variable-pitch-mode)
 	 )
-  :config (setq org-agenda-files `("~/Brain" "~/Brain/Tasks/Tasks.org")) 
+  :config (setq org-agenda-files `("~/Notes" "~/Notes/Tasks/Tasks.org")) 
   (org-bullets-mode t) 
   (org-indent-mode t)
   (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
@@ -551,7 +594,7 @@
 	     "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
 	     "s" '(org-roam-server-mode :which-key "roam server "))
   :custom
-  (org-roam-directory "~/Brain")
+  (org-roam-directory "~/Notes")
   :config
   (setq
    org-roam-server-host "127.0.0.1"
@@ -575,3 +618,42 @@
 
 
 (require 'org-roam-protocol)
+
+(use-package flycheck
+  :init
+  (flycheck-set-checker-executable "c/c++-clang" "~/code/competitive/clang++")
+)
+(use-package flycheck-irony
+  :after flycheck
+  (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
+)
+
+(use-package lsp-mode
+    :init 
+    (setq lsp-keymap-prefix "C-SPC c")
+    :config
+    (lsp-mode . lsp-enable-which-key-integration)
+    :commands (lsp lsp-deferred)
+    )
+  (use-package lsp-treemacs
+    :after lsp-mode
+    )
+(use-package lsp-ivy)
+
+(use-package irony
+  :init
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
+)
+
+(use-package markdown-mode)
+
+(use-package tuareg)
+
+(use-package direnv
+   :config
+   (direnv-mode))
+(add-hook 'lsp-mode-hook #'direnv-update-environment)

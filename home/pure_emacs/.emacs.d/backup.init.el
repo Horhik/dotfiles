@@ -567,3 +567,4 @@
 (treemacs-load-theme 'Material)
 
 (find-file "~/.emacs.d/startup.org")
+
