@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ config, pkgs, ... }:
+{ config, pkgs, callPackage, ... }:
 
 {
    nix = {
@@ -97,7 +97,8 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
   services.xserver.libinput.touchpad.tapping = true;
-
+  services.xserver.libinput.touchpad.disableWhileTyping = true;
+  # TODO create touchpad.nix
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.defaultUserShell = pkgs.zsh;
   users.users.horhik = {
@@ -210,5 +211,14 @@
   
   
 
-      programs.adb.enable = true;
+  programs.adb.enable = true;
+  services.emacs.package = pkgs.emacsUnstable;
+
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+      sha256 = "0c2p2ycx6c50rzfd5k56cc411cb0ilhc3zyhhxlwcjnz1ysn5laj";
+    }))
+  ];
+
 }

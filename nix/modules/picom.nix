@@ -20,6 +20,37 @@
   services.picom.shadowExclude = [
 	"class_g = 'Navigator'"
   ];
+# services.picom.winTypes = 
+#  {
+# 	normal = { 
+#       	fade = false; 
+#       	shadow = true; 
+#       };
+#       tooltip = { 
+#       	fade = true; 
+#       	shadow = true; 
+#       	opacity = 0.75; 
+#       	focus = true; 
+#       	full-shadow = false; 
+#   		round-borders = 0; corner-radius = 0;
+#       };
+#       dock = { 
+#       	shadow = false; 
+#   		round-borders = 0;
+#   		corner-radius = 0;
+#       };
+#       dnd = { 
+#       	shadow = true; 
+#   		round-borders = 0;
+#   		corner-radius = 0;
+#       };
+#       popup_menu = { 
+#       	opacity = 0.8; 
+#       };
+#       dropdown_menu = { 
+#       	opacity = 0.8; 
+#       };
+#   };
   services.picom.extraOptions = ''
     #inactive-dim = 0.5;
     #active-opacity = 1.0;
@@ -39,15 +70,19 @@
         "class_g = 'Navigator'",
         "class_g = 'Firefox'"
     ];
-    corner-radius = 4;
+    corner-radius = 0;
     rounded-corners-exclude = [
         "window_type = 'dock'",
         "_NET_WM_STATE@:32a *= '_NET_WM_STATE_FULLSCREEN'",
         "class_g = 'keynav'",
     ];
-    round-borders = 4;
+    round-borders = 0;
     round-borders-exclude = [
-        "class_g = 'keynav'"
+        "class_g = 'keynav'",
+        "class_g = 'Xmonad'",
+        "class_g = 'xmobar'",
+        "class_g = 'simpleTabbed'",
+        "class_g = 'tabbed'"
     ];
   '';
 }
