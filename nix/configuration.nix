@@ -124,7 +124,7 @@
     wpa_supplicant python3 xkblayout-state acpi yaru-theme
     pipewire  pulsemixer nerdfonts
     feh compton ninja meson cmake 
-    anki clang zathura redshift rustup neofetch tree
+    anki clang_12 zathura redshift rustup neofetch tree
     killall audacity  thefuck
     polkit etcher gsettings-qt appimage-run pamixer unzip qjackctl gnome3.nautilus bluez pkgconfig pavucontrol bpytop 
     #nur.repos.reedrw.picom-next-ibhagwan

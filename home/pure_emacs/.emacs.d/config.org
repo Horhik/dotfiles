@@ -3,14 +3,12 @@
 #+BABEL: :cache no
 #+PROPERTY: header-args:emacs-lisp :tangle init.el
 
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░█░█░█▀█░█▀▄░█░█░▀█▀░█░█░▀░█▀▀░░░░
-░░█▀█░█░█░█▀▄░█▀█░░█░░█▀▄░░░▀▀█░░░░
-░░▀░▀░▀▀▀░▀░▀░▀░▀░▀▀▀░▀░▀░░░▀▀▀░░░░
-░░█▀▄░█▀█░▀█▀░█▀▀░▀█▀░█░░░█▀▀░█▀▀░░
-░░█░█░█░█░░█░░█▀▀░░█░░█░░░█▀▀░▀▀█░░
-░░▀▀░░▀▀▀░░▀░░▀░░░▀▀▀░▀▀▀░▀▀▀░▀▀▀░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+ █ █ █▀█ █▀▄ █ █ ▀█▀ █ █ ▀ █▀▀  
+ █▀█ █ █ █▀▄ █▀█  █  █▀▄   ▀▀█  
+ ▀ ▀ ▀▀▀ ▀ ▀ ▀ ▀ ▀▀▀ ▀ ▀   ▀▀▀  
+█▀▄ █▀█ ▀█▀ █▀▀ ▀█▀ █   █▀▀ █▀▀
+█ █ █ █  █  █▀▀  █  █   █▀▀ ▀▀█
+▀▀  ▀▀▀  ▀  ▀   ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀
 
 * Help info
   ~C-z~ to toggle vim/emacs mode
@@ -42,16 +40,16 @@
 * UI
 ** Cleaning up
   #+begin_src emacs-lisp
-(require 'package)
-(setq inhibit-startup-message t)
-(menu-bar-mode -1)
-(toggle-scroll-bar -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(set-fringe-mode 10)
-(visual-line-mode t)
-(global-visual-line-mode 1)
-(global-visual-line-mode)
+    (require 'package)
+    (setq inhibit-startup-message t)
+    (menu-bar-mode -1)
+    (toggle-scroll-bar -1)
+    (tool-bar-mode -1)
+    (tooltip-mode -1)
+    (set-fringe-mode 10)
+    (visual-line-mode t)
+    (global-visual-line-mode 1)
+    (global-visual-line-mode)
   #+end_src
 
   #+RESULTS:
@@ -59,28 +57,27 @@
 
 ** Theme
 #+begin_src emacs-lisp
-    (require 'use-package)
-    (use-package doom-themes)
- '(custom-enabled-themes '(gruvbox))
- '(custom-safe-themes
-   '("d14f3df28603e9517eb8fb7518b662d653b25b26e83bd8e129acea042b774298" "6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" default))
-
-
-    (use-package gruvbox-theme
-      :ensure t
-      :config
-      (load-theme 'gruvbox-dark-hard)
-     )
-    (setq use-package-always-ensure t)
+  (require 'use-package)
     (custom-set-variables
-     ;; custom-set-variables was added by Custom.
-     ;; If you edit it by hand, you could mess it up, so be careful.
-     ;; Your init file should contain only one such instance.
-     ;; If there is more than one, they won't work right.
-  ;   '(custom-safe-themes
-  ;     '("6b5c518d1c250a8ce17463b7e435e9e20faa84f3f7defba8b579d4f5925f60c1" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
-     '(package-selected-packages
-       '(org-roam-server visual-fill-column org-bullets workgroups2 neotree treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil   which-key rainbow-delimiters highlight-parentheses org-roam general use-package)))
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(custom-safe-themes
+     '("75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
+   '(package-selected-packages
+     '(neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
+(use-package doom-themes)
+  '(custom-enabled-themes '(gruvbox))
+
+  (use-package gruvbox-theme
+    :ensure t
+    :config
+    (load-theme 'doom-gruvbox)
+    )
+  (setq use-package-always-ensure t)
+
+
 
 #+end_src
 
@@ -304,7 +301,7 @@
       (treemacs-create-icon :file "folder-node.png"        :fallback "📁"       :extensions (dir-closed))
       (treemacs-create-icon :file "folder-test-open.png"   :fallback "📂"       :extensions ("tests"))
       (treemacs-create-icon :file "folder-test.png"        :fallback "📁"       :extensions ("tests"))
-      (treemacs-create-icon :file "emacs.png"              :fallback "💜"     :extensions ("el" "elc" ".spacemacs" "doom" ))
+      (treemacs-create-icon :file "emacs.png"              :fallback "💜"     :extensions ("el" "elc" ".spacemacs" "doom" "spacemacs.env" ))
       (treemacs-create-icon :file "emacs.png"              :fallback "💜"     :extensions ("el" "elc"))
       (treemacs-create-icon :file "markdown.png"           :fallback "📖"     :extensions ("md"))
       (treemacs-create-icon :file "readme.png"             :fallback "📖"     :extensions ("readme.md" "README.md" "README" "readme"))
@@ -315,9 +312,10 @@
       (treemacs-create-icon :file "dart.png"               :fallback "🐴"     :extensions ("dt"))
       (treemacs-create-icon :file "haskell.png"            :fallback "🐴"     :extensions ("hs" "haskell"))
       (treemacs-create-icon :file "c.png"                  :fallback "🐴"     :extensions ("c"))
-      (treemacs-create-icon :file "cpp.png"                :fallback "🐴"     :extensions ("cpp" "c++"))
+      (treemacs-create-icon :file "cpp.png"                :fallback "🐴"     :extensions ("cpp" "c++" "C" "cxx" "cc"))
       (treemacs-create-icon :file "nix.png"                :fallback "🐴"     :extensions ("nix"))
       (treemacs-create-icon :file "lock.png"                :fallback "🐴"     :extensions ("lock" "lck"))
+      (treemacs-create-icon :file "ocaml.png"                :fallback "🐴"     :extensions ("ocaml" "ml"))
       (treemacs-create-icon :file "h.png"                  :fallback "🐴"     :extensions ("h"))
       (treemacs-create-icon :file "diff.png"               :fallback "🐴"     :extensions ("diff"))
       (treemacs-create-icon :file "makefile.png"           :fallback "🐴"     :extensions ("mk" "make" "Makefile"))
@@ -327,7 +325,7 @@
       (treemacs-create-icon :file "toml.png"               :fallback "🗃️"     :extensions ("toml"))
       (treemacs-create-icon :file "json.png"               :fallback "🗃️"     :extensions ("json"))
       (treemacs-create-icon :file "yaml.png"               :fallback "🗃️"     :extensions ("yml" "yaml"))
-      (treemacs-create-icon :file "vim.png"                :fallback "🗃️"     :extensions ("vim" "vi" "nvim"))
+      (treemacs-create-icon :file "vim.png"                :fallback "🗃️"     :extensions ("vim" "vi" "nvim" ".viminfo" ".vimrc" ))
       (treemacs-create-icon :file "video.png"              :fallback "🗃️"     :extensions ("mp4" "avi" "gif" "mpv"))
       (treemacs-create-icon :file "audio.png"              :fallback "🗃️"     :extensions ("mp3" "ogg" "wav" ))
       (treemacs-create-icon :file "image.png"              :fallback "🗃️"     :extensions ("png" "jpg"))
@@ -449,7 +447,7 @@
 	;; (add-to-map "<SPC> b" 'lusty-buffer-explorer)
 	;;(add-to-map "<SPC> o" 'treemacs)
 	;;(add-to-map "<SPC> s" 'save-buffer)
-    (add-to-map "TAB" 'company-indent-or-complete-common)
+    ;;(add-to-map "TAB" 'company-indent-or-complete-common)
 	(defun open-file (file)
 	  "just more shortest function for opening the file"
 	  (interactive)
@@ -499,19 +497,20 @@
 
 ** Company-mode
    #+begin_src emacs-lisp
-(use-package company
-  :after lsp-mode
-  :hook (lsp-mode . company-mode)
-  :bind (:map company-active-map
-         ("<tab>" . company-complete-selection))
-        (:map lsp-mode-map
-         ("<tab>" . company-indent-or-complete-common))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0))
+     (use-package company
+       :after lsp-mode
+       :hook (lsp-mode . company-mode)
+       :bind (:map company-active-map
+	      ("<tab>" . company-complete-selection))
+	     (:map lsp-mode-map
+	      ("<tab>" . company-indent-or-complete-common))
+       :custom
+       (company-minimum-prefix-length 1)
+       (company-idle-delay 0.0))
+       ;;(setq company-clang-executable "~/code/competitive/clang++")
 
-(use-package company-box
-  :hook (company-mode . company-box-mode))
+     (use-package company-box
+       :hook (company-mode . company-box-mode))
    #+end_src 
 #+RESULTS:
 
@@ -526,15 +525,15 @@
                     :weight 'light)
 
 (set-face-attribute 'org-document-title nil :font "ubuntu" :weight 'bold :height 1.3)
-(dolist (face '((org-level-1 . 1.3)
-		(org-level-2 . 1.2)
+(dolist (face '((org-level-1 . 1.18)
+		(org-level-2 . 1.14)
 		(org-level-3 . 1.05)
 		(org-level-4 . 1.0)
 		(org-level-5 . 1.1)
 		(org-level-6 . 1.1)
 		(org-level-7 . 1.1)
 		(org-level-8 . 1.1)))
-  (set-face-attribute (car face) nil :font "ubuntu" :weight 'bold :height (cdr face)))
+  (set-face-attribute (car face) nil :font "ubuntu" :weight 'bold :height (cdr face) ))
 (require 'org-indent)
 (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :font "Hack" )
 (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
@@ -570,101 +569,102 @@
 
   (use-package org 
     :hook ((org-mode . my/org-mode-setup)
-	   (org-mode . variable-pitch-mode)
-	   )
+           (org-mode . variable-pitch-mode)
+           (org-mode . org-inddent-mode)
+           )
     :config (setq org-agenda-files `("~/Notes" "~/Notes/Tasks/Tasks.org")) 
     (org-bullets-mode t) 
     (org-indent-mode t)
     (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
-	  org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
-	  org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
+          org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
+          org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
     (setq org-agenda-start-with-log-mode t) 
     (setq org-log-done 'time) 
     (setq org-log-into-drawer t)
     (setq org-todo-keyword-faces '(("TODO" . org-warning) 
-				   ("STARTED" . "yellow") 
-				   ("DREAM" . "pink") 
-				   ("IDEA" . "gold") 
-				   ("ARTICLE" . "lightblue") 
-				   ("CANCELED" . 
-				    (:foreground "blue" 
-						 :weight bold))))
+                                   ("STARTED" . "yellow") 
+                                   ("DREAM" . "pink") 
+                                   ("IDEA" . "gold") 
+                                   ("ARTICLE" . "lightblue") 
+                                   ("CANCELED" . 
+                                    (:foreground "blue" 
+                                                 :weight bold))))
 
     (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)") 
-			      (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)"
-					"WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)") 
-			      (sequence "IDEA(i)" "DREAM(d)" "ARTICLE(a)" "|" "DONE(d!)")))
+                              (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)"
+                                        "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)") 
+                              (sequence "IDEA(i)" "DREAM(d)" "ARTICLE(a)" "|" "DONE(d!)")))
 
     (setq org-agenda-custom-commands '(("d" "Dashboard" ((agenda "" ((org-deadline-warning-days 7))) 
-							 (todo "NEXT" ((org-agenda-overriding-header
-									"Next Tasks"))) 
-							 (tags-todo "agenda/ACTIVE"
-								    ((org-agenda-overriding-header
-								      "Active Projects")))))
-				       ("n" "Next Tasks" ((todo "NEXT" ((org-agenda-overriding-header
-									 "Next Tasks")))))
-				       ("i" "Ideas" ((todo "IDEA" ((org-agenda-overriding-header
-									 "Ideas ")))))
-				       ("A" "Articles" ((todo "Article" ((org-agenda-overriding-header
-									 "Article")))))
-				       ("W" "Work Tasks" tags-todo "+work-email")
-				       ("W" "Work Tasks" tags-todo "+work-email")
-				       ("I" "ideas" tags-todo "+idea-article")
+                                                         (todo "NEXT" ((org-agenda-overriding-header
+                                                                        "Next Tasks"))) 
+                                                         (tags-todo "agenda/ACTIVE"
+                                                                    ((org-agenda-overriding-header
+                                                                      "Active Projects")))))
+                                       ("n" "Next Tasks" ((todo "NEXT" ((org-agenda-overriding-header
+                                                                         "Next Tasks")))))
+                                       ("i" "Ideas" ((todo "IDEA" ((org-agenda-overriding-header
+                                                                         "Ideas ")))))
+                                       ("A" "Articles" ((todo "Article" ((org-agenda-overriding-header
+                                                                         "Article")))))
+                                       ("W" "Work Tasks" tags-todo "+work-email")
+                                       ("W" "Work Tasks" tags-todo "+work-email")
+                                       ("I" "ideas" tags-todo "+idea-article")
 
-				       ;; Low-effort next actions
-				       ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-					((org-agenda-overriding-header "Low Effort Tasks") 
-					 (org-agenda-max-todos 20) 
-					 (org-agenda-files org-agenda-files)))
-				       ("w" "Workflow Status" ((todo "WAIT"
-								     ((org-agenda-overriding-header
-								       "Waiting on External") 
-								      (org-agenda-files
-								       org-agenda-files))) 
-							       (todo "REVIEW"
-								     ((org-agenda-overriding-header
-								       "In Review") 
-								      (org-agenda-files
-								       org-agenda-files))) 
-							       (todo "PLAN"
-								     ((org-agenda-overriding-header
-								       "In Planning") 
-								      (org-agenda-todo-list-sublevels
-								       nil) 
-								      (org-agenda-files
-								       org-agenda-files))) 
-							       (todo "BACKLOG"
-								     ((org-agenda-overriding-header
-								       "Project Backlog") 
-								      (org-agenda-todo-list-sublevels
-								       nil) 
-								      (org-agenda-files
-								       org-agenda-files))) 
-							       (todo "READY"
-								     ((org-agenda-overriding-header
-								       "Ready for Work") 
-								      (org-agenda-files
-								       org-agenda-files))) 
-							       (todo "ACTIVE"
-								     ((org-agenda-overriding-header
-								       "Active Projects") 
-								      (org-agenda-files
-								       org-agenda-files))) 
-							       (todo "COMPLETED"
-								     ((org-agenda-overriding-header
-								       "Completed Projects") 
-								      (org-agenda-files
-								       org-agenda-files))) 
-							       (todo "CANC"
-								     ((org-agenda-overriding-header
-								       "Cancelled Projects") 
-								      (org-agenda-files
-								       org-agenda-files)))))))
+                                       ;; Low-effort next actions
+                                       ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+                                        ((org-agenda-overriding-header "Low Effort Tasks") 
+                                         (org-agenda-max-todos 20) 
+                                         (org-agenda-files org-agenda-files)))
+                                       ("w" "Workflow Status" ((todo "WAIT"
+                                                                     ((org-agenda-overriding-header
+                                                                       "Waiting on External") 
+                                                                      (org-agenda-files
+                                                                       org-agenda-files))) 
+                                                               (todo "REVIEW"
+                                                                     ((org-agenda-overriding-header
+                                                                       "In Review") 
+                                                                      (org-agenda-files
+                                                                       org-agenda-files))) 
+                                                               (todo "PLAN"
+                                                                     ((org-agenda-overriding-header
+                                                                       "In Planning") 
+                                                                      (org-agenda-todo-list-sublevels
+                                                                       nil) 
+                                                                      (org-agenda-files
+                                                                       org-agenda-files))) 
+                                                               (todo "BACKLOG"
+                                                                     ((org-agenda-overriding-header
+                                                                       "Project Backlog") 
+                                                                      (org-agenda-todo-list-sublevels
+                                                                       nil) 
+                                                                      (org-agenda-files
+                                                                       org-agenda-files))) 
+                                                               (todo "READY"
+                                                                     ((org-agenda-overriding-header
+                                                                       "Ready for Work") 
+                                                                      (org-agenda-files
+                                                                       org-agenda-files))) 
+                                                               (todo "ACTIVE"
+                                                                     ((org-agenda-overriding-header
+                                                                       "Active Projects") 
+                                                                      (org-agenda-files
+                                                                       org-agenda-files))) 
+                                                               (todo "COMPLETED"
+                                                                     ((org-agenda-overriding-header
+                                                                       "Completed Projects") 
+                                                                      (org-agenda-files
+                                                                       org-agenda-files))) 
+                                                               (todo "CANC"
+                                                                     ((org-agenda-overriding-header
+                                                                       "Cancelled Projects") 
+                                                                      (org-agenda-files
+                                                                       org-agenda-files)))))))
 
 
     :general (general-nmap :prefix "SPC a" 
-	       :keymap 'org-agenda-mode-map 
-	       "a" 'org-agenda))
+               :keymap 'org-agenda-mode-map 
+               "a" 'org-agenda))
   (use-package org-bullets
     :after org
     :hook
@@ -762,14 +762,15 @@
 * Languages
 ** Flycheck
    #+begin_src emacs-lisp
-     (use-package flycheck
-       :init
-       (flycheck-set-checker-executable "c/c++-clang" "~/code/competitive/clang++")
-     )
-     (use-package flycheck-irony
-       :after flycheck
-       (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
-     )
+	  (use-package flycheck
+	    :init
+	    ;;(flycheck-c/c++-clang-executable "c/c++-clang" "~/code/competitive/clang++")
+
+	  )
+	  (use-package flycheck-irony
+	    :after flycheck
+	    (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
+	  )
    #+end_src
 ** LSP
 #+begin_src emacs-lisp
@@ -777,9 +778,11 @@
       :hook ((prog-mode). lsp)
       :init 
       (setq lsp-keymap-prefix "C-SPC c")
-      (setq lsp-client-packages nil
+      ;;(setq lsp-client-packages nil)
       :config
-      (lsp-mode . lsp-enable-which-key-integration)
+      ;;(setq lsp-clients-clangd-executable "/home/horhik/code/competitive/clangd")
+      ;;(setq lsp-clients-clangd-default-executable "/home/horhik/code/competitive/clangd")
+      ;;(lsp-mode . lsp-enable-which-key-integration)
       :commands (lsp lsp-deferred)
       )
     (use-package lsp-treemacs
@@ -811,8 +814,8 @@
 
 ** Nix
    #+begin_src emacs-lisp
-     (use-package direnv
-      :config
-      (direnv-mode))
-   (add-hook 'lsp-mode-hook #'direnv-update-environment)
+;;     (use-package direnv
+;;      :config
+;;      (direnv-mode))
+;;   (add-hook 'lsp-mode-hook #'direnv-update-environment)
    #+end_src
