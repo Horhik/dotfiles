@@ -482,15 +482,20 @@
 
 * Suggestions
 #+begin_src emacs-lisp
-(use-package which-key
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 0.3))
+    (use-package which-key
+      :init (which-key-mode)
+      :diminish which-key-mode
+      :config
+      (setq which-key-idle-delay 0.3))
 
-(use-package ivy-rich
-  :init
-  (ivy-rich-mode 1))
+  (use-package all-the-icons-ivy-rich
+    :ensure t
+    :init (all-the-icons-ivy-rich-mode 1))
+
+
+    (use-package ivy-rich
+      :init
+      (ivy-rich-mode 1))
 
 
 #+end_src
@@ -773,11 +778,13 @@
 ** LSP
 #+begin_src emacs-lisp
     (use-package lsp-mode
-      :hook ((prog-mode). lsp)
       :init 
       (setq lsp-keymap-prefix "C-SPC c")
       ;;(setq lsp-client-packages nil)
       :config
+	   (add-hook 'c++-mode-hook #'lsp-mode)
+	   (add-hook 'rust-mode-hook #'lsp-mode)
+	   (add-hook 'c-mode-hook #'lsp-mode)
       ;;(setq lsp-clients-clangd-executable "/home/horhik/code/competitive/clangd")
       ;;(setq lsp-clients-clangd-default-executable "/home/horhik/code/competitive/clangd")
       ;;(lsp-mode . lsp-enable-which-key-integration)
