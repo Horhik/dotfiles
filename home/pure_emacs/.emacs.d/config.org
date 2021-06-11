@@ -798,14 +798,23 @@
 
 ** C/CPP
    #+begin_src emacs-lisp
-     (use-package irony
-       :init
-       (add-hook 'c++-mode-hook 'irony-mode)
-       (add-hook 'c-mode-hook 'irony-mode)
-       (add-hook 'objc-mode-hook 'irony-mode)
-       (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-     )
+          (use-package irony
+            :init
+            (add-hook 'c++-mode-hook 'irony-mode)
+            (add-hook 'c-mode-hook 'irony-mode)
+            (add-hook 'objc-mode-hook 'irony-mode)
+            (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+            (setq irony-additional-clang-options
+           (append '("-std=c++17") irony-additional-clang-options))
+            )
+          (add-to-list 'auto-mode-alist '("\\.cpp\\'" . cpp-hook))
+          (add-to-list 'auto-mode-alist '("\\.cxx\\'" . cpp-hook))
+          (add-to-list 'auto-mode-alist '("\\.c++\\'" . cpp-hook))
+          (add-to-list 'auto-mode-alist '("\\.C\\'" . cpp-hook))
+          (defun cpp-hook ()
+           (c++-mode 1)
+           (lsp-mode 1)
+            )
    #+end_src
 ** Markdown
 #+begin_src emacs-lisp
@@ -819,8 +828,9 @@
 
 ** Nix
    #+begin_src emacs-lisp
-;;     (use-package direnv
-;;      :config
-;;      (direnv-mode))
-;;   (add-hook 'lsp-mode-hook #'direnv-update-environment)
+     ;;     (use-package direnv
+     ;;      :config
+     ;;      (direnv-mode))
+     ;;   (add-hook 'lsp-mode-hook #'direnv-update-environment)
+   (use-package nix-mode)
    #+end_src
