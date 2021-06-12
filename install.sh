@@ -2,12 +2,65 @@
 sudo pacman -S  git fakeroot make patch gcc autoconf automake binutils bison stow zsh vim neovim
 mkdir -p  ~/Downloads/tmp; cd ~/Downloads/tmp;
 pacman -S --needed git base-devel
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+if [ test ! -f yay ] 
+then
+  git clone https://aur.archlinux.org/yay.git
+  cd yay
+  makepkg -si
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+ yay -S dunst
+ yay -S firefox
+ yay -S dwm
+ yay -S surf
+ yay -S dmenu
+ yay -S st
+ yay -S qutebrowser
+ yay -S pulsemixer
+ yay -S pkg-config
+ yay -S variety
+ yay -S alacritty
+ yay -S compton-tryone-git
+ yay -S ninja
+ yay -S meson
+ yay -S cmake
+ yay -S libev
+ yay -S libevdev
+ yay -S uthash
+ yay -S nerd-fonts-mononoki
+ yay -S ttf-mononki-git
+ yay -S nerd-fonts
+ yay -S tmux
+ yay -S feh
+ yay -S xorg-xsetroot
+ yay -S xkblayout-state
+ yay -S flameshot
+ yay -S cava
+ yay -S rustfmt
+ yay -S emacs
+ yay -S playerctl
+ yay -S rofi
+ yay -S eww
+ yay -S ttf-twemoji
+ yay -S ttf-twemoji-color
+ yay -S ttf-twemoji
+ yay -S alacritty-themes
+ yay -S anki
+ yay -S clang
+ yay -S xkblayout-state-git
+ yay -S zathura
+ yay -S redshift
+ yay -S rustup
+ yay -S pfetch
+ yay -S xclip
+ yay -S tree
+ yay -S xorg-xbacklight
+ yay -S enact-bin
+ yay -S pipewire pipewire-media-session pipewire-pulse
+ yay -S acpi xkblayout-state-git
+ yay -S obsidian superproductivity nextcloud nextcloud-client
+ yay -S nix
 
-yay -S dunst firefox dwm surf dmenu st qutebrowser pulsemixer pkg-config variety alacritty compton-tryone-git ninja meson cmake libev  libevdev uthash nerd-fonts-mononoki nerd-fonts tmux feh xorg-xsetroot xkblayout-state flameshot cava rustfmt emacs playerctl rofi eww ttf-twemoji ttf-twemoji-color ttf-twemoji alacritty-themes anki clang xkblayout-state-git zathura redshift rustup pfetch xclip tree  xorg-xbacklight
 # setup compositor
 cd $HOME/Downloads/tmp
 git clone https://github.com/ibhagwan/picom

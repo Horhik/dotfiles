@@ -187,7 +187,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. controlMask .|. shiftMask, xK_h), namedScratchpadAction myScratchpads "htop")
     , ((modm .|. shiftMask    , xK_a),  namedScratchpadAction myScratchpads "anki")
     , ((modm .|. shiftMask    , xK_m),  namedScratchpadAction myScratchpads "pulse")
---    , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
+    , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
     , ((modm .|. shiftMask    , xK_n),  namedScratchpadAction myScratchpads "rss_news")
     , ((modm .|. controlMask, xK_e),    namedScratchpadAction myScratchpads "emacs")
 
@@ -223,9 +223,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
      ++
-     [ ((0, XF86.xF86XK_MonBrightnessUp), spawn "light -A 5")
-     , ((0, XF86.xF86XK_MonBrightnessDown), spawn "light -U 5"
-     )]
+     [ ((0, XF86.xF86XK_MonBrightnessUp  ), spawn "light -A 5")
+     , ((0, XF86.xF86XK_MonBrightnessDown), spawn "light -U 5")
+     , ((0, XF86.xF86XK_AudioPause       ), spawn "playerctl play-pause")
+     , ((0, XF86.xF86XK_AudioPrev        ), spawn "playerctl previous")
+     , ((0, XF86.xF86XK_AudioMute        ), spawn "pulsemixer --toggle-mute")
+     , ((0, XF86.xF86XK_AudioLowerVolume ), spawn "pulsemixer --set-volume  $(($(pulsemixer --get-volume | cut  -d ' ' -f 1) - 5))")
+     , ((0, XF86.xF86XK_AudioRaiseVolume ), spawn "pulsemixer --set-volume  $(($(pulsemixer --get-volume | cut  -d ' ' -f 1) + 5))")
+     ]
 
 
 
@@ -295,7 +300,6 @@ floats   = renamed [Replace "floats"]
            $ smartBorders
            $ limitWindows 20 simplestFloat
 grid     = renamed [Replace "grid"]
-           $ smartBorders
            $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
            $ limitWindows 12
@@ -448,7 +452,7 @@ myScratchpads = [
 
     classTodoist     = "TodoistDropdown"
     titleTodoist     = "Super Productivity"
-    spawnTodoist     = "super-productivity"
+    spawnTodoist     = "superproductivity"
     findTodoist      = title =? titleTodoist
     manageTodoist    = customFloating $ W.RationalRect l t w h
       where
@@ -541,7 +545,7 @@ myStartupHook = do
   spawnOnce "setxkbmap us,ru &"
   spawnOnce "eww daemon"
   spawnOnce "nextcloud"
-  spawnOnce "superProductivity"
+  spawnOnce "superproductivity"
   spawnOnce "syncthing"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
   spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa"

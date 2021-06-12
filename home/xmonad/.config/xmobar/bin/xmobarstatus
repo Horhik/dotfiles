@@ -75,15 +75,15 @@ esac
 diskspace ()
 {
                         #might be another /dev/sda...
-    echo "<fc=$pinkColor>—{ </fc>"$(df -h | grep $MAIN_DISK | grep -oh "[0-9]*%")"<fc=$pinkColor>}</fc>"
+    echo "<fc=$pinkColor>—{ </fc>"$(df $MAIN_DISK | grep -oh "[0-9]*%" | tail -n 1 )"<fc=$pinkColor>}</fc>"
 }
 
 wifi ()
 {
- name=$(connmanctl services | grep  "*A" | grep -oh "^*A. [A-Za-z]*" | grep -oh "[[:space:]][A-Za-x]*" | head -n 1)
+ name=$(iwgetid -r)
 if [ $name != " " ];
   then
-      echo "<fc=$cyanColor>—{ </fc>$name<fc=$cyanColor>}</fc>"
+      echo "<fc=$cyanColor>—{ </fc> $name<fc=$cyanColor>}</fc>"
   else
    echo 睊 off
   fi

@@ -2,6 +2,9 @@ inactive-dim = 0.5;
 active-opacity = 1.0;
 detect-client-opacity = true;
 detect-rounded-corners = true;
+
+shadow = true;
+backend = "glx";
 blur:
 {
         method = "kawase";
@@ -10,25 +13,24 @@ blur:
         background-frame = false;
         background-fixed = false;
 };
-    blur-background-exclude = [
-        "class_g = 'keynav'"
-    ];
-    corner-radius = 0;
-    rounded-corners-exclude = [
+blur-background-exclude = [
+        "class_g = 'keynav'",
+        "class_g = 'Dunst'",
+        "class_g = 'Navigator'",
+        "class_g = 'Firefox'"
+];
+corner-radius = 0;
+rounded-corners-exclude = [
         "window_type = 'dock'",
         "_NET_WM_STATE@:32a *= '_NET_WM_STATE_FULLSCREEN'",
         "class_g = 'keynav'",
-    ];
-    round-borders = 0;
-    round-borders-exclude = [
-        "class_g = 'keynav'"
- ];
+];
+round-borders = 0;
+round-borders-exclude = [
+        "class_g = 'keynav'",
+        "class_g = 'Xmonad'",
+        "class_g = 'xmobar'",
+        "class_g = 'simpleTabbed'",
+        "class_g = 'tabbed'"
+];
 
-opacity-rule =  [
-      "80:class_g  = 'Zathura'",
-      "80:class_g  = 'TelegramDesktop'",
-      "80:class_g  = 'Discord'",
-      "80:class_g  = 'Emacs'",
-      "100:class_g = 'keynav'",
-      "85:class_g = 'Alacritty'"
-  ];

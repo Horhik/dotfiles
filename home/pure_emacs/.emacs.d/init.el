@@ -27,50 +27,15 @@
 (global-visual-line-mode)
 
 (require 'use-package)
-    
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#282828" "#fb4934" "#b8bb26" "#fabd2f" "#83a598" "#cc241d" "#8ec07c" "#ebdbb2"])
- '(custom-safe-themes
-   '("6b1abd26f3e38be1823bd151a96117b288062c6cde5253823539c6926c3bb178" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
- '(exwm-floating-border-color "#504945")
- '(fci-rule-color "#7c6f64")
- '(highlight-tail-colors ((("#363627" "#363627") . 0) (("#323730" "#323730") . 20)))
- '(jdee-db-active-breakpoint-face-colors (cons "#0d1011" "#fabd2f"))
- '(jdee-db-requested-breakpoint-face-colors (cons "#0d1011" "#b8bb26"))
- '(jdee-db-spec-breakpoint-face-colors (cons "#0d1011" "#928374"))
- '(objed-cursor-color "#fb4934")
- '(package-selected-packages
-   '(ivy-posframe nix-mode neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy))
- '(pdf-view-midnight-colors (cons "#ebdbb2" "#282828"))
- '(rustic-ansi-faces
-   ["#282828" "#fb4934" "#b8bb26" "#fabd2f" "#83a598" "#cc241d" "#8ec07c" "#ebdbb2"])
- '(vc-annotate-background "#282828")
- '(vc-annotate-color-map
-   (list
-    (cons 20 "#b8bb26")
-    (cons 40 "#cebb29")
-    (cons 60 "#e3bc2c")
-    (cons 80 "#fabd2f")
-    (cons 100 "#fba827")
-    (cons 120 "#fc9420")
-    (cons 140 "#fe8019")
-    (cons 160 "#ed611a")
-    (cons 180 "#dc421b")
-    (cons 200 "#cc241d")
-    (cons 220 "#db3024")
-    (cons 240 "#eb3c2c")
-    (cons 260 "#fb4934")
-    (cons 280 "#e05744")
-    (cons 300 "#c66554")
-    (cons 320 "#ac7464")
-    (cons 340 "#7c6f64")
-    (cons 360 "#7c6f64")))
- '(vc-annotate-very-old-color nil))
+    (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(custom-safe-themes
+     '("75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
+   '(package-selected-packages
+     '(neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
 (use-package doom-themes)
   '(custom-enabled-themes '(gruvbox))
 
@@ -419,29 +384,44 @@
       )
 
 (use-package which-key
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 0.3))
+    :init (which-key-mode)
+    :diminish which-key-mode
+    :config
+    (setq which-key-idle-delay 0.3))
 
-(use-package ivy-rich
-  :init
-  (ivy-rich-mode 1))
+(use-package all-the-icons-ivy-rich
+  :ensure t
+  :init (all-the-icons-ivy-rich-mode 1))
+
+
+  (use-package ivy-rich
+    :init
+    (ivy-rich-mode 1))
 
 (use-package company
   :after lsp-mode
   :hook (lsp-mode . company-mode)
   :bind (:map company-active-map
-	 ("<tab>" . company-complete-selection))
-	(:map lsp-mode-map
-	 ("<tab>" . company-indent-or-complete-common))
+         ("<tab>" . company-complete-selection))
+        (:map lsp-mode-map
+         ("<tab>" . company-indent-or-complete-common))
   :custom
   (company-minimum-prefix-length 1)
   (company-idle-delay 0.0))
-  ;;(setq company-clang-executable "~/code/competitive/clang++")
 
 (use-package company-box
-  :hook (company-mode . company-box-mode))
+  :hook (company-mode . company-box-mode))   #+end_src
+
+(use-package ivy-postframe
+       :config
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+  (ivy-posframe-mode 1)
+)
 
 (set-face-attribute 'variable-pitch nil
                     ;; :font "Cantarell"
@@ -665,11 +645,13 @@
 )
 
 (use-package lsp-mode
-    :hook ((prog-mode). lsp)
     :init 
     (setq lsp-keymap-prefix "C-SPC c")
     ;;(setq lsp-client-packages nil)
     :config
+	 (add-hook 'c++-mode-hook #'lsp-mode)
+	 (add-hook 'rust-mode-hook #'lsp-mode)
+	 (add-hook 'c-mode-hook #'lsp-mode)
     ;;(setq lsp-clients-clangd-executable "/home/horhik/code/competitive/clangd")
     ;;(setq lsp-clients-clangd-default-executable "/home/horhik/code/competitive/clangd")
     ;;(lsp-mode . lsp-enable-which-key-integration)
@@ -679,6 +661,8 @@
     :after lsp-mode
     )
 (use-package lsp-ivy)
+(use-package lsp-ui
+:after lsp)
 
 (use-package irony
   :init
@@ -686,14 +670,24 @@
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-)
+  (setq irony-additional-clang-options
+ (append '("-std=c++17") irony-additional-clang-options))
+  )
+(add-to-list 'auto-mode-alist '("\\.cpp\\'" . cpp-hook))
+(add-to-list 'auto-mode-alist '("\\.cxx\\'" . cpp-hook))
+(add-to-list 'auto-mode-alist '("\\.c++\\'" . cpp-hook))
+(add-to-list 'auto-mode-alist '("\\.C\\'" . cpp-hook))
+(defun cpp-hook ()
+ (c++-mode 1)
+ (lsp-mode 1)
+  )
 
 (use-package markdown-mode)
 
 (use-package tuareg)
 
 ;;     (use-package direnv
-;;      :config
-;;      (direnv-mode))
-;;   (add-hook 'lsp-mode-hook #'direnv-update-environment)
+  ;;      :config
+  ;;      (direnv-mode))
+  ;;   (add-hook 'lsp-mode-hook #'direnv-update-environment)
+(use-package nix-mode)
