@@ -129,6 +129,8 @@
     polkit etcher gsettings-qt appimage-run pamixer unzip qjackctl gnome3.nautilus bluez pkgconfig pavucontrol bpytop 
     #nur.repos.reedrw.picom-next-ibhagwan
     spotify obsidian discord
+    nfs-utils cifs-utils
+    nfs-ganesha
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
