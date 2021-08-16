@@ -90,3 +90,5 @@ cargo build --release
 echo "installing tmp (tmux package manager)"
 git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 
+echo "installing gruvbox theme"
+yay -S gtk-engine-murrine gruvbox-material-git 

@@ -27,24 +27,26 @@
 (global-visual-line-mode)
 
 (require 'use-package)
-    (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(custom-safe-themes
-     '("75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
-   '(package-selected-packages
-     '(neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
-(use-package doom-themes)
-  '(custom-enabled-themes '(gruvbox))
+    ;;     (custom-set-variables
+    ;;    ;; custom-set-variables was added by Custom.
+    ;;    ;; If you edit it by hand, you could mess it up, so be careful.
+    ;;    ;; Your init file should contain only one such instance.
+    ;;    ;; If there is more than one, they won't work right.
+    ;;    '(custom-safe-themes
+    ;;      '("75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
+    ;;    '(package-selected-packages
+    ;;      '(neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
+(use-package doom-themes
+      :ensure t
+      )
+  (load-theme 'doom-gruvbox t)
 
-  (use-package gruvbox-theme
-    :ensure t
-    :config
-    (load-theme 'doom-gruvbox)
-    )
-  (setq use-package-always-ensure t)
+      ;; (use-package gruvbox-theme
+      ;;   :ensure t
+      ;;   :config
+      ;;   (load-theme 'doom-gruvbox)
+      ;;   )
+      (setq use-package-always-ensure t)
 
 (use-package doom-modeline
   :init
@@ -62,6 +64,8 @@
 (when (member "Twitter Color Emoji" (font-family-list))
   (set-fontset-font t 'unicode "Twitter Color Emoji" nil 'prepend))
 
+(when (member "Twemoji" (font-family-list))
+  (set-fontset-font t 'unicode "Twemoji" nil 'prepend))
 ;; ☺️ ☻ 😃 😄 😅 😆 😊 😎 😇 😈 😏 🤣 🤩 🤪 🥳 😁 😀 😂 🤠 🤡 🤑 🤓 🤖 😗 😚 😘 😙 😉 🤗 😍 🥰 🤤 😋 🤔 🤨 🧐 🤭 🤫 😯 🤐 😌 😖 😕 😳 😔 🤥 🥴 😮 😲 🤯 😩 😫 🥱 😪 😴 😵 ☹️ 😦 😞 😥 😟 😢 😭 🤢 🤮 😷 🤒 🤕 🥵 🥶 🥺 😬 😓 😰 😨 😱 😒 😠 😡 😤 😣 😧 🤬 😸 😹 😺 😻 😼 😽 😾 😿 🙀 🙈 🙉 🙊 🤦 🤷 🙅 🙆 🙋 🙌 🙍 🙎 🙇 🙏 👯 💃 🕺 🤳 💇 💈 💆 🧖 🧘 🧍 🧎 👰 🤰 🤱 👶 🧒 👦 👧 👩 👨 🧑 🧔 🧓 👴 👵 👤 👥 👪 👫 👬 👭 👱 👳 👲 🧕 👸 🤴 🎅 🤶 🧏 🦻 🦮 🦯 🦺 🦼 🦽 🦾 🦿 🤵 👮 👷 💁 💂 🕴 🕵️ 🦸 🦹 🧙 🧚 🧜 🧝 🧞 🧛 🧟 👼 👿 👻 👹 👺 👽 👾 🛸 💀 ☠️ 🕱 🧠 🦴 👁 👀 👂 👃 👄 🗢 👅 🦷 🦵 🦶 💭 🗬 🗭 💬 🗨 🗩 💦 💧 💢 💫 💤 💨 💥 💪 🗲 🔥 💡 💩 💯 
 ;; Fallback for emojies
 
@@ -83,6 +87,7 @@
   (show-paren-mode t))			;
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+(global-prettify-symbols-mode +1)
 
 (use-package all-the-icons)
 (use-package all-the-icons-ivy
@@ -410,18 +415,53 @@
   (company-idle-delay 0.0))
 
 (use-package company-box
-  :hook (company-mode . company-box-mode))   #+end_src
+  :hook (company-mode . company-box-mode))
 
-(use-package ivy-postframe
-       :config
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
-  (ivy-posframe-mode 1)
-)
+;;     (use-package ivy-postframe
+;;     :init
+;;   (ivy-posframe-mode 1)
+;;   ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+;;   ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+;;   ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
+;;   ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
+;;   ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+;; )
+
+;;  (lambda ()
+  ;;    (push '("TODO" . ?📥) prettify-symbols-alist)
+  ;;    (push '("DONE" . ?☑) prettify-symbols-alist)
+  ;;    (push '("NEXT" . ?⏭) prettify-symbols-alist)
+  ;;    (push '("IDEA" . ?💡) prettify-symbols-alist)
+  ;;    (push '("DREAM" . ?✨) prettify-symbols-alist)
+  ;;  )
+
+(setq-default prettify-symbols-alist
+                '(("#+BEGIN_SRC"     . "λ")
+                  ("#+END_SRC"       . "λ")
+                  ("#+end_src"       . "λ")
+                  ("#+begin_src"     . "λ")
+                  ("TODO"." T ")
+                  ("DONE"." D ")
+                  ("NEXT"." N ")
+                  ("IDEA"." 💡 ")
+                  ("DREAM"." ✨ ")
+                  (":LOGBOOK:"." LOG ")
+                  ))
+
+(defun my/org-toggle-todo-and-fold ()
+  (interactive)
+  (save-excursion
+    (org-back-to-heading t) ;; Make sure command works even if point is
+                            ;; below target heading
+    (cond ((looking-at "\*+ TODO")
+           (org-todo "DONE")
+	        (sleep-for 0.5)
+           (org-archive-subtree-default-with-confirmation)
+           )
+          ((looking-at "\*+ DONE")
+           (org-todo "TODO")
+           (hide-subtree))
+          (t (message "Can only toggle between TODO and DONE.")))))
 
 (set-face-attribute 'variable-pitch nil
                     ;; :font "Cantarell"
@@ -429,15 +469,15 @@
                     :height 1.3
                     :weight 'light)
 
-(set-face-attribute 'org-document-title nil :font "ubuntu" :weight 'bold :height 1.3)
-(dolist (face '((org-level-1 . 1.18)
-		(org-level-2 . 1.14)
-		(org-level-3 . 1.05)
+(set-face-attribute 'org-document-title nil :font "ubuntu" :weight 'light :height 1.3)
+(dolist (face '((org-level-1 . 1.1)
+		(org-level-2 . 1.0)
+		(org-level-3 . 1.0)
 		(org-level-4 . 1.0)
-		(org-level-5 . 1.1)
-		(org-level-6 . 1.1)
-		(org-level-7 . 1.1)
-		(org-level-8 . 1.1)))
+		(org-level-5 . 0.9)
+		(org-level-6 . 0.9)
+		(org-level-7 . 0.9)
+		(org-level-8 . 0.9)))
   (set-face-attribute (car face) nil :font "ubuntu" :weight 'bold :height (cdr face) ))
 (require 'org-indent)
 (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :font "Hack" )
@@ -460,15 +500,18 @@
   (visual-line-mode 1)
   (setq evil-auto-indent 1)
   (variable-pitch-mode t)
+  (prettify-symbols-mode +1)
+  (display-line-numbers-mode 0)
   )
-
 
 (use-package org 
   :hook ((org-mode . my/org-mode-setup)
          (org-mode . variable-pitch-mode)
          (org-mode . org-inddent-mode)
+         (org-mode . prettify-symbols-mode)
          )
-  :config (setq org-agenda-files `("~/Notes" "~/Notes/Tasks/Tasks.org")) 
+  :config (setq org-agenda-files `("~/Nextcloud2/Notes/Ideas💡.org"  "~/Nextcloud2/Notes/Lists📜.org"  "~/Nextcloud2/Notes/Projects💻.org"  "~/Nextcloud2/Notes/Tasks🧾.org")) 
+  (display-line-numbers-mode 0)
   (org-bullets-mode t) 
   (org-indent-mode t)
   (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
@@ -500,9 +543,12 @@
                                      ("n" "Next Tasks" ((todo "NEXT" ((org-agenda-overriding-header
                                                                        "Next Tasks")))))
                                      ("i" "Ideas" ((todo "IDEA" ((org-agenda-overriding-header
-                                                                       "Ideas ")))))
+                                                                  "Ideas "))
+                                                         )
+                                                   (tags-todo "+idea")
+                                                   ))
                                      ("A" "Articles" ((todo "Article" ((org-agenda-overriding-header
-                                                                       "Article")))))
+                                                                        "Article")))))
                                      ("W" "Work Tasks" tags-todo "+work-email")
                                      ("W" "Work Tasks" tags-todo "+work-email")
                                      ("I" "ideas" tags-todo "+idea-article")
@@ -560,7 +606,9 @@
 
   :general (general-nmap :prefix "SPC a" 
              :keymap 'org-agenda-mode-map 
-             "a" 'org-agenda))
+             "a" 'org-agenda
+             "d" 'my/org-toggle-todo-and-fold
+             ))
 (use-package org-bullets
   :after org
   :hook
@@ -609,7 +657,7 @@
 	     "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
 	     "s" '(org-roam-server-mode :which-key "roam server "))
   :custom
-  (org-roam-directory "~/Notes")
+  (org-roam-directory "~/Nextcloud2/Notes")
   :config
   (setq
    org-roam-server-host "127.0.0.1"
@@ -645,42 +693,46 @@
 )
 
 (use-package lsp-mode
-    :init 
-    (setq lsp-keymap-prefix "C-SPC c")
-    ;;(setq lsp-client-packages nil)
-    :config
-	 (add-hook 'c++-mode-hook #'lsp-mode)
-	 (add-hook 'rust-mode-hook #'lsp-mode)
-	 (add-hook 'c-mode-hook #'lsp-mode)
-    ;;(setq lsp-clients-clangd-executable "/home/horhik/code/competitive/clangd")
-    ;;(setq lsp-clients-clangd-default-executable "/home/horhik/code/competitive/clangd")
-    ;;(lsp-mode . lsp-enable-which-key-integration)
-    :commands (lsp lsp-deferred)
-    )
-  (use-package lsp-treemacs
-    :after lsp-mode
-    )
-(use-package lsp-ivy)
-(use-package lsp-ui
-:after lsp)
+      :init 
+      (setq lsp-keymap-prefix "C-SPC c")
+;;      (setq lsp-clients-clangd-args " --header-insertion-decorators=0 ")
+      ;;(setq lsp-client-packages nil)
+      :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (c++-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+      :config
+           (add-hook 'c\+\+-mode-hook #'lsp-mode)
+           (add-hook 'rust-mode-hook #'lsp-mode)
+           (add-hook 'c-mode-hook #'lsp-mode)
+
+      ;;(setq lsp-clients-clangd-executable "/home/horhik/code/competitive/clangd")
+      ;;(setq lsp-clients-clangd-default-executable "/home/horhik/code/competitive/clangd")
+      ;;(lsp-mode . lsp-enable-which-key-integration)
+      :commands (lsp lsp-deferred)
+      )
+    (use-package lsp-treemacs
+      :after lsp-mode
+      )
+  (use-package lsp-ivy)
+  (use-package lsp-ui
+  :after lsp)
 
 (use-package irony
-  :init
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-  (setq irony-additional-clang-options
- (append '("-std=c++17") irony-additional-clang-options))
-  )
-(add-to-list 'auto-mode-alist '("\\.cpp\\'" . cpp-hook))
-(add-to-list 'auto-mode-alist '("\\.cxx\\'" . cpp-hook))
-(add-to-list 'auto-mode-alist '("\\.c++\\'" . cpp-hook))
-(add-to-list 'auto-mode-alist '("\\.C\\'" . cpp-hook))
-(defun cpp-hook ()
- (c++-mode 1)
- (lsp-mode 1)
-  )
+            :init
+            (add-hook 'c++-mode-hook 'irony-mode)
+            (add-hook 'c-mode-hook 'irony-mode)
+            (add-hook 'objc-mode-hook 'irony-mode)
+            (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+            (setq irony-additional-clang-options
+           (append '("-std=c++17") irony-additional-clang-options))
+            )
+
+
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.cxx\\'" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-mode))
+(add-to-list 'auto-mode-alist '("\\.C\\'" . c++-mode))
 
 (use-package markdown-mode)
 
@@ -691,3 +743,23 @@
   ;;      (direnv-mode))
   ;;   (add-hook 'lsp-mode-hook #'direnv-update-environment)
 (use-package nix-mode)
+
+(use-package rust-mode
+:config
+  (setq rust-format-on-save t)
+  (add-hook 'rust-mode-hook
+            (lambda () (setq indent-tabs-mode nil)))
+)
+(use-package rustic
+:config
+(setq rustic-lsp-server 'rls)
+  )
+
+(setq initial-buffer-choice "~/Nextcloud2/Notes/Tasks🧾.org")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(rustic rust-mode workgroups2 which-key visual-fill-column use-package undo-tree tuareg treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil treemacs-all-the-icons realgud rainbow-delimiters pretty-symbols org-roam-server org-caldav org-bullets ob-browser nix-mode neotree lsp-ui lsp-treemacs lsp-ivy ivy-posframe highlight-parentheses gruvbox-theme general flycheck-irony evil-collection elisp-lint doom-themes doom-modeline counsel-projectile company-box clang-format+ all-the-icons-ivy-rich all-the-icons-ivy)))

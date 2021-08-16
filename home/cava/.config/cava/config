@@ -108,7 +108,7 @@ method = ncurses
 ; raw_target = /dev/stdout
 
 # Raw data format. Can be 'binary' or 'ascii'.
-; data_format = ascii
+; data_format = binary
 
 # Binary bit format, can be '8bit' (0-255) or '16bit' (0-65530).
 ; bit_format = 16bit
@@ -159,7 +159,7 @@ waves = 5
 
 # Set gravity percentage for "drop off". Higher values means bars will drop faster.
 # Accepts only non-negative values. 50 means half gravity, 200 means double. Set to 0 to disable "drop off".
-; gravity = 800
+; gravity = 100
 
 
 # In bar height, bars that would have been lower that this will not be drawn.

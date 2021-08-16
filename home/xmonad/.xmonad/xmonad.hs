@@ -101,7 +101,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm              , xK_e     ), spawn "rofimoji")
     , ((modm              , xK_p     ), spawn "rofi -show drun")
 
-    , ((modm .|. shiftMask , xK_p     ), spawn "rofi -show window")
+    , ((modm .|. shiftMask , xK_p     ), spawn "rofi-pass")
   
     -- close focused window
     , ((modm .|. shiftMask, xK_c     ), kill)
@@ -178,6 +178,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. mod1Mask         , xK_space ),  spawn "$HOME/.local/scripts/deadd_notify")
     -- change lang
     , ((modm, xK_Control_R)       , spawn "xkblayout-state set +1")
+    , ((modm, xK_Shift_R)       , spawn "xkblayout-state set +1")
     , ((modm, xK_d)               , spawn "eww-toggl")
     -- toggle fullscreen
     , ((mod4Mask .|. shiftMask, xK_f), sendMessage ToggleStruts)
@@ -292,10 +293,10 @@ magnify  = renamed [Replace "magnify"]
            $ mySpacing 8
            $ ResizableTall 1 (3/100) (1/2) []
 monocle  = renamed [Replace "monocle"]
-           $ smartBorders
-           $ addTabs shrinkText myTabTheme
-           $ subLayout [] (smartBorders Simplest)
-           $ limitWindows 20 Full
+            $ noBorders
+            -- $ addTabs shrinkText myTabTheme
+            $ subLayout [] (smartBorders Simplest)
+            $ limitWindows 20 Full
 floats   = renamed [Replace "floats"]
            $ smartBorders
            $ limitWindows 20 simplestFloat
@@ -361,7 +362,7 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
              where
                myDefaultLayout =     withBorder myBorderWidth tall
                                  ||| noBorders magnify
-                                 ||| noBorders monocle
+                                 ||| monocle
                                  ||| floats
                                  ||| noBorders tabs
                                  ||| grid

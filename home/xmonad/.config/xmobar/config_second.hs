@@ -16,7 +16,7 @@
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "]["  -- separator between left-right alignment
-   , template = "<fc=#a89984>--{</fc>%StdinReader%<fc=#a89984>}————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</fc>][%/home/horhik/.config/xmobar/bin/xmobarstatus2%"
+   , template = "<fc=#a89984>--{</fc>%StdinReader%<fc=#a89984>}—————————————————————————————————————————————————————————————————————————————————————————————————————————————————</fc>][%/home/horhik/.config/xmobar/bin/xmobarstatus2%"
 
    -- general behavior
    , lowerOnStart =     False    -- send to bottom of window stack on start

@@ -109,7 +109,7 @@ duration=$(echo $((duration_sec / (60 * 60))):$((duration_sec / 60  - duration_s
 echo   "<fc=$greenDarkerColor>—{$toggl_description(</fc>"$duration"<fc=$greenDarkerColor>)}</fc>"
 }
 
-
+ 
 echo "$(toggl_timer)$(wifi)$(battery)$(volume)$(layout)$(diskspace)$(timeanddate)<fc=$greenDarkerColor>—{</fc>$(calendar)<fc=$greenDarkerColor>}——</fc>"
 
 #echo "                                          "

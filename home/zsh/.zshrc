@@ -12,7 +12,7 @@ export ZSH=/usr/share/oh-my-zsh/
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # if you installed the package oh-my-zsh-powerline-theme-git then you type here "powerline" as zsh theme
-ZSH_THEME="random"
+ZSH_THEME="sporty_256"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -111,8 +111,8 @@ export HISTCONTROL=ignoreboth:erasedups
 
 # Make nano the default editor
 
-export EDITOR='nano'
-export VISUAL='nano'
+export EDITOR='nvim'
+export VISUAL='nvim'
 
 #PS1='[\u@\h \W]\$ '
 
@@ -405,3 +405,4 @@ compile_and_run() {
 
 #   eval $(thefuck --alias)
 
+if [ -e /home/horhik/.nix-profile/etc/profile.d/nix.sh ]; then . /home/horhik/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
