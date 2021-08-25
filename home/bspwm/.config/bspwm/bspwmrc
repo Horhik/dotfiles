@@ -1,0 +1,74 @@
+#!/bin/bash
+
+pgrep -x sxhkd > /dev/null || sxhkd &
+
+enact -w --pos left &
+if [[  $(xrandr --query | grep 'HDMI-A-0') != *disconnected* ]]; then
+    enact --pos left
+    bspc monitor "HDMI-A-0" -d 1 2 3 4 5
+    bspc monitor eDP  -d 6 7 8 9 0
+    $HOME/.config/polybar/launch.sh duo 
+else 
+    $HOME/.config/polybar/launch.sh 
+    bspc monitor eDP -d 1 2 3 4 5 6 7 8 9 0 
+fi
+#tint2 &
+#          
+
+bspc config border_width         3
+
+bspc config active_border_ctopolor "#657b83"
+bspc config normal_border_color "#002b36"
+bspc config focused_border_color "#073642"
+
+bspc config window_gap          0
+
+bspc config split_ratio          0.52
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+bspc rule -a Gimp desktop='^8' state=floating follow=on
+bspc rule -a Chromium desktop='^2'
+bspc rule -a mplaye2 state=floating
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+
+
+
+#Startup
+export MAIN_DISPLAY=eDP
+export SECOND_DISPLAY=HDMI1
+export BINSCRIPTS=$HOME/.local/bin/
+
+
+$HOME/scripts/startup/touchpad.sh &
+$HOME/scripts/startup/wifi.sh &
+#$HOME/scripts/startup/spotifyshit &
+$HOME/.local/bin/fullscreen-daemon &
+picom --experimental-backends&
+blueman-tray &
+setxkbmap -layout us,ru &
+nitrogen --restore
+
+# --- Scratchpads --- #
+  # terminal dropdown
+  bspc rule -a dropdown sticky=on state=floating hidden=on
+  alacritty --class dropdown --title dropdown -e "tmux" &
+  tmux new -s scratchpad
+  # mixer dropdown
+  bspc rule -a pulsemixer sticky=on state=floating hidden=on
+  alacritty --class pulsemixer --title pulsemixer -e "pulsemixer" &
+
+
+#  $HOME/scripts/startup/spotifyshit &
+#  bspc rule -a Spotify sticky=on state=floating hidden=on
+#  spotify
+#  $HOME/scripts/startup/spotifyshit &
+
+
+bspc() {
+    echo $@ | grep -q " fullscreen" && touch /tmp/bspcblock
+    /usr/local/bin/bspc $@
+}
+
+killall flameshot

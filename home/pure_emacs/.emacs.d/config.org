@@ -63,18 +63,13 @@
    ;; If you edit it by hand, you could mess it up, so be careful.
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
-   '(custom-safe-themes
-     '("75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
    '(package-selected-packages
      '(neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
-(use-package doom-themes)
-  '(custom-enabled-themes '(gruvbox))
-
-  (use-package gruvbox-theme
-    :ensure t
-    :config
-    (load-theme 'doom-gruvbox)
-    )
+(use-package doom-themes
+:ensure t
+:init
+(load-theme 'doom-solarized-dark)
+)
   (setq use-package-always-ensure t)
 
 
@@ -82,6 +77,7 @@
 #+end_src
 
 #+RESULTS:
+: t
 
 ** Modeline
 #+begin_src emacs-lisp
@@ -500,6 +496,8 @@
 
 #+end_src
 
+#+RESULTS:
+
 ** Company-mode
    #+begin_src emacs-lisp
 (use-package company
@@ -514,7 +512,8 @@
   (company-idle-delay 0.0))
 
 (use-package company-box
-  :hook (company-mode . company-box-mode))   #+end_src 
+  :hook (company-mode . company-box-mode))   
+#+end_src 
 #+RESULTS:
 
 * Org
@@ -760,7 +759,6 @@
 #+end_src
 
 #+RESULTS:
-: org-roam-protocol
 
 * Languages
 ** Flycheck
@@ -824,3 +822,5 @@
 ;;      (direnv-mode))
 ;;   (add-hook 'lsp-mode-hook #'direnv-update-environment)
    #+end_src
+
+   #+RESULTS:

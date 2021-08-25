@@ -44,7 +44,7 @@ Plug 'preservim/nerdtree'
 Plug 'phanviet/vim-monokai-pro'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'sheerun/vim-polyglot'
-Plug 'ayu-theme/ayu-vim' " or other package manager
+"Plug 'ayu-theme/ayu-vim' " or other package manager
 Plug 'sickill/vim-monokai'
 Plug 'yarisgutierrez/ayu-lightline'
 Plug 'vim-airline/vim-airline'
@@ -57,7 +57,8 @@ Plug 'lervag/vimtex'
 Plug 'ap/vim-css-color'
 Plug 'joshdick/onedark.vim'
 Plug 'dracula/vim'
-Plug 'morhetz/gruvbox'
+" Plug 'morhetz/gruvbox'
+Plug 'altercation/vim-colors-solarized'
 Plug 'rust-lang/rust.vim'
 call plug#end()
 
@@ -73,8 +74,9 @@ let g:molokai_original = 1
 " ---AirLine--- "
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#buffer_nr_show = 1
+"let g:airline#extensions#tabline#left_sep = ' '
+"let g:airline#extensions#tabline#left_alt_sep = '|'
 
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
@@ -96,11 +98,13 @@ endif
 
 set termguicolors     " enable true colors support
 "let ayucolor="mirage" " for mirage version of theme
-let ayucolor="dark"   " for dark version of theme
+"let ayucolor="dark"   " for dark version of theme
 " colorscheme onedark
- let g:gruvbox_italic=1
-colorscheme gruvbox
-let g:airline_theme='gruvbox'
+set background=dark
+"let g:gruvbox_italic=1
+colo solarized
+colorscheme solarized
+let g:airline_theme='solarized'
 let g:onedark_terminal_italics = 1
 
 

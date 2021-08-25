@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+class=$2
+typ3=$1 #"class" # or name
+
+id=$(xdotool search --$typ3 $class)
+
+if [ "$id" != "" ]
+ then
+  bspc node "$id" --flag hidden --to-desktop focused -f --state floating
+fi
+

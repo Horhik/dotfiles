@@ -89,13 +89,13 @@ padding:
 font:
   size: 10
   normal:
-    family: Mononoki Nerd Font
+    family: Mononoki 
     style: Medium
   bold:
-    family: Mononoki Nerd Font
+    family: Mononoki
     style: Bold
   italic:
-    family: Mononoki Nerd Font
+    family: Mononoki
     style: Italic
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -105,31 +105,36 @@ font:
 
 # Colors (Tomorrow Night)
 colors:
+  # COLORSCHEME: Cobalt2.yaml
   # Default colors
   primary:
     # hard contrast: background = '#1d2021'
-    background: '#282828'
-    # soft contrast: background = '#32302f'
-    foreground: '#ebdbb2'
+    background: '0x122637'
+    foreground: '0xffffff'
 
-  # Normal colors
+  # Colors the cursor will use if `custom_cursor_colors` is true
   normal:
-    black: '#282828'
-    red: '#cc241d'
-    green: '#98971a'
-    yellow: '#d79921'
-    blue: '#458588'
-    magenta: '#b16286'
-    cyan: '#689d6a'
-    white: '#a89984'
+    black: '0x000000'
+    red: '0xff0000'
+    green: '0x37dd21'
+    yellow: '0xfee409'
+    blue: '0x1460d2'
+    magenta: '0xff005d'
+    cyan: '0x00bbbb'
+    white: '0xbbbbbb'
 
   # Bright colors
   bright:
-    black: '#928374'
-    red: '#fb4934'
-    green: '#b8bb26'
-    yellow: '#fabd2f'
-    blue: '#83a598'
-    magenta: '#d3869b'
-    cyan: '#8ec07c'
-    white: '#ebdbb2'
+    black: '0x545454'
+    red: '0xf40d17'
+    green: '0x3bcf1d'
+    yellow: '0xecc809'
+    blue: '0x5555ff'
+    magenta: '0xff55ff'
+    cyan: '0x6ae3f9'
+    white: '0xffffff'
+  cursor:
+    text: '0x122637'
+    cursor: '0xf0cb09'
+
+  # Normal colors
