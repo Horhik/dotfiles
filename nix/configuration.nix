@@ -122,7 +122,7 @@
     firefox 
     connman
     wpa_supplicant python3 xkblayout-state acpi yaru-theme xkb-switch
-    pipewire  pulsemixer nerdfonts
+    pipewire  pulsemixer nerdfonts gnupg
     feh compton ninja meson cmake 
     anki clang_12 zathura redshift rustup neofetch tree
     killall audacity  thefuck
