@@ -121,7 +121,7 @@
     mononoki fontmatrix
     firefox 
     connman
-    wpa_supplicant python3 xkblayout-state acpi yaru-theme
+    wpa_supplicant python3 xkblayout-state acpi yaru-theme xkb-switch
     pipewire  pulsemixer nerdfonts
     feh compton ninja meson cmake 
     anki clang_12 zathura redshift rustup neofetch tree
@@ -131,6 +131,7 @@
     spotify obsidian discord
     nfs-utils cifs-utils
     nfs-ganesha
+    transmission
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -219,7 +220,7 @@
   nixpkgs.overlays = [
     (import (builtins.fetchTarball {
       url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-      sha256 = "0c2p2ycx6c50rzfd5k56cc411cb0ilhc3zyhhxlwcjnz1ysn5laj";
+      sha256 = "039kk45r6pqsfd865lgfiwbaqlpll4p9pmndbzhi6l5w5r8dbabm";
     }))
   ];
 }

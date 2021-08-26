@@ -74,9 +74,12 @@
               imports = [
                 ./modules/picom.nix
                 ./modules/tmux.nix
+                ./modules/bspwm
               ];
             };
           })
+
+          { nixpkgs.overlays = overlays; }
         ];
         inherit pkgs;
       };

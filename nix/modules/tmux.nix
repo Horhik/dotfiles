@@ -1,8 +1,8 @@
 {config, pkgs, ...}:
-programs.tmux = {
+ {
   enable = true;
   clock24 = true;
-  extraPackages = tmuxPlugins : [tmux-gruvbox.gruvbox ];
+  home.packages =  [pkgs.tmuxPlugins.gruvbox ];
   extraTmuxConf = '' 
     set -g @plugin 'egel/tmux-gruvbox'
     set -g @tmux-gruvbox 'dark' # or 'light'

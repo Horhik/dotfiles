@@ -74,7 +74,7 @@
     rounded-corners-exclude = [
         "window_type = 'dock'",
         "_NET_WM_STATE@:32a *= '_NET_WM_STATE_FULLSCREEN'",
-        "class_g = 'keynav'",
+        "class_g = 'keynav'"
     ];
     round-borders = 0;
     round-borders-exclude = [
