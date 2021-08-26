@@ -177,8 +177,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_s ),  spawn "flameshot gui")
     , ((modm .|. mod1Mask         , xK_space ),  spawn "$HOME/.local/scripts/deadd_notify")
     -- change lang
-    , ((modm, xK_Control_R)       , spawn "xkblayout-state set +1")
-    , ((modm, xK_Shift_R)       , spawn "xkblayout-state set +1")
+    , ((modm, xK_Control_R)       , spawn "xkb-switch -n")
+    , ((modm, xK_Shift_R)       , spawn "xkb-switch -n")
     , ((modm, xK_d)               , spawn "eww-toggl")
     -- toggle fullscreen
     , ((mod4Mask .|. shiftMask, xK_f), sendMessage ToggleStruts)
@@ -265,7 +265,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-defaultGapSize = 7;
+defaultGapSize = 0;
 defaultGaps = gaps [(U,defaultGapSize), (R,defaultGapSize), (D, defaultGapSize), (L, defaultGapSize)]
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
@@ -273,7 +273,7 @@ mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
 mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
-spacesAndGaps = mySpacing 7 . defaultGaps
+spacesAndGaps = mySpacing 0 . defaultGaps
 
 
 
@@ -282,7 +282,7 @@ tall     = renamed [Replace "tall"]
            $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
            $ limitWindows 12
-           $ mySpacing 8
+           $ mySpacing 0
            $ ResizableTall 1 (3/100) (1/2) []
 magnify  = renamed [Replace "magnify"]
            $ smartBorders
@@ -290,7 +290,7 @@ magnify  = renamed [Replace "magnify"]
            $ subLayout [] (smartBorders Simplest)
            $ magnifier
            $ limitWindows 12
-           $ mySpacing 8
+           $ mySpacing 0
            $ ResizableTall 1 (3/100) (1/2) []
 monocle  = renamed [Replace "monocle"]
             $ noBorders
@@ -304,14 +304,14 @@ grid     = renamed [Replace "grid"]
            $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
            $ limitWindows 12
-           $ mySpacing 8
+           $ mySpacing 0
            $ mkToggle (single MIRROR)
            $ Grid (16/10)
 spirals  = renamed [Replace "spirals"]
            $ smartBorders
            $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
-           $ mySpacing' 8
+           $ mySpacing' 0
            $ spiral (6/7)
 threeCol = renamed [Replace "threeCol"]
            $ smartBorders

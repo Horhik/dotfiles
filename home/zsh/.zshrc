@@ -12,7 +12,7 @@ export ZSH=/usr/share/oh-my-zsh/
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # if you installed the package oh-my-zsh-powerline-theme-git then you type here "powerline" as zsh theme
-ZSH_THEME="sporty_256"
+ZSH_THEME="robyshell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -75,9 +75,8 @@ ZSH_THEME="sporty_256"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+#source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -100,7 +99,7 @@ source $ZSH/oh-my-zsh.sh
 ####   ARCOLINUX SETTINGS   ####
 
 
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+#source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 setopt GLOB_DOTS
 
@@ -369,7 +368,6 @@ export CXX=/usr/bin/clang++
 export _JAVA_AWT_WM_NONREPARENTING=1
 export ANDROID_SDK_ROOT=/home/horhik/Android/Sdk/
 export NDK_HOME=/home/horhik/Android/Sdk/ndk/22.0.7026061/
-ZSH_THEME="cloud"
 plugins=(git colorize colored-man-pages emoji rustup sudo zsh-syntax-highlighting zsh-autosuggestions zsh-completions)
 autoload -U compinit && compinit
 export PATH=$HOME/.local/bin:$PATH
@@ -406,3 +404,4 @@ compile_and_run() {
 #   eval $(thefuck --alias)
 
 if [ -e /home/horhik/.nix-profile/etc/profile.d/nix.sh ]; then . /home/horhik/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
