@@ -1,3 +1,6 @@
 [submodule "my-nixos"]
-	path = my-nixos
+path = my-nixos
+url = https://github.com/Horhik/my-nixos
+[submodule "master"]
+	path = master
 	url = https://github.com/Horhik/my-nixos
