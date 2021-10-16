@@ -1,0 +1,3 @@
+[submodule "my-nixos"]
+	path = my-nixos
+	url = https://github.com/Horhik/my-nixos
