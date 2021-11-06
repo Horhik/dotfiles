@@ -1,6 +1,7 @@
+(setq max-lisp-eval-depth 10000)
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "http://melpa.org/packages/"))
+             '("melpa" . "http://stable.melpa.org/packages/"))
 
 (package-initialize)
 
@@ -282,7 +283,7 @@
     (treemacs-create-icon :file "zip.png"                :fallback "🗃️"     :extensions ("zip" "tar" "tar.xz" "xz" "xfv" "7z"))
     (treemacs-create-icon :file "todo.png"               :fallback "🗃️"     :extensions ("TODO" "todo" "Tasks" ))
     (treemacs-create-icon :file "webassembly"            :fallback "🗃️"     :extensions ("wasm" "webasm" "webassembly"))
-    (treemacs-create-icon :file "python"                 :fallback "🗃️"     :extensions ("py" "python"))))
+    (treemacs-create-icon :file "python.png"                 :fallback "🗃️"     :extensions ("py" "python"))))
 
 (treemacs-load-theme 'Material)
 
@@ -385,7 +386,7 @@
       "f v"  '(lambda() (interactive) (find-file "~/.config/nvim/init.vim" :which-key "neovim config"          ))
       "f d"  '(lambda() (interactive) (find-file "~/dotfiles/home"  :which-key "dotfiles dired"                 ))
       "f a"  '(lambda() (interactive) (find-file "~/.config/alacritty/alacritty.yml" :which-key "alacritty"))
-      "f b"  '(lambda() (interactive) (find-file "~/Notes")                           :which-key "my brain")
+      "f b"  '(lambda() (interactive) (find-file "~/org-notes")                           :which-key "my brain")
       )
 
 (use-package which-key
@@ -444,6 +445,7 @@
                   ("DONE"." D ")
                   ("NEXT"." N ")
                   ("IDEA"." 💡 ")
+                  ("READ"." 🔖 ")
                   ("DREAM"." ✨ ")
                   (":LOGBOOK:"." LOG ")
                   ))
@@ -507,10 +509,10 @@
 (use-package org 
   :hook ((org-mode . my/org-mode-setup)
          (org-mode . variable-pitch-mode)
-         (org-mode . org-inddent-mode)
+         (org-mode . org-indent-mode)
          (org-mode . prettify-symbols-mode)
          )
-  :config (setq org-agenda-files `("~/Nextcloud2/Notes/Ideas💡.org"  "~/Nextcloud2/Notes/Lists📜.org"  "~/Nextcloud2/Notes/Projects💻.org"  "~/Nextcloud2/Notes/Tasks🧾.org")) 
+  :config (setq org-agenda-files `("~/org-notes")) 
   (display-line-numbers-mode 0)
   (org-bullets-mode t) 
   (org-indent-mode t)
@@ -524,6 +526,7 @@
                                  ("STARTED" . "yellow") 
                                  ("DREAM" . "pink") 
                                  ("IDEA" . "gold") 
+                                 ("READ" . "violet") 
                                  ("ARTICLE" . "lightblue") 
                                  ("CANCELED" . 
                                   (:foreground "blue" 
@@ -532,7 +535,7 @@
   (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)") 
                             (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)"
                                       "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)") 
-                            (sequence "IDEA(i)" "DREAM(d)" "ARTICLE(a)" "|" "DONE(d!)")))
+                            (sequence "IDEA(i)" "DREAM(d)" "READ(r)" "ARTICLE(a)" "|" "DONE(d!)")))
 
   (setq org-agenda-custom-commands '(("d" "Dashboard" ((agenda "" ((org-deadline-warning-days 7))) 
                                                        (todo "NEXT" ((org-agenda-overriding-header
@@ -542,6 +545,8 @@
                                                                     "Active Projects")))))
                                      ("n" "Next Tasks" ((todo "NEXT" ((org-agenda-overriding-header
                                                                        "Next Tasks")))))
+                                     ("r" "Read pages" ((todo "READ" ((org-agenda-overriding-header
+                                                                       "To read")))))
                                      ("i" "Ideas" ((todo "IDEA" ((org-agenda-overriding-header
                                                                   "Ideas "))
                                                          )
@@ -638,49 +643,50 @@
 (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
 (add-to-list 'org-structure-template-alist '("json" . "src json"))
 
-(use-package org-roam-server)
 (use-package org-roam
   :ensure t
   :hook
   (after-init . org-roam-mode)
   :general (general-nmap
-	     :prefix "SPC r"
-	     ;; Org-roam keymap
-	     "d" '(org-roam-dailies-find-today :which-key "roam today")
-	     "t a" '(org-roam-tag-add :which-key "roam add tag")
-	     "t d" '(org-roam-tag-delete :which-key "roam delete tag")
-	     "a a" '(org-roam-alias-add :which-key "roam add alias")
-	     "f f" '(org-roam-find-file :which-key "roam findgfile ")
-	     "g" '(org-roam-graph-show :which-key "roam graph ")
-	     "b b" '(org-roam-buffer-toggle-display :which-key "roam buffer toggle ")
-	     "b s" '(org-roam-buffer-activate :which-key "roam buffer show ")
-	     "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
-	     "s" '(org-roam-server-mode :which-key "roam server "))
+             :prefix "SPC r"
+             ;; Org-roam keymap
+             "d" '(org-roam-dailies-find-today :which-key "roam today")
+             "t a" '(org-roam-tag-add :which-key "roam add tag")
+             "t d" '(org-roam-tag-delete :which-key "roam delete tag")
+             "a a" '(org-roam-alias-add :which-key "roam add alias")
+             "f f" '(org-roam-find-file :which-key "roam findgfile ")
+             "g" '(org-roam-graph-show :which-key "roam graph ")
+             "b b" '(org-roam-buffer-toggle-display :which-key "roam buffer toggle ")
+             "b s" '(org-roam-buffer-activate :which-key "roam buffer show ")
+             "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
+             "s" '(org-roam-ui-mode :which-key "roam ui "))
   :custom
-  (org-roam-directory "~/Nextcloud2/Notes")
+  (org-roam-directory (file-truename "~/org-notes"))
   :config
-  (setq
-   org-roam-server-host "127.0.0.1"
-   org-roam-server-port 5034
-   org-roam-server-authenticate nil
-   org-roam-server-export-inline-images t
-   org-roam-server-serve-files nil
-   org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-   org-roam-server-network-poll t
-   org-roam-server-network-arrows nil
-   org-roam-server-network-label-truncate t
-   org-roam-server-network-label-truncate-length 60
-   org-roam-server-network-label-wrap-length 20)
+  (org-roam-db-autosync-mode)
 
 
   (require 'org-roam-protocol)
-  (org-roam-server-mode t)
   (server-start t)
   )
 
+  (setq org-roam-v2-ack t)
 
+(setq org-roam-directory (file-truename "~/org-notes"))
 
 (require 'org-roam-protocol)
+
+(use-package websocket
+      :after org-roam
+    )
+    (use-package simple-httpd
+      :after org-roam
+    )
+(require 'websocket)
+(require 'simple-httpd)
+
+  (add-to-list 'load-path "~/.emacs.d/private/org-roam-ui")
+  (load-library "org-roam-ui")
 
 (use-package flycheck
   :init
@@ -717,22 +723,34 @@
   (use-package lsp-ivy)
   (use-package lsp-ui
   :after lsp)
+  (use-package company-lsp
+    :ensure t
+    :commands company-lsp
+    :config (push 'company-lsp company-backends))
 
 (use-package irony
-            :init
-            (add-hook 'c++-mode-hook 'irony-mode)
-            (add-hook 'c-mode-hook 'irony-mode)
-            (add-hook 'objc-mode-hook 'irony-mode)
-            (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-            (setq irony-additional-clang-options
-           (append '("-std=c++17") irony-additional-clang-options))
-            )
+                 :init
+                 (add-hook 'c++-mode-hook 'irony-mode)
+                 (add-hook 'c-mode-hook 'irony-mode)
+                 (add-hook 'objc-mode-hook 'irony-mode)
+                 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+                 (setq irony-additional-clang-options
+                (append '("-std=c++17") irony-additional-clang-options))
+                 )
 
 
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-(add-to-list 'auto-mode-alist '("\\.cxx\\'" . c++-mode))
-(add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-mode))
-(add-to-list 'auto-mode-alist '("\\.C\\'" . c++-mode))
+     (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+     (add-to-list 'auto-mode-alist '("\\.cxx\\'" . c++-mode))
+     (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-mode))
+     (add-to-list 'auto-mode-alist '("\\.C\\'" . c++-mode))
+(use-package ccls
+  :ensure t
+  :config
+  (setq ccls-executable "ccls")
+  (setq lsp-prefer-flymake nil)
+  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+  :hook ((c-mode c++-mode objc-mode) .
+         (lambda () (require 'ccls) (lsp))))
 
 (use-package markdown-mode)
 
@@ -755,11 +773,9 @@
 (setq rustic-lsp-server 'rls)
   )
 
-(setq initial-buffer-choice "~/Nextcloud2/Notes/Tasks🧾.org")
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(rustic rust-mode workgroups2 which-key visual-fill-column use-package undo-tree tuareg treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil treemacs-all-the-icons realgud rainbow-delimiters pretty-symbols org-roam-server org-caldav org-bullets ob-browser nix-mode neotree lsp-ui lsp-treemacs lsp-ivy ivy-posframe highlight-parentheses gruvbox-theme general flycheck-irony evil-collection elisp-lint doom-themes doom-modeline counsel-projectile company-box clang-format+ all-the-icons-ivy-rich all-the-icons-ivy)))
+(use-package mastodon
+:config
+  (setq mastodon-instance-url "https://mastodon.ml")
+)
+
+(org-agenda)
