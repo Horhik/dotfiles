@@ -30,6 +30,7 @@ import XMonad.Layout.NoBorders (noBorders, smartBorders)
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.Scratchpad
 import XMonad.Util.NamedScratchpad
+import XMonad.Util.Brightness as Bright
 
     -- Layouts
 import XMonad.Layout.Accordion
@@ -63,6 +64,7 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
 import GruvboxColors as Colors 
+import TaskMonad
 
 
 home                  = "/home/horhik/"
@@ -177,7 +179,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_s ),  spawn "flameshot gui")
     , ((modm .|. mod1Mask         , xK_space ),  spawn "$HOME/.local/scripts/deadd_notify")
     -- change lang
-    , ((modm, xK_Control_R)       , spawn "xkb-switch -n")
+    , ((modm, xK_Control_R)       , spawn "setxkbmap us,ru; xkb-switch -n")
     , ((modm, xK_Shift_R)       , spawn "xkb-switch -n")
     , ((modm, xK_d)               , spawn "eww-toggl")
     -- toggle fullscreen
@@ -191,6 +193,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
     , ((modm .|. shiftMask    , xK_n),  namedScratchpadAction myScratchpads "rss_news")
     , ((modm .|. controlMask, xK_e),    namedScratchpadAction myScratchpads "emacs")
+    , ((modm , xK_w),       taskwarriorPrompt [(\x -> x == "processInbox", processInbox)])
 
     -- | Programs
     , ((modm .|. shiftMask, xK_z), spawn "zathura &")                                                                            -- book reader (zathura)
@@ -224,8 +227,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
      ++
-     [ ((0, XF86.xF86XK_MonBrightnessUp  ), spawn "light -A 5")
-     , ((0, XF86.xF86XK_MonBrightnessDown), spawn "light -U 5")
+     [ ((0, XF86.xF86XK_MonBrightnessUp  ), Bright.increase)
+     , ((0, XF86.xF86XK_MonBrightnessDown), Bright.decrease)
      , ((0, XF86.xF86XK_AudioPause       ), spawn "playerctl play-pause")
      , ((0, XF86.xF86XK_AudioPrev        ), spawn "playerctl previous")
      , ((0, XF86.xF86XK_AudioMute        ), spawn "pulsemixer --toggle-mute")
@@ -284,14 +287,14 @@ tall     = renamed [Replace "tall"]
            $ limitWindows 12
            $ mySpacing 0
            $ ResizableTall 1 (3/100) (1/2) []
-magnify  = renamed [Replace "magnify"]
-           $ smartBorders
-           $ addTabs shrinkText myTabTheme
-           $ subLayout [] (smartBorders Simplest)
-           $ magnifier
-           $ limitWindows 12
-           $ mySpacing 0
-           $ ResizableTall 1 (3/100) (1/2) []
+-- magnify  = renamed [Replace "magnify"]
+--            $ smartBorders
+--            $ addTabs shrinkText myTabTheme
+--            $ subLayout [] (smartBorders Simplest)
+--            $ magnifier
+--            $ limitWindows 12
+--            $ mySpacing 0
+--            $ ResizableTall 1 (3/100) (1/2) []
 monocle  = renamed [Replace "monocle"]
             $ noBorders
             -- $ addTabs shrinkText myTabTheme
@@ -319,15 +322,15 @@ threeCol = renamed [Replace "threeCol"]
            $ subLayout [] (smartBorders Simplest)
            $ limitWindows 7
            $ ThreeCol 1 (3/100) (1/2)
-threeRow = renamed [Replace "threeRow"]
-           $ smartBorders
-           $ addTabs shrinkText myTabTheme
-           $ subLayout [] (smartBorders Simplest)
-           $ limitWindows 7
-           -- Mirror takes a layout and rotates it by 90 degrees.
-           -- So we are applying Mirror to the ThreeCol layout.
-           $ Mirror
-           $ ThreeCol 1 (3/100) (1/2)
+-- threeRow = renamed [Replace "threeRow"]
+--            $ smartBorders
+--            $ addTabs shrinkText myTabTheme
+--            $ subLayout [] (smartBorders Simplest)
+--            $ limitWindows 7
+--            -- Mirror takes a layout and rotates it by 90 degrees.
+--            -- So we are applying Mirror to the ThreeCol layout.
+--            $ Mirror
+--            $ ThreeCol 1 (3/100) (1/2)
 tabs     = renamed [Replace "tabs"]
            -- I cannot add spacing to this layout because it will
            -- add spacing between window and tabs which looks bad.
@@ -360,17 +363,13 @@ myShowWNameTheme = def
 myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts floats
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
              where
-               myDefaultLayout =     withBorder myBorderWidth tall
-                                 ||| noBorders magnify
+               myDefaultLayout = withBorder myBorderWidth tall
                                  ||| monocle
                                  ||| floats
                                  ||| noBorders tabs
                                  ||| grid
                                  ||| spirals
                                  ||| threeCol
-                                 ||| threeRow
-                                 ||| noBorders tallAccordion
-                                 ||| noBorders wideAccordion
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -394,10 +393,12 @@ myManageHook = (composeAll
     , className =? "TerminalDropdown"       --> doFloat
     , className =? "Nemo"                   --> doCenter
     , title     =? "dropdown"               --> doFloat
+    , title     =? "scratchpad"               --> doFloat
     , resource  =? "desktop_window"         --> doIgnore
     , resource  =? "kdesktop"               --> doIgnore
     ])
     <+> namedScratchpadManageHook myScratchpads
+    <+> namedScratchpadManageHook taskwarriorScratchpads
   where
     doCenter    = customFloating $ W.RationalRect l t w h
       where
@@ -411,6 +412,7 @@ myManageHook = (composeAll
 
 myScratchpads = [
     NS "terminal" spawnTerm findTerm manageTerm
+  , NS "tw-term" spawnTerm findTerm manageTerm
   , NS "htop" "alacritty -t htop -e htop " (title =? "htop") defaultFloating
   , NS "pomo" "pomodone" (title =? "PomoDoneApp") defaultFloating
   , NS "notion" "notion" (title =? "Notion") defaultFloating
@@ -421,6 +423,19 @@ myScratchpads = [
   , NS "rss_news" spawnRSS findRSS manageRSS
     ]
   where
+    classTW     = "scratchpad"
+    titleTW     = "scratchpad"
+    spawnTW     = "alacritty  --t " ++ titleTW ++ " --class " ++ classTW
+    findTW      = title =? titleTW
+    manageTW    = customFloating $ W.RationalRect l t w h
+      where
+        h = 0.3             -- height, 50%
+        w = 0.2             -- width, 50%
+        t = 0     -- bottom edge
+        l = (1 - w) / 2     -- centered left/right
+
+
+
     classTerm     = "TerminalDropdown"
     titleTerm     = "!dropdown!"
     spawnTerm     = "alacritty  -t " ++ titleTerm ++ " --class " ++ classTerm
@@ -546,6 +561,7 @@ myStartupHook = do
   spawnOnce "setxkbmap us,ru &"
   spawnOnce "eww daemon"
   spawnOnce "nextcloud"
+  spawnOnce "thunderbird"
   spawnOnce "superproductivity"
   spawnOnce "syncthing"
   spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
@@ -558,7 +574,7 @@ myStartupHook = do
   -- spawnOnce ("cd /home/horhik/Freenet/downloads/fms; ./fms --daemon &")
   spawnOnce "xautolock -time 25 -locker i3lock-fancy-multimonitor -notifier 'xkb-switch -s us' &"
   spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa &"
-  spawnOnce "xrandr --output HDMI-A-0 --left-of eDP &" 
+  spawnOnce "xrandr --output HDMI-A-0 --right-of eDP &" 
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
