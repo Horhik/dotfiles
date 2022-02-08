@@ -631,127 +631,90 @@
 : t
 
 ** Org mode
+*** Org agenda commands
 #+begin_src emacs-lisp
-
-  (defun my/org-mode-setup()
-    (auto-fill-mode 0)
-    (visual-line-mode 1)
-    (setq evil-auto-indent 1)
-    (variable-pitch-mode t)
-    (prettify-symbols-mode +1)
-    (display-line-numbers-mode 0)
-    )
-
-  (use-package pdf-tools
-    :defer t
-    )
-  (use-package org 
-    :hook ((org-mode . my/org-mode-setup)
-           (org-mode . variable-pitch-mode)
-           (org-mode . org-indent-mode)
-           (org-mode . prettify-symbols-mode)
-           )
-    :config (setq org-agenda-files `("~/Notes/GTD")) 
-    (display-line-numbers-mode 0)
-    (org-bullets-mode t) 
-    (org-indent-mode t)
-    (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
-          org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
-          org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
-    (setq org-agenda-start-with-log-mode t) 
-    (setq org-log-done 'time) 
-    (setq org-log-into-drawer t)
-    (setq org-todo-keyword-faces '(("TODO" . org-warning) 
-                                   ("STARTED" . "yellow") 
-                                   ("DREAM" . "pink") 
-                                   ("IDEA" . "gold") 
-                                   ("READ" . "violet") 
-                                   ("ARTICLE" . "lightblue") 
-                                   ("CANCELED" . 
-                                    (:foreground "blue" 
-                                                 :weight bold))))
-
-    (setq org-todo-keywords '((sequence "INBOX(i)" "PROJECT(p)" "TODO(t)" "NEXT(n)" "CAL(c)" "WAIT(w@/!)" "|" "DONE(d!)" "CANC(k@)") 
-                              ))
-    (setq org-agenda-custom-commands '(
-                                       ("d" "Dashboard" ((agenda "" ((org-deadline-warning-days 14))) 
-                                                         (todo "NEXT" ((org-agenda-overriding-header
-                                                                        "Next Tasks"))) 
-                                                         (todo "PROJECT"
-                                                                    ((org-agenda-overriding-header
-                                                                      "Active Projects")))))
-
-                                       ("n" "Next Tasks" ((todo "NEXT" ((org-agenda-overriding-header
-                                                                         "Next Tasks")))
-
-                                                          ))
+   (setq org-agenda-settings '(
+     ("d" "Dashboard 📜"
+      (
+       (tags "@morning"  ((org-agenda-overriding-header "Eat the Frog 🐸"))) 
+       (todo "NEXT"      ((org-agenda-overriding-header "Next Tasks ⏩"))) 
+       (todo "WAIT"      ((org-agenda-overriding-header "Waiting tasks ⏰"))) 
+       (agenda ""        ((org-deadline-warning-days 14))) 
+       (todo "PROJECT"   ((org-agenda-overriding-header "Active Projects ")))
+       (todo "INBOX"     ((org-agenda-overriding-header "Inbox 📥"))) 
+      ))
 
 
-                                       ("w" "Wait Tasks" ((todo "WAIT" ((org-agenda-overriding-header
-                                                                         "Wait Tasks"))))
-                                                          (todo "NEXT" ((org-agenda-overriding-header
-                                                                         "Wait Tasks")))
-                                        )
-                                       ("c" "Dated Tasks" ((todo "CAL" ((org-agenda-overriding-header
-                                                                         "Dated Tasks")))))
-                                       ("s" "Somewhen" ((todo "TODO" ((org-agenda-overriding-header
-                                                                    "Somewhen "))
-                                                           )))
-                                       ("A" "Articles" ((todo "Article" ((org-agenda-overriding-header
-                                                                          "Article")))))
-                                       ("R" "Read" tags-todo "+readlist")
-                                       ("W" "Work Tasks" tags-todo "+work-email")
-                                       ("I" "ideas" tags-todo "+idea-article")
+     ("w" "Wait Tasks ⏰"
+      (todo "WAIT"      ((org-agenda-overriding-header "Wait Tasks")))
+      (todo "NEXT"      ((org-agenda-overriding-header "Wait Tasks")))
+     )
+     ("c" "Dated Tasks   📅" ((todo "CAL" ((org-agenda-overriding-header "Dated Tasks")))))
 
-                                       ;; Low-effort next actions
-                                       ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
-                                        ((org-agenda-overriding-header "Low Effort Tasks") 
-                                         (org-agenda-max-todos 20) 
-                                         (org-agenda-files org-agenda-files)))
-                                       ("w" "Workflow Status" ((todo "WAIT"
-                                                                     ((org-agenda-overriding-header
-                                                                       "Waiting on External") 
-                                                                      (org-agenda-files
-                                                                       org-agenda-files))) 
-                                                               (todo "REVIEW"
-                                                                     ((org-agenda-overriding-header
-                                                                       "In Review") 
-                                                                      (org-agenda-files
-                                                                       org-agenda-files))) 
-                                                               (todo "PLAN"
-                                                                     ((org-agenda-overriding-header
-                                                                       "In Planning") 
-                                                                      (org-agenda-todo-list-sublevels
-                                                                       nil) 
-                                                                      (org-agenda-files
-                                                                       org-agenda-files))) 
-                                                               (todo "BACKLOG"
-                                                                     ((org-agenda-overriding-header
-                                                                       "Project Backlog") 
-                                                                      (org-agenda-todo-list-sublevels
-                                                                       nil) 
-                                                                      (org-agenda-files
-                                                                       org-agenda-files))) 
-                                                               (todo "READY"
-                                                                     ((org-agenda-overriding-header
-                                                                       "Ready for Work") 
-                                                                      (org-agenda-files
-                                                                       org-agenda-files))) 
-                                                               (todo "ACTIVE"
-                                                                     ((org-agenda-overriding-header
-                                                                       "Active Projects") 
-                                                                      (org-agenda-files
-                                                                       org-agenda-files))) 
-                                                               (todo "COMPLETED"
-                                                                     ((org-agenda-overriding-header
-                                                                       "Completed Projects") 
-                                                                      (org-agenda-files
-                                                                       org-agenda-files))) 
-                                                               (todo "CANC"
-                                                                     ((org-agenda-overriding-header
-                                                                       "Cancelled Projects") 
-                                                                      (org-agenda-files
-                                                                       org-agenda-files)))))))
+     ("S" "Somewhen ⌛" ((todo "TODO" ((org-agenda-overriding-header "Somewhen ")))))
+     ("R" "Read list  📚" tags-todo "+readlist")
+     ("W" "Watch list   🎦" tags-todo "+watchlist")
+     ("I" "Ideas 💡" tags-todo "+idea")
+     ("P" "petprojects 🐕" tags-todo "+petproject")
+     ("B" "Things to buy  🛍" tags-todo "+shoplist")
+
+     ;; My state/contexts
+     ("s" . "My State and contexts")
+     ("st" "Tired 🥱" tags "+@tired"    ((org-agenda-overriding-header "Tired 🥱")))
+     ("sh" "At home🏠" tags "+@home"     ((org-agenda-overriding-header "At home🏠")))
+     ("sc" "By a computer 💻" tags "+@computer" ((org-agenda-overriding-header "By a computer 💻")))
+     ("ss" "On studies 🏫" tags "+@school"   ((org-agenda-overriding-header "On studies 🏫")))
+     ("so" "Online 🌐" tags "+@online"   ((org-agenda-overriding-header "Online 🌐")))
+     ("sO" "‍Outdoors🚶‍" tags "+@outdoors" ((org-agenda-overriding-header "‍Outdoors🚶‍")))
+     ("sT" "To takeaway 👝 " tags "+takeaway"  ((org-agenda-overriding-header "To takeaway 👝 ")))
+   )
+  )
+#+end_src
+*** Org-mode config
+  #+begin_src emacs-lisp
+
+    (defun my/org-mode-setup()
+      (auto-fill-mode 0)
+      (visual-line-mode 1)
+      (setq evil-auto-indent 1)
+      (variable-pitch-mode t)
+      (prettify-symbols-mode +1)
+      (display-line-numbers-mode 0)
+      )
+
+    (use-package pdf-tools
+      :defer t
+      )
+    (use-package org 
+      :hook ((org-mode . my/org-mode-setup)
+             (org-mode . variable-pitch-mode)
+             (org-mode . org-indent-mode)
+             (org-mode . prettify-symbols-mode)
+             )
+      :config (setq org-agenda-files `("~/Notes/GTD")) 
+      (display-line-numbers-mode 0)
+      (org-bullets-mode t) 
+      (org-indent-mode t)
+      (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
+            org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
+            org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
+      (setq org-agenda-start-with-log-mode t) 
+      (setq org-log-done 'time) 
+      (setq org-log-into-drawer t)
+      (setq org-todo-keyword-faces '(("TODO" . org-warning) 
+                                     ("STARTED" . "yellow") 
+                                     ("DREAM" . "pink") 
+                                     ("PROJECT" . "pink") 
+                                     ("IDEA" . "gold") 
+                                     ("READ" . "violet") 
+                                     ("ARTICLE" . "lightblue") 
+                                     ("CANCELED" . 
+                                      (:foreground "blue" 
+                                                   :weight bold))))
+
+      (setq org-todo-keywords '((sequence "INBOX(i)" "PROJECT(p)" "TODO(t)" "NEXT(n)" "CAL(c)" "WAIT(w@/!)" "|" "DONE(d!)" "CANC(k@)") 
+                                ))
+    (setq org-agenda-custom-commands org-agenda-settings)
 
 
     :general (general-nmap :prefix "SPC a" 
