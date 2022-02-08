@@ -1,15 +1,15 @@
 #+title: Emacs config
-#+author O. George
+#+author Horhik
 #+BABEL: :cache no
 #+PROPERTY: header-args:emacs-lisp :tangle init.el
-
+#+begin_src
  █ █ █▀█ █▀▄ █ █ ▀█▀ █ █ ▀ █▀▀  
  █▀█ █ █ █▀▄ █▀█  █  █▀▄   ▀▀█  
  ▀ ▀ ▀▀▀ ▀ ▀ ▀ ▀ ▀▀▀ ▀ ▀   ▀▀▀  
 █▀▄ █▀█ ▀█▀ █▀▀ ▀█▀ █   █▀▀ █▀▀
 █ █ █ █  █  █▀▀  █  █   █▀▀ ▀▀█
 ▀▀  ▀▀▀  ▀  ▀   ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀
-
+#+end_src
 * Help info
   ~C-z~ to toggle vim/emacs mode
 

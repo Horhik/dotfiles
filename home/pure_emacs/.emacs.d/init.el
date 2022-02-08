@@ -579,6 +579,7 @@
     (setq org-todo-keyword-faces '(("TODO" . org-warning) 
                                    ("STARTED" . "yellow") 
                                    ("DREAM" . "pink") 
+                                   ("PROJECT" . "pink") 
                                    ("IDEA" . "gold") 
                                    ("READ" . "violet") 
                                    ("ARTICLE" . "lightblue") 
