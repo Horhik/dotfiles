@@ -71,15 +71,22 @@
 ;; Fallback for emojies
 
 (dolist (mode '(text-mode-hook
-		prog-mode-hook
-		conf-mode-hook))
+                prog-mode-hook
+                conf-mode-hook))
   (add-hook mode (lambda ()
-		   (display-line-numbers-mode 1)
-		   (setq display-line-numbers 'relative))))
+                   (display-line-numbers-mode 1)
+                   (setq display-line-numbers 'relative))))
 
 ;; Override some modes which derive from the above
 (dolist (mode '(org-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (add-hook mode (lambda () (display-line-numbers-mode 0)))
+  '(lambda ()
+       (setq org-file-apps
+         '((auto-mode . emacs)
+           ("\\.mm\\'" . default)
+           ("\\.x?html?\\'" . default)
+           ("\\.pdf\\'" . "evince %s"))))
+  )
 
 (use-package highlight-parentheses
   :ensure t
@@ -319,76 +326,6 @@
   :config
   (evil-collection-init))
 
-(use-package ivy
-      :diminish
-      :bind (
-	     ("M-x" . counsel-M-x)
-	     ("C-s" . swiper)
-	     :map ivy-minibuffer-map
-	     ("TAB" . ivy-alt-done)
-	     ("C-f" . ivy-alt-done)
-	     ("C-l" . ivy-alt-done)
-	     ("C-j" . ivy-next-line)
-	     ("C-k" . ivy-previous-line)
-	     :map ivy-switch-buffer-map
-	     ("C-k" . ivy-previous-line)
-	     ("C-l" . ivy-done)
-	     ("C-d" . ivy-switch-buffer-kill)
-	     :map ivy-reverse-i-search-map
-	     ("C-k" . ivy-previous-line)
-	     ("C-d" . ivy-reverse-i-search-kill))
-      :init
-      (ivy-mode 1))
-    (use-package counsel
-      :bind (("C-M-j" . 'counsel-switch-buffer)
-	     :map minibuffer-local-map
-	     ("C-r" . 'counsel-minibuffer-history))
-      :config
-      (counsel-mode 1))
-    (use-package counsel-projectile
-      :config (counsel-projectile-mode))
-
-
-    ;; Keybindings
-
-    (defun add-to-map(keys func)
-      "Add a keybinding in evil mode from keys to func."
-      (define-key evil-normal-state-map (kbd keys) func)
-      (define-key evil-motion-state-map (kbd keys) func))
-
-    ;;(add-to-map "<SPC>" nil)
-    ;;(add-to-map "<SPC> <SPC>" 'counsel-M-x)
-    ;; (add-to-map "<SPC> f" 'lusty-file-explorer)
-    ;; (add-to-map "<SPC> b" 'lusty-buffer-explorer)
-    ;;(add-to-map "<SPC> o" 'treemacs)
-    ;;(add-to-map "<SPC> s" 'save-buffer)
-;;(add-to-map "TAB" 'company-indent-or-complete-common)
-    (defun open-file (file)
-      "just more shortest function for opening the file"
-      (interactive)
-      ((lambda (file) (interactive)
-	 (find-file (expand-file-name (format "%s" file)))) file ) )
-
-
-    (use-package general)
-    (general-evil-setup)
-    (general-nmap
-      :prefix "SPC"
-      ;; dotfiles editing config
-      "SPC" '(counsel-M-x :which-key "M-x")
-      "o"   '(treemacs :which-key "treemacs")
-      "f f" '(counsel-find-file :which-key "find-file")
-      "f r" '(counsel-buffer-or-recentf :which-key "recent files")
-
-      "b b" '(counsel-switch-buffer :which-key "switch buff")
-
-      "f e"  '(lambda() (interactive) (find-file "~/.emacs.d/config.org") :which-key "config.org")
-      "f v"  '(lambda() (interactive) (find-file "~/.config/nvim/init.vim" :which-key "neovim config"          ))
-      "f d"  '(lambda() (interactive) (find-file "~/dotfiles/home"  :which-key "dotfiles dired"                 ))
-      "f a"  '(lambda() (interactive) (find-file "~/.config/alacritty/alacritty.yml" :which-key "alacritty"))
-      "f b"  '(lambda() (interactive) (find-file "~/org-notes")                           :which-key "my brain")
-      )
-
 (use-package which-key
     :init (which-key-mode)
     :diminish which-key-mode
@@ -428,6 +365,83 @@
 ;;   ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
 ;; )
 
+(use-package general)
+  (general-evil-setup)
+
+  (use-package ivy
+    :diminish
+    :bind (
+           ("M-x" . counsel-M-x)
+           ("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)
+           ("C-f" . ivy-alt-done)
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
+    :init
+    (ivy-mode 1))
+  (use-package counsel
+    :general
+    ("C-x b" '(counsel-switch-buffer :which-key "switch buff"))
+    :bind (("C-M-j" . 'counsel-switch-buffer)
+           ("C-x b" . 'counsel-switch-buffer)
+           ("C-x C-b" . 'counsel-switch-buffer)
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history))
+    :config
+    (counsel-mode 1))
+  (use-package counsel-projectile
+    :config (counsel-projectile-mode))
+
+
+  ;; Keybindings
+
+  (defun add-to-map(keys func)
+    "Add a keybinding in evil mode from keys to func."
+    (define-key evil-normal-state-map (kbd keys) func)
+    (define-key evil-motion-state-map (kbd keys) func))
+
+  ;;(add-to-map "<SPC>" nil)
+  ;;(add-to-map "<SPC> <SPC>" 'counsel-M-x)
+  ;; (add-to-map "<SPC> f" 'lusty-file-explorer)
+  ;; (add-to-map "<SPC> b" 'lusty-buffer-explorer)
+  ;;(add-to-map "<SPC> o" 'treemacs)
+  ;;(add-to-map "<SPC> s" 'save-buffer)
+  ;;(add-to-map "TAB" 'company-indent-or-complete-common)
+  (defun open-file (file)
+    "just more shortest function for opening the file"
+    (interactive)
+    ((lambda (file) (interactive)
+       (find-file (expand-file-name (format "%s" file)))) file ) )
+
+
+  (general-nmap
+    :prefix "SPC"
+    ;; dotfiles editing config
+    "SPC" '(counsel-M-x :which-key "M-x")
+    "o"   '(treemacs :which-key "treemacs")
+    "f f" '(counsel-find-file :which-key "find-file")
+    "f r" '(counsel-buffer-or-recentf :which-key "recent files")
+
+    "b b" '(counsel-switch-buffer :which-key "switch buff")
+
+    "f e"  '(lambda() (interactive) (find-file "~/.emacs.d/config.org") :which-key "config.org")
+    "f v"  '(lambda() (interactive) (find-file "~/.config/nvim/init.vim" :which-key "neovim config"          ))
+    "f d"  '(lambda() (interactive) (find-file "~/dotfiles/home"  :which-key "dotfiles dired"                 ))
+    "f a"  '(lambda() (interactive) (find-file "~/.config/alacritty/alacritty.yml" :which-key "alacritty"))
+    "f b"  '(lambda() (interactive) (find-file "~/Notes")                           :which-key "my brain")
+    )
+
+(general-nmap "C-x b" (general-simulate-key "SPC b b"))
+
 ;;  (lambda ()
   ;;    (push '("TODO" . ?📥) prettify-symbols-alist)
   ;;    (push '("DONE" . ?☑) prettify-symbols-alist)
@@ -441,9 +455,9 @@
                   ("#+END_SRC"       . "λ")
                   ("#+end_src"       . "λ")
                   ("#+begin_src"     . "λ")
-                  ("TODO"." T ")
-                  ("DONE"." D ")
-                  ("NEXT"." N ")
+                  ("TODO"." 🕤 ")
+                  ("DONE"." ✅ ")
+                  ("INBOX"." 📥 ")
                   ("IDEA"." 💡 ")
                   ("READ"." 🔖 ")
                   ("DREAM"." ✨ ")
@@ -471,15 +485,15 @@
                     :height 1.3
                     :weight 'light)
 
-(set-face-attribute 'org-document-title nil :font "ubuntu" :weight 'light :height 1.3)
+(set-face-attribute 'org-document-title nil :font "ubuntu" :weight 'bold :height 1.3)
 (dolist (face '((org-level-1 . 1.1)
-		(org-level-2 . 1.0)
-		(org-level-3 . 1.0)
-		(org-level-4 . 1.0)
-		(org-level-5 . 0.9)
-		(org-level-6 . 0.9)
-		(org-level-7 . 0.9)
-		(org-level-8 . 0.9)))
+		(org-level-2 . 0.9)
+		(org-level-3 . 0.8)
+		(org-level-4 . 0.8)
+		(org-level-5 . 0.8)
+		(org-level-6 . 0.8)
+		(org-level-7 . 0.8)
+		(org-level-8 . 0.8)))
   (set-face-attribute (car face) nil :font "ubuntu" :weight 'bold :height (cdr face) ))
 (require 'org-indent)
 (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch :font "Hack" )
@@ -506,13 +520,16 @@
   (display-line-numbers-mode 0)
   )
 
+(use-package pdf-tools
+  :defer t
+  )
 (use-package org 
   :hook ((org-mode . my/org-mode-setup)
          (org-mode . variable-pitch-mode)
          (org-mode . org-indent-mode)
          (org-mode . prettify-symbols-mode)
          )
-  :config (setq org-agenda-files `("~/org-notes")) 
+  :config (setq org-agenda-files `("~/Notes/GTD")) 
   (display-line-numbers-mode 0)
   (org-bullets-mode t) 
   (org-indent-mode t)
@@ -532,29 +549,35 @@
                                   (:foreground "blue" 
                                                :weight bold))))
 
-  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!)") 
-                            (sequence "BACKLOG(b)" "PLAN(p)" "READY(r)" "ACTIVE(a)" "REVIEW(v)"
-                                      "WAIT(w@/!)" "HOLD(h)" "|" "COMPLETED(c)" "CANC(k@)") 
-                            (sequence "IDEA(i)" "DREAM(d)" "READ(r)" "ARTICLE(a)" "|" "DONE(d!)")))
-
-  (setq org-agenda-custom-commands '(("d" "Dashboard" ((agenda "" ((org-deadline-warning-days 7))) 
+  (setq org-todo-keywords '((sequence "INBOX(i)" "PROJECT(p)" "TODO(t)" "NEXT(n)" "CAL(c)" "WAIT(w@/!)" "|" "DONE(d!)" "CANC(k@)") 
+                            ))
+  (setq org-agenda-custom-commands '(
+                                     ("d" "Dashboard" ((agenda "" ((org-deadline-warning-days 14))) 
                                                        (todo "NEXT" ((org-agenda-overriding-header
                                                                       "Next Tasks"))) 
-                                                       (tags-todo "agenda/ACTIVE"
+                                                       (todo "PROJECT"
                                                                   ((org-agenda-overriding-header
                                                                     "Active Projects")))))
+
                                      ("n" "Next Tasks" ((todo "NEXT" ((org-agenda-overriding-header
-                                                                       "Next Tasks")))))
-                                     ("r" "Read pages" ((todo "READ" ((org-agenda-overriding-header
-                                                                       "To read")))))
-                                     ("i" "Ideas" ((todo "IDEA" ((org-agenda-overriding-header
-                                                                  "Ideas "))
-                                                         )
-                                                   (tags-todo "+idea")
-                                                   ))
+                                                                       "Next Tasks")))
+
+                                                        ))
+
+
+                                     ("w" "Wait Tasks" ((todo "WAIT" ((org-agenda-overriding-header
+                                                                       "Wait Tasks"))))
+                                                        (todo "NEXT" ((org-agenda-overriding-header
+                                                                       "Wait Tasks")))
+                                      )
+                                     ("c" "Dated Tasks" ((todo "CAL" ((org-agenda-overriding-header
+                                                                       "Dated Tasks")))))
+                                     ("s" "Somewhen" ((todo "TODO" ((org-agenda-overriding-header
+                                                                  "Somewhen "))
+                                                         )))
                                      ("A" "Articles" ((todo "Article" ((org-agenda-overriding-header
                                                                         "Article")))))
-                                     ("W" "Work Tasks" tags-todo "+work-email")
+                                     ("R" "Read" tags-todo "+readlist")
                                      ("W" "Work Tasks" tags-todo "+work-email")
                                      ("I" "ideas" tags-todo "+idea-article")
 
@@ -622,7 +645,7 @@
   )
 
 (defun my/visual-fill ()
-  (setq visual-fill-column-width 140
+  (setq visual-fill-column-width 300
 	visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
 (use-package visual-fill-column
@@ -676,18 +699,6 @@
 
 (require 'org-roam-protocol)
 
-(use-package websocket
-      :after org-roam
-    )
-    (use-package simple-httpd
-      :after org-roam
-    )
-(require 'websocket)
-(require 'simple-httpd)
-
-  (add-to-list 'load-path "~/.emacs.d/private/org-roam-ui")
-  (load-library "org-roam-ui")
-
 (use-package flycheck
   :init
   ;;(flycheck-c/c++-clang-executable "c/c++-clang" "~/code/competitive/clang++")
@@ -723,10 +734,10 @@
   (use-package lsp-ivy)
   (use-package lsp-ui
   :after lsp)
-  (use-package company-lsp
-    :ensure t
-    :commands company-lsp
-    :config (push 'company-lsp company-backends))
+  ;;(use-package company-lsp
+  ;;:ensure t
+  ;;:commands company-lsp
+  ;;:config (push 'company-lsp company-backends))
 
 (use-package irony
                  :init
@@ -743,14 +754,14 @@
      (add-to-list 'auto-mode-alist '("\\.cxx\\'" . c++-mode))
      (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-mode))
      (add-to-list 'auto-mode-alist '("\\.C\\'" . c++-mode))
-(use-package ccls
-  :ensure t
-  :config
-  (setq ccls-executable "ccls")
-  (setq lsp-prefer-flymake nil)
-  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
-  :hook ((c-mode c++-mode objc-mode) .
-         (lambda () (require 'ccls) (lsp))))
+;use-package ccls
+; :ensure t
+; :config
+; (setq ccls-executable "ccls")
+; (setq lsp-prefer-flymake nil)
+; (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+; :hook ((c-mode c++-mode objc-mode) .
+;        (lambda () (require 'ccls) (lsp))))
 
 (use-package markdown-mode)
 
@@ -778,4 +789,4 @@
   (setq mastodon-instance-url "https://mastodon.ml")
 )
 
-(org-agenda)
+;(org-agenda)
