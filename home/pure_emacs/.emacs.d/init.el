@@ -538,13 +538,13 @@
 
    ;; My state/contexts
    ("s" . "My State and contexts")
-   ("st" "Tired 🥱" tags "+@tired"    ((org-agenda-overriding-header "Tired 🥱")))
-   ("sh" "At home🏠" tags "+@home"     ((org-agenda-overriding-header "At home🏠")))
-   ("sc" "By a computer 💻" tags "+@computer" ((org-agenda-overriding-header "By a computer 💻")))
-   ("ss" "On studies 🏫" tags "+@school"   ((org-agenda-overriding-header "On studies 🏫")))
-   ("so" "Online 🌐" tags "+@online"   ((org-agenda-overriding-header "Online 🌐")))
-   ("sO" "‍Outdoors🚶‍" tags "+@outdoors" ((org-agenda-overriding-header "‍Outdoors🚶‍")))
-   ("sT" "To takeaway 👝 " tags "+takeaway"  ((org-agenda-overriding-header "To takeaway 👝 ")))
+   ("st" "Tired 🥱" tags-todo "+@tired/NEXT"    ((org-agenda-overriding-header "Tired 🥱")))
+   ("sh" "At home🏠" tags-todo "+@home/NEXT"     ((org-agenda-overriding-header "At home🏠")))
+   ("sc" "By a computer 💻" tags-todo "+@computer/NEXT" ((org-agenda-overriding-header "By a computer 💻")))
+   ("ss" "On studies 🏫" tags-todo "+@school/NEXT"   ((org-agenda-overriding-header "On studies 🏫")))
+   ("so" "Online 🌐" tags-todo "+@online/NEXT"   ((org-agenda-overriding-header "Online 🌐")))
+   ("sO" "‍Outdoors🚶‍" tags-todo "+@outdoors/NEXT" ((org-agenda-overriding-header "‍Outdoors🚶‍")))
+   ("sT" "To takeaway 👝 " tags-todo "+takeaway"  ((org-agenda-overriding-header "To takeaway 👝 ")))
  )
 )
 
