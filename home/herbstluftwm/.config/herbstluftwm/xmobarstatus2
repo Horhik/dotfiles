@@ -1,0 +1,115 @@
+#!/bin/sh
+
+backgroundColor="#282828"
+currentLineColor="#fabd2f"
+selectionColor="#665c54"
+foregroundColor="#ebdbb2"
+foregroundSecondColor="#fbf1c1"
+commentColor="#458588"
+cyanColor="#83a598"
+greenColor="#8ec07c"
+greenDarkerColor="#689d6a"
+orangeColor="#fe8019"
+pinkColor="#d3869b"
+purpleColor="#b16286"
+redColor="#cc241d"
+yellowColor="#fabd2f"
+
+
+
+
+battery ()
+{
+val=$(acpi | grep -oh "[[:digit:]]*%" | grep -oh "[0-9]*")
+
+case $val in
+  [1—9][0—9][0—9])
+  echo "<fc=$greenColor>—{  </fc>$val<fc=$greenColor>%}</fc>"
+  ;;
+  [5—9][0—9])
+      echo "<fc=$greenColor>—{  </fc>$val<fc=$greenColor>%}</fc>"
+  ;;
+[1—4][0—9])
+    echo "<fc=$yellowColor>—{  </fc>$val<fc=$yellowColor>%}</fc>"
+  ;;
+[1-9])
+    echo "<fc=$redColor>—{  </fc>$val<fc=$redColor>%}</fc>"
+  ;;
+0)
+    echo "<fc=$redColor>  </fc>"
+  ;;
+*)
+    echo "<fc=$greenColor>—{  </fc>$val<fc=$greenColor>%}</fc>"
+  ;;
+esac
+}
+
+
+volume ()
+{
+                                #maybe change to Right, Left, Mono
+val=$(amixer sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }'| grep -oh "[0-9]*")
+case $val in
+  100)
+      echo "<fc=$redColor>—{ $val%}</fc>"
+;;  
+  [5-9][0-9])
+      echo "<fc=$yellowColor>—{ $val%}</fc>"
+  ;;
+[1-4][0-9])
+  echo "<fc=$pinkColor>—{ $val%}</fc>"
+  ;;
+[1-9])
+    echo "<fc=$greenDarkerColor>—{ $val%}</fc>"
+  ;;
+0)
+  echo "<fc=$selectionColor>—{0%}</fc>"
+  ;;
+*)
+    echo "<fc=$redColor>—{ $val%}</fc>"
+esac
+}
+
+diskspace ()
+{
+                        #might be another /dev/sda...
+    echo "<fc=$pinkColor>—{ </fc>"$(df $MAIN_DISK | grep -oh "[0-9]*%" | tail -n 1)"<fc=$pinkColor>}</fc>"
+}
+
+wifi ()
+{
+ name=$(iwgetid -r)
+if [ $name != " " ];
+  then
+      echo "<fc=$cyanColor>—{ </fc>$name<fc=$cyanColor>}</fc>"
+  else
+   echo 睊 off
+  fi
+}
+layout () 
+{
+    echo "<fc=$orangeColor>—{ </fc>"$(xkblayout-state print %s)"<fc=$orangeColor>}</fc>"
+}
+timeanddate ()
+{
+    echo "<fc=$yellowColor>—{</fc>" "<fc=$yellowColor>$(date +'%T')}</fc>" 
+}
+calendar ()
+{
+    echo   "<fc=$greenDarkerColor> </fc>"$(date +'%d/%m/%Y')
+}
+
+toggl_timer () {
+toggl=$($HOME/.local/scripts/toggl-current)
+toggl_duration=$(echo $toggl | jq -r '.data .duration')
+toggl_description=$(echo $toggl | jq -r '.data .description')
+curr_time=$(date +%s)
+duration_sec=$((curr_time + toggl_duration))
+duration=$(echo $((duration_sec / (60 * 60))):$((duration_sec / 60  - duration_sec / (60 * 60) * 60)):$((duration_sec % 60)))
+echo   "<fc=$greenDarkerColor>—{$toggl_description(</fc>"$duration"<fc=$greenDarkerColor>)}</fc>"
+}
+
+ 
+echo "$(wifi)$(battery)$(volume)$(layout)$(diskspace)$(timeanddate)<fc=$greenDarkerColor>—{</fc>$(calendar)<fc=$greenDarkerColor>}——</fc>"
+
+#echo "                                          "
