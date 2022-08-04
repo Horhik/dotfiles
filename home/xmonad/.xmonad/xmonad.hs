@@ -30,7 +30,6 @@ import XMonad.Layout.NoBorders (noBorders, smartBorders)
 import XMonad.Hooks.DynamicLog
 import XMonad.Util.Scratchpad
 import XMonad.Util.NamedScratchpad
-import XMonad.Util.Brightness as Bright
 
     -- Layouts
 import XMonad.Layout.Accordion
@@ -58,13 +57,12 @@ import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(T
 import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 
 
-import qualified Graphics.X11.ExtraTypes.XF86 as XF86
+-- import  Graphics.X11.ExtraTypes.XF86 as XF86
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
 import GruvboxColors as Colors 
-import TaskMonad
 
 
 home                  = "/home/horhik/"
@@ -100,7 +98,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- launch dmenu
 --    , ((modm,               xK_p     ), spawn ("dmenu_run " ++ " -fn '" ++ myDmenuFont ++ "' -nb '" ++  backgroundColor ++  "' -nf '" ++ selectionColor ++ "' -sb '"++ selectionColor ++"' -sf '"++foregroundSecondColor++"' -shb '"++ greenDarkerColor ++ "' -c "++" -l "++" 20 "))
     -- launch emoji picker
-    , ((modm              , xK_e     ), spawn "rofimoji")
+    , ((modm              , xK_e     ), spawn "rofi -show emoji")
     , ((modm              , xK_p     ), spawn "rofi -show drun")
 
     , ((modm .|. shiftMask , xK_p     ), spawn "rofi-pass")
@@ -109,7 +107,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_c     ), kill)
 
      -- Rotate through the available layout algorithms
-    , ((modm,               xK_space ), sendMessage NextLayout)
+    , ((controlMask,               xK_Control_R ), sendMessage NextLayout)
 
     --  Reset the layouts on the current workspace to default
     , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
@@ -177,9 +175,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- flameshot gui
     , ((modm .|. shiftMask, xK_s ),  spawn "flameshot gui")
-    , ((modm .|. mod1Mask         , xK_space ),  spawn "$HOME/.local/scripts/deadd_notify")
+    --, ((modm .|. mod1Mask         , xK_space ),  spawn "$HOME/.local/scripts/deadd_notify")
     -- change lang
-    , ((modm, xK_Control_R)       , spawn "setxkbmap us,ru; xkb-switch -n")
+    , ((modm, xK_space)       , spawn "setxkbmap us,ru; xkb-switch -n")
     , ((modm, xK_Shift_R)       , spawn "xkb-switch -n")
     , ((modm, xK_d)               , spawn "eww-toggl")
     -- toggle fullscreen
@@ -192,8 +190,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask    , xK_m),  namedScratchpadAction myScratchpads "pulse")
     , ((modm .|. shiftMask    , xK_d),  namedScratchpadAction myScratchpads "todoist")
     , ((modm .|. shiftMask    , xK_n),  namedScratchpadAction myScratchpads "rss_news")
-    , ((modm .|. controlMask, xK_e),    namedScratchpadAction myScratchpads "emacs")
-    , ((modm , xK_w),       taskwarriorPrompt [(\x -> x == "processInbox", processInbox)])
+    , ((modm .|. shiftMask, xK_d),    namedScratchpadAction myScratchpads "emacs")
 
     -- | Programs
     , ((modm .|. shiftMask, xK_z), spawn "zathura &")                                                                            -- book reader (zathura)
@@ -227,13 +224,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
      ++
-     [ ((0, XF86.xF86XK_MonBrightnessUp  ), Bright.increase)
-     , ((0, XF86.xF86XK_MonBrightnessDown), Bright.decrease)
-     , ((0, XF86.xF86XK_AudioPause       ), spawn "playerctl play-pause")
-     , ((0, XF86.xF86XK_AudioPrev        ), spawn "playerctl previous")
-     , ((0, XF86.xF86XK_AudioMute        ), spawn "pulsemixer --toggle-mute")
-     , ((0, XF86.xF86XK_AudioLowerVolume ), spawn "pulsemixer --set-volume  $(($(pulsemixer --get-volume | cut  -d ' ' -f 1) - 5))")
-     , ((0, XF86.xF86XK_AudioRaiseVolume ), spawn "pulsemixer --set-volume  $(($(pulsemixer --get-volume | cut  -d ' ' -f 1) + 5))")
+     [ 
+     --((0, XF86.xF86XK_AudioPause       ), spawn "playerctl play-pause")
+     --, ((0, XF86.xF86XK_AudioPrev        ), spawn "playerctl previous")
+     --, ((0, XF86.xF86XK_AudioMute        ), spawn "pulsemixer --toggle-mute")
+     --, ((0, XF86.xF86XK_AudioLowerVolume ), spawn "pulsemixer --set-volume  $(($(pulsemixer --get-volume | cut  -d ' ' -f 1) - 5))")
+     --, ((0, XF86.xF86XK_AudioRaiseVolume ), spawn "pulsemixer --set-volume  $(($(pulsemixer --get-volume | cut  -d ' ' -f 1) + 5))")
      ]
 
 
@@ -398,7 +394,6 @@ myManageHook = (composeAll
     , resource  =? "kdesktop"               --> doIgnore
     ])
     <+> namedScratchpadManageHook myScratchpads
-    <+> namedScratchpadManageHook taskwarriorScratchpads
   where
     doCenter    = customFloating $ W.RationalRect l t w h
       where
@@ -555,26 +550,30 @@ myLogHook (xmproc0, xmproc1) = dynamicLogWithPP $ xmobarPP { -- XMobar
 --
 -- By default, do nothing.
 myStartupHook = do
-  spawnOnce "nitrogen --restore &"
-  -- spawnOnce "compton --config ~/.config/compton/compton.conf &"
-  spawnOnce "picom --experimental-backends &"
-  spawnOnce "setxkbmap us,ru &"
-  spawnOnce "eww daemon"
-  spawnOnce "nextcloud"
-  spawnOnce "thunderbird"
-  spawnOnce "superproductivity"
-  spawnOnce "syncthing"
-  spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
-  spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa"
-  spawnOnce ("$HOME/.cargo/bin/enact  --watch --pos left")
-  spawnOnce ("sleep 1; $HOME/.cargo/bin/enact --pos left")
-  -- spawnOnce ("xrandr --output HDMI1 --left-of eDP1&")
-  spawnOnce (home ++ ".local/scripts/status/launch &")
-  spawnOnce (home ++ ".local/scripts/touchpad.sh &")
-  -- spawnOnce ("cd /home/horhik/Freenet/downloads/fms; ./fms --daemon &")
-  spawnOnce "xautolock -time 25 -locker i3lock-fancy-multimonitor -notifier 'xkb-switch -s us' &"
-  spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa &"
-  spawnOnce "xrandr --output HDMI-A-0 --right-of eDP &" 
+    spawnOnce "/home/horhik/.local/scripts/autostart.sh"
+--  spawnOnce "picom &"
+--  -- spawnOnce "compton --config ~/.config/compton/compton.conf &"
+--  spawnOnce "setxkbmap us,ru &"
+--  spawnOnce "kill $(pidof pulseaudio) ; pipewire &; pipewire-pulse &"
+--  spawnOnce "kill $(pidof pulseaudio) ; pipewire &; pipewire-pulse &"
+--  spawnOnce "/home/horhik/.local/scripts/pipewire-mazafaka.sh"
+--  spawnOnce "nitromegen --restore"
+--  --spawnOnce "eww daemon"
+--  spawnOnce "nextcloud &"
+--  spawnOnce "thunderbird &"
+--  --spawnOnce "superproductivity"
+--  spawnOnce "syncthing &"
+--  --spawnOnce "sh ssh-agent bash ; ssh-add ~/.ssh/arch"
+--  --spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa"
+--  --spawnOnce ("$HOME/.cargo/bin/enact  --watch --pos left")
+--  --spawnOnce ("sleep 1; $HOME/.cargo/bin/enact --pos left")
+--  -- spawnOnce ("xrandr --output HDMI1 --left-of eDP1&")
+--  --spawnOnce (home ++ ".local/scripts/status/launch &")
+--  --spawnOnce (home ++ ".local/scripts/touchpad.sh &")
+--  -- spawnOnce ("cd /home/horhik/Freenet/downloads/fms; ./fms --daemon &")
+--  --spawnOnce "xautolock -time 25 -locker i3lock-fancy-multimonitor -notifier 'xkb-switch -s us' &"
+--  spawnOnce "eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa &"
+--  spawnOnce "xrandr --output HDMI-A-0 --right-of eDP &" 
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
