@@ -15,25 +15,45 @@
 
 * Packages
 #+begin_src emacs-lisp
-  (setq max-lisp-eval-depth 10000)
-  (require 'package)
-  (add-to-list 'package-archives
-               '("melpa" . "http://stable.melpa.org/packages/"))
-
-  (package-initialize)
-
-  (unless package-archive-contents
-    (package-refresh-contents))
+        (setq max-lisp-eval-depth 10000)
+        (require 'package)
+        (add-to-list 'package-archives
+                     '("melpa" . "http://melpa.org/packages/") t)
+        (add-to-list 'package-archives
+                     '("melpa" . "http://melpa.org/packages/") t)
 
 
-  (defvar package-list
-    '(use-package doom-themes))
+        (package-initialize)
 
-  (dolist (p package-list)
-    (when (not (package-installed-p p))
-      (package-install p)))
+        (unless package-archive-contents
+          (package-refresh-contents))
 
 
+        (defvar package-list
+          '(gruvbox-theme))
+
+        (dolist (p package-list)
+          (when (not (package-installed-p p))
+            (package-install p)))
+
+
+       (defvar bootstrap-version)
+      (let ((bootstrap-file
+             (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+            (bootstrap-version 5))
+        (unless (file-exists-p bootstrap-file)
+          (with-current-buffer
+              (url-retrieve-synchronously
+               "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+               'silent 'inhibit-cookies)
+            (goto-char (point-max))
+            (eval-print-last-sexp)))
+        (load bootstrap-file nil 'nomessage))
+    (setq package-enable-at-startup nil)
+    (setq straight-use-package-by-default t)
+  (straight-use-package 'org) 
+
+  (straight-use-package 'use-package)
 #+end_src
 
 #+RESULTS:
@@ -53,6 +73,7 @@
     (global-visual-line-mode)
   #+end_src
 
+
   #+RESULTS:
   : t
 
@@ -68,10 +89,10 @@
     ;;      '("75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
     ;;    '(package-selected-packages
     ;;      '(neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
-(use-package doom-themes
+(use-package gruvbox-theme
       :ensure t
       )
-  (load-theme 'doom-gruvbox t)
+  (load-theme 'gruvbox-dark-hard t)
 
       ;; (use-package gruvbox-theme
       ;;   :ensure t
@@ -283,10 +304,7 @@
     :ensure t
     :config (treemacs-set-scope-type 'Perspectives))
 
-  (use-package neotree
-    :ensure t
-    :init
-    (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
+  
 
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -294,7 +312,6 @@
 
 
   (use-package magit)
-  (use-package workgroups2)
 
 
 #+end_src
@@ -420,15 +437,12 @@
       :config
       (setq which-key-idle-delay 0.3))
 
-  (use-package all-the-icons-ivy-rich
-    :ensure t
-    :init (all-the-icons-ivy-rich-mode 1))
 
 
-    (use-package ivy-rich
-      :init
-      (ivy-rich-mode 1))
-
+;;    (use-package ivy-rich
+;;      :init
+;;      (ivy-rich-mode 1))
+;;
 
 #+end_src
 
@@ -445,8 +459,8 @@
   (company-minimum-prefix-length 1)
   (company-idle-delay 0.0))
 
-(use-package company-box
-  :hook (company-mode . company-box-mode))   
+;;(use-package company-box
+ ;; :hook (company-mode . company-box-mode))   
   #+end_src
 
 ** Popup
@@ -540,7 +554,7 @@
       "f b"  '(lambda() (interactive) (find-file "~/Notes")                           :which-key "my brain")
       )
 
-  (general-nmap "C-x b" (general-simulate-key "SPC b b"))
+  (general-nmap "C-x b" (general-simulate-key "SPC b b"))   
 
 #+end_src
 
@@ -630,6 +644,55 @@
 #+RESULTS:
 : t
 
+** Org roam
+#+begin_src emacs-lisp
+
+  (use-package org-roam
+   :straight
+    (:host github :repo "org-roam/org-roam" :branch "main" :files ("*.el" "out"))
+    :after org
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/Documents/KB/"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
+
+   ; (setq org-roam-v2-ack t)
+
+  (setq org-roam-directory (file-truename "~/Documents/KB"))
+
+
+#+end_src
+
+: org-roam-protocol
+*** org-roam-ui
+#+begin_src emacs-lisp
+(use-package org-roam-ui
+  :straight
+    (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+    :after org-roam
+         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+         a hookable mode anymore, you're advised to pick something yourself
+         if you don't care about startup time, use
+  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+#+end_src
+
 ** Org mode
 *** Org agenda commands
 #+begin_src emacs-lisp
@@ -673,61 +736,65 @@
 *** Org-mode config
   #+begin_src emacs-lisp
 
-    (defun my/org-mode-setup()
-      (auto-fill-mode 0)
-      (visual-line-mode 1)
-      (setq evil-auto-indent 1)
-      (variable-pitch-mode t)
-      (prettify-symbols-mode +1)
-      (display-line-numbers-mode 0)
+      (defun my/org-mode-setup()
+        (auto-fill-mode 0)
+        (visual-line-mode 1)
+        (setq evil-auto-indent 1)
+        (variable-pitch-mode t)
+        (prettify-symbols-mode +1)
+        (display-line-numbers-mode 0)
+        )
+
+      (use-package pdf-tools
+        :defer t
+        )
+      (use-package org
+      :straight
+          (:host github :repo "https://git.savannah.gnu.org/cgit/emacs/elpa.git" :branch "main" :files ("*.el" "out"))
+        ;:demand t
+        ;:load-path "~/.emacs.d/elpa/org-9.5.4/"
+        :hook ((org-mode . my/org-mode-setup)
+               (org-mode . variable-pitch-mode)
+               (org-mode . org-indent-mode)
+               (org-mode . prettify-symbols-mode)
+               )
+        :config (setq org-agenda-files `("~/Documents/GTD")) 
+        (display-line-numbers-mode 0)
+        ;(org-bullets-mode t) 
+        ;(org-indent-mode t)
+        ;(setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
+        ;      org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
+        ;      org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
+        (setq org-agenda-start-with-log-mode t) 
+        (setq org-log-done 'time) 
+        (setq org-log-into-drawer t)
+        (setq org-todo-keyword-faces '(("TODO" . org-warning) 
+                                       ("STARTED" . "yellow") 
+                                       ("DREAM" . "pink") 
+                                       ("PROJECT" . "pink") 
+                                       ("IDEA" . "gold") 
+                                       ("READ" . "violet") 
+                                       ("ARTICLE" . "lightblue") 
+                                       ("CANCELED" . 
+                                        (:foreground "blue" 
+                                                     :weight bold))))
+
+        (setq org-todo-keywords '((sequence "INBOX(i)" "PROJECT(p)" "TODO(t)" "NEXT(n)" "CAL(c)" "WAIT(w@/!)" "|" "DONE(d!)" "CANC(k@)") 
+                                  ))
+      (setq org-agenda-custom-commands org-agenda-settings)
+
+
+      :general (general-nmap :prefix "SPC a" 
+                 :keymap 'org-agenda-mode-map 
+                 "a" 'org-agenda
+                 "d" 'my/org-toggle-todo-and-fold
+                 ))
+    (use-package org-bullets
+      :after org
+      :hook
+      ((org-mode . org-bullets-mode)
+       )
       )
-
-    (use-package pdf-tools
-      :defer t
-      )
-    (use-package org 
-      :hook ((org-mode . my/org-mode-setup)
-             (org-mode . variable-pitch-mode)
-             (org-mode . org-indent-mode)
-             (org-mode . prettify-symbols-mode)
-             )
-      :config (setq org-agenda-files `("~/Notes/GTD")) 
-      (display-line-numbers-mode 0)
-      (org-bullets-mode t) 
-      (org-indent-mode t)
-      (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
-            org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
-            org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
-      (setq org-agenda-start-with-log-mode t) 
-      (setq org-log-done 'time) 
-      (setq org-log-into-drawer t)
-      (setq org-todo-keyword-faces '(("TODO" . org-warning) 
-                                     ("STARTED" . "yellow") 
-                                     ("DREAM" . "pink") 
-                                     ("PROJECT" . "pink") 
-                                     ("IDEA" . "gold") 
-                                     ("READ" . "violet") 
-                                     ("ARTICLE" . "lightblue") 
-                                     ("CANCELED" . 
-                                      (:foreground "blue" 
-                                                   :weight bold))))
-
-      (setq org-todo-keywords '((sequence "INBOX(i)" "PROJECT(p)" "TODO(t)" "NEXT(n)" "CAL(c)" "WAIT(w@/!)" "|" "DONE(d!)" "CANC(k@)") 
-                                ))
-    (setq org-agenda-custom-commands org-agenda-settings)
-
-
-    :general (general-nmap :prefix "SPC a" 
-               :keymap 'org-agenda-mode-map 
-               "a" 'org-agenda
-               "d" 'my/org-toggle-todo-and-fold
-               ))
-  (use-package org-bullets
-    :after org
-    :hook
-    ((org-mode . org-bullets-mode)
-     )
-    )
 
 
 #+end_src
@@ -764,60 +831,6 @@
 
 #+RESULTS:
 : ((json . src json) (yaml . src yaml) (py . src python) (ts . src typescript) (sc . src scheme) (el . src emacs-lisp) (sh . src sh) (a . export ascii) (c . center) (C . comment) (e . example) (E . export) (h . export html) (l . export latex) (q . quote) (s . src) (v . verse))
-
-** Org roam
-#+begin_src emacs-lisp
-  (use-package org-roam
-    :ensure t
-    :hook
-    (after-init . org-roam-mode)
-    :general (general-nmap
-               :prefix "SPC r"
-               ;; Org-roam keymap
-               "d" '(org-roam-dailies-find-today :which-key "roam today")
-               "t a" '(org-roam-tag-add :which-key "roam add tag")
-               "t d" '(org-roam-tag-delete :which-key "roam delete tag")
-               "a a" '(org-roam-alias-add :which-key "roam add alias")
-               "f f" '(org-roam-find-file :which-key "roam findgfile ")
-               "g" '(org-roam-graph-show :which-key "roam graph ")
-               "b b" '(org-roam-buffer-toggle-display :which-key "roam buffer toggle ")
-               "b s" '(org-roam-buffer-activate :which-key "roam buffer show ")
-               "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
-               "s" '(org-roam-ui-mode :which-key "roam ui "))
-    :custom
-    (org-roam-directory (file-truename "~/org-notes"))
-    :config
-    (org-roam-db-autosync-mode)
-
-
-    (require 'org-roam-protocol)
-    (server-start t)
-    )
-
-    (setq org-roam-v2-ack t)
-
-  (setq org-roam-directory (file-truename "~/org-notes"))
-
-  (require 'org-roam-protocol)
-
-#+end_src
-
-: org-roam-protocol
-*** org-roam-ui
-#+begin_src emacs-lisp-no
-
-    (use-package websocket
-      :after org-roam
-    )
-    (use-package simple-httpd
-      :after org-roam
-    )
-(require 'websocket)
-(require 'simple-httpd)
-
-  (add-to-list 'load-path "~/.emacs.d/private/org-roam-ui")
-  (load-library "org-roam-ui")
-#+end_src
 
 * Languages
 ** Flycheck
@@ -911,7 +924,7 @@
    #+end_src
 
 ** Rust
-#+begin_src emacs-lisp
+#+begin_src aemacs-lisp
   (use-package rust-mode
   :config
     (setq rust-format-on-save t)

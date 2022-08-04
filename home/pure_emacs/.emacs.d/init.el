@@ -1,20 +1,42 @@
 (setq max-lisp-eval-depth 10000)
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://stable.melpa.org/packages/"))
-
-(package-initialize)
-
-(unless package-archive-contents
-  (package-refresh-contents))
+      (require 'package)
+      (add-to-list 'package-archives
+                   '("melpa" . "http://melpa.org/packages/") t)
+      (add-to-list 'package-archives
+                   '("melpa" . "http://melpa.org/packages/") t)
 
 
-(defvar package-list
-  '(use-package doom-themes))
+      (package-initialize)
 
-(dolist (p package-list)
-  (when (not (package-installed-p p))
-    (package-install p)))
+      (unless package-archive-contents
+        (package-refresh-contents))
+
+
+      (defvar package-list
+        '(gruvbox-theme))
+
+      (dolist (p package-list)
+        (when (not (package-installed-p p))
+          (package-install p)))
+
+
+     (defvar bootstrap-version)
+    (let ((bootstrap-file
+           (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+          (bootstrap-version 5))
+      (unless (file-exists-p bootstrap-file)
+        (with-current-buffer
+            (url-retrieve-synchronously
+             "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+             'silent 'inhibit-cookies)
+          (goto-char (point-max))
+          (eval-print-last-sexp)))
+      (load bootstrap-file nil 'nomessage))
+  (setq package-enable-at-startup nil)
+  (setq straight-use-package-by-default t)
+(straight-use-package 'org) 
+
+(straight-use-package 'use-package)
 
 (require 'package)
 (setq inhibit-startup-message t)
@@ -37,10 +59,10 @@
     ;;      '("75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "7661b762556018a44a29477b84757994d8386d6edee909409fabe0631952dad9" default))
     ;;    '(package-selected-packages
     ;;      '(neotree treemacs-persp spaceline-all-the-icons all-the-icons-ivy-rich all-the-icons-ivy treemacs-the-icons dired-icon treemacs-magit treemacs-projectile nlinum linum-mode unicode-fonts ewal-doom-themes ivy-rich which-key counsel org-roam treemacs-evil treemacs-all-the-icons treemacs use-package general gruvbox-theme flycheck-rust cargo linum-relative ac-racer lusty-explorer doom-modeline doom-themes rainbow-delimiters evil-mc rustic lsp-mode avy)))
-(use-package doom-themes
+(use-package gruvbox-theme
       :ensure t
       )
-  (load-theme 'doom-gruvbox t)
+  (load-theme 'gruvbox-dark-hard t)
 
       ;; (use-package gruvbox-theme
       ;;   :ensure t
@@ -216,10 +238,7 @@
   :ensure t
   :config (treemacs-set-scope-type 'Perspectives))
 
-(use-package neotree
-  :ensure t
-  :init
-  (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
+
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -227,7 +246,6 @@
 
 
 (use-package magit)
-(use-package workgroups2)
 
 (treemacs-create-theme "Material"
   :icon-directory (treemacs-join-path treemacs-dir "/home/horhik/.emacs.d/icons")
@@ -327,19 +345,17 @@
   (evil-collection-init))
 
 (use-package which-key
-    :init (which-key-mode)
-    :diminish which-key-mode
-    :config
-    (setq which-key-idle-delay 0.3))
-
-(use-package all-the-icons-ivy-rich
-  :ensure t
-  :init (all-the-icons-ivy-rich-mode 1))
+      :init (which-key-mode)
+      :diminish which-key-mode
+      :config
+      (setq which-key-idle-delay 0.3))
 
 
-  (use-package ivy-rich
-    :init
-    (ivy-rich-mode 1))
+
+;;    (use-package ivy-rich
+;;      :init
+;;      (ivy-rich-mode 1))
+;;
 
 (use-package company
   :after lsp-mode
@@ -352,8 +368,8 @@
   (company-minimum-prefix-length 1)
   (company-idle-delay 0.0))
 
-(use-package company-box
-  :hook (company-mode . company-box-mode))
+;;(use-package company-box
+ ;; :hook (company-mode . company-box-mode))
 
 ;;     (use-package ivy-postframe
 ;;     :init
@@ -511,6 +527,43 @@
 (set-face-attribute 'org-column-title nil :background nil)
 (setq org-src-fontify-natively t)
 
+(use-package org-roam
+:straight
+:ensure t
+:custom
+(org-roam-directory (file-truename "~/Documents/KB/"))
+:bind (("C-c n l" . org-roam-buffer-toggle)
+       ("C-c n f" . org-roam-node-find)
+       ("C-c n g" . org-roam-graph)
+       ("C-c n i" . org-roam-node-insert)
+       ("C-c n c" . org-roam-capture)
+       ;; Dailies
+       ("C-c n j" . org-roam-dailies-capture-today))
+:config
+;; If you're using a vertical completion framework, you might want a more informative completion interface
+(setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+(org-roam-db-autosync-mode)
+;; If using org-roam-protocol
+(require 'org-roam-protocol))
+
+ ; (setq org-roam-v2-ack t)
+
+(setq org-roam-directory (file-truename "~/Documents/KB"))
+
+(use-package org-roam-ui
+  :straight
+    (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+    :after org-roam
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+
 (setq org-agenda-settings '(
    ("d" "Dashboard 📜"
     (
@@ -560,19 +613,20 @@
   (use-package pdf-tools
     :defer t
     )
-  (use-package org 
+  (use-package org  :demand t
+    :load-path "~/.emacs.d/elpa/org-9.5.4/"
     :hook ((org-mode . my/org-mode-setup)
            (org-mode . variable-pitch-mode)
            (org-mode . org-indent-mode)
            (org-mode . prettify-symbols-mode)
            )
-    :config (setq org-agenda-files `("~/Notes/GTD")) 
+    :config (setq org-agenda-files `("~/Documents/GTD")) 
     (display-line-numbers-mode 0)
-    (org-bullets-mode t) 
-    (org-indent-mode t)
-    (setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
-          org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
-          org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
+    ;(org-bullets-mode t) 
+    ;(org-indent-mode t)
+    ;(setq org-ellipsis " ▸" org-hide-emphasis-markers t org-src-fontify-natively t
+    ;      org-src-tab-acts-natively t org-edit-src-content-indentation 2 org-hide-block-startup nil
+    ;      org-src-preserve-indentation nil org-startup-folded 'content org-cycle-separator-lines 2) 
     (setq org-agenda-start-with-log-mode t) 
     (setq org-log-done 'time) 
     (setq org-log-into-drawer t)
@@ -625,39 +679,6 @@
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
 (add-to-list 'org-structure-template-alist '("json" . "src json"))
-
-(use-package org-roam
-  :ensure t
-  :hook
-  (after-init . org-roam-mode)
-  :general (general-nmap
-             :prefix "SPC r"
-             ;; Org-roam keymap
-             "d" '(org-roam-dailies-find-today :which-key "roam today")
-             "t a" '(org-roam-tag-add :which-key "roam add tag")
-             "t d" '(org-roam-tag-delete :which-key "roam delete tag")
-             "a a" '(org-roam-alias-add :which-key "roam add alias")
-             "f f" '(org-roam-find-file :which-key "roam findgfile ")
-             "g" '(org-roam-graph-show :which-key "roam graph ")
-             "b b" '(org-roam-buffer-toggle-display :which-key "roam buffer toggle ")
-             "b s" '(org-roam-buffer-activate :which-key "roam buffer show ")
-             "b h" '(org-roam-buffer-deactivate :which-key "roam buffer hide ")
-             "s" '(org-roam-ui-mode :which-key "roam ui "))
-  :custom
-  (org-roam-directory (file-truename "~/org-notes"))
-  :config
-  (org-roam-db-autosync-mode)
-
-
-  (require 'org-roam-protocol)
-  (server-start t)
-  )
-
-  (setq org-roam-v2-ack t)
-
-(setq org-roam-directory (file-truename "~/org-notes"))
-
-(require 'org-roam-protocol)
 
 (use-package flycheck
   :init
@@ -732,17 +753,6 @@
   ;;      (direnv-mode))
   ;;   (add-hook 'lsp-mode-hook #'direnv-update-environment)
 (use-package nix-mode)
-
-(use-package rust-mode
-:config
-  (setq rust-format-on-save t)
-  (add-hook 'rust-mode-hook
-            (lambda () (setq indent-tabs-mode nil)))
-)
-(use-package rustic
-:config
-(setq rustic-lsp-server 'rls)
-  )
 
 (use-package mastodon
 :config
