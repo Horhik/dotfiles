@@ -1,0 +1,374 @@
+#+title: Emacs config
+#+author Horhik
+#+BABEL: :cache no
+#+PROPERTY: header-args:emacs-lisp :tangle init.el
+#+begin_src
+ █ █ █▀█ █▀▄ █ █ ▀█▀ █ █ ▀ █▀▀  
+ █▀█ █ █ █▀▄ █▀█  █  █▀▄   ▀▀█  
+ ▀ ▀ ▀▀▀ ▀ ▀ ▀ ▀ ▀▀▀ ▀ ▀   ▀▀▀  
+█▀▄ █▀█ ▀█▀ █▀▀ ▀█▀ █   █▀▀ █▀▀
+█ █ █ █  █  █▀▀  █  █   █▀▀ ▀▀█
+▀▀  ▀▀▀  ▀  ▀   ▀▀▀ ▀▀▀ ▀▀▀ ▀▀▀
+#+end_src
+* Help info
+  ~C-z~ to toggle vim/emacs mode
+  ~M-p~ in Counsel to get previos seach
+
+* Initial
+** Straight.el
+#+begin_src emacs-lisp
+	(setq max-lisp-eval-depth 10000)
+	(require 'package)
+	(add-to-list 'package-archives
+		     '("melpa" . "http://melpa.org/packages/") t)
+	(add-to-list 'package-archives
+		     '("melpa" . "http://melpa.org/packages/") t)
+
+
+	(package-initialize)
+
+	(unless package-archive-contents
+	  (package-refresh-contents))
+
+
+
+	(defvar bootstrap-version)
+  (let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+	(url-retrieve-synchronously
+	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	 'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+  (setq straight-use-package-by-default t)
+  (setq package-enable-at-startup nil)
+
+  
+#+end_src
+** Basic Theiming
+#+begin_src emacs-lisp
+    (straight-use-package 'doom-themes
+    :init
+      (require 'doom-themes)
+    )
+
+
+    (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(doom-gruvbox))
+ '(custom-safe-themes
+   '("e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "969a67341a68becdccc9101dc87f5071b2767b75c0b199e0ded35bd8359ecd69" default)))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+
+    (setq inhibit-startup-message t)
+    (setq visible-bell t)
+    (menu-bar-mode -1)
+    (toggle-scroll-bar -1)
+    (tool-bar-mode -1)
+    (tooltip-mode -1)
+    (set-fringe-mode 10)
+    (visual-line-mode t)
+    (global-visual-line-mode 1)
+    (global-visual-line-mode)
+    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+    (straight-use-package 'use-package)
+
+  
+#+end_src
+** UI
+
+*** Disbling line numbers
+#+begin_src emacs-lisp
+  (column-number-mode)
+  (global-display-line-numbers-mode)
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+#+end_src
+
+*** Rainbow Brakets
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+  :straight t
+  :hook (prog-mode . rainbow-delimiters-mode))
+#+end_src
+
+*** Rainbow Brakets
+#+begin_src emacs-lisp
+  (use-package which-key
+    :init (which-key-mode)
+    :diminish which-key-mode
+    :config
+    (setq which-key-idle-delay 0.3))
+#+end_src
+*** All-the icons
+#+begin_src emacs-lisp
+(use-package all-the-icons
+:straight t)
+#+end_src
+** Evil mode
+#+begin_src emacs-lisp
+    (use-package evil
+      :straight t
+      :init
+      :custom
+      (setq evil-want-keybinding nil)
+      (setq evil-want-integration t)
+      (setq evil-want-C-u-scroll t)
+      (setq evil-want-C-i-jump nil)
+      (setq evil-search-module 'evil-search)
+      (setq evil-ex-complete-emacs-commands nil)
+      (setq evil-vsplit-window-right t)
+      (setq evil-split-window-below t)
+      (evil-set-undo-system 'undo-tree)
+      :config (evil-mode 1)
+      )
+#+end_src
+
+** Fonts
+#+begin_src emacs-lisp
+;; Default fonts
+(add-to-list 'default-frame-alist '(font . "Mononoki Nerd Font" ))
+(set-face-attribute 'default t :font "Mononoki Nerd Font" )
+(set-frame-font "Mononoki Nerd Font 12" nil t)
+
+;;(set-fontset-font "fontset-startup" 'unicode
+;;		  (font-spec :name "Mononoki Nerd Font" :size 14))
+(when (member "Twitter Color Emoji" (font-family-list))
+  (set-fontset-font t 'unicode "Twitter Color Emoji" nil 'prepend))
+
+(when (member "Twemoji" (font-family-list))
+  (set-fontset-font t 'unicode "Twemoji" nil 'prepend))
+;; ☺️ ☻ 😃 😄 😅 😆 😊 😎 😇 😈 😏 🤣 🤩 🤪 🥳 😁 😀 😂 🤠 🤡 🤑 🤓 🤖 😗 😚 😘 😙 😉 🤗 😍 🥰 🤤 😋 🤔 🤨 🧐 🤭 🤫 😯 🤐 😌 😖 😕 😳 😔 🤥 🥴 😮 😲 🤯 😩 😫 🥱 😪 😴 😵 ☹️ 😦 😞 😥 😟 😢 😭 🤢 🤮 😷 🤒 🤕 🥵 🥶 🥺 😬 😓 😰 😨 😱 😒 😠 😡 😤 😣 😧 🤬 😸 😹 😺 😻 😼 😽 😾 😿 🙀 🙈 🙉 🙊 🤦 🤷 🙅 🙆 🙋 🙌 🙍 🙎 🙇 🙏 👯 💃 🕺 🤳 💇 💈 💆 🧖 🧘 🧍 🧎 👰 🤰 🤱 👶 🧒 👦 👧 👩 👨 🧑 🧔 🧓 👴 👵 👤 👥 👪 👫 👬 👭 👱 👳 👲 🧕 👸 🤴 🎅 🤶 🧏 🦻 🦮 🦯 🦺 🦼 🦽 🦾 🦿 🤵 👮 👷 💁 💂 🕴 🕵️ 🦸 🦹 🧙 🧚 🧜 🧝 🧞 🧛 🧟 👼 👿 👻 👹 👺 👽 👾 🛸 💀 ☠️ 🕱 🧠 🦴 👁 👀 👂 👃 👄 🗢 👅 🦷 🦵 🦶 💭 🗬 🗭 💬 🗨 🗩 💦 💧 💢 💫 💤 💨 💥 💪 🗲 🔥 💡 💩 💯 
+;; Fallback for emojies
+
+#+end_src emacs-lisp
+* Org mode setup
+
+#+begin_src emacs-lisp
+      (use-package org
+      :straight t
+      :config
+    ;; Make sure org-indent face is available
+      ;; Increase the size of various headings
+      (set-face-attribute 'org-document-title nil :font "Ubuntu" :weight 'bold :height 1.3)
+
+      (dolist (face '((org-level-1 . 1.4)
+                      (org-level-2 . 1.3)
+                      (org-level-3 . 1.05)
+                      (org-level-4 . 1.0)
+                      (org-level-5 . 1.1)
+                      (org-level-6 . 1.1)
+                      (org-level-7 . 1.1)
+                      (org-level-8 . 1.1)))
+        (set-face-attribute (car face) nil :font "Ubuntu" :weight 'bold :height (cdr face)))
+
+      ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+      (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+      (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+      (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+      (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+      ;(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+      (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+      (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+      (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+      (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
+      ;; Get rid of the background on column views
+      (set-face-attribute 'org-column nil :background nil)
+      (set-face-attribute 'org-column-title nil :background nil)
+      (setq org-src-fontify-natively t)
+    )
+
+      (use-package org-bullets
+      :after (org)
+      :hook (
+         (org-mode . org-bullets-mode )
+         (org-mode . org-indent-mode )
+
+       )
+
+      )
+#+end_src
+** Org Fonts
+#+begin_src emacs-lisp
+
+
+    
+#+end_src emacs-lisp
+* Modeline
+#+begin_src emacs-lisp
+
+
+(use-package doom-modeline
+  :straight t
+  :init (doom-modeline-mode 1)
+  :custom ((doom-modeline-height 15)))
+#+end_src
+
+* Ivy
+#+begin_src emacs-lisp
+    (use-package ivy
+      :straight t
+      :diminish
+      :bind (("C-s" . swiper)
+             :map ivy-minibuffer-map
+             ("TAB" . ivy-alt-done)	
+             ("C-l" . ivy-alt-done)
+             ("C-j" . ivy-next-line)
+             ("C-k" . ivy-previous-line)
+             :map ivy-switch-buffer-map
+             ("C-k" . ivy-previous-line)
+             ("C-l" . ivy-done)
+             ("C-d" . ivy-switch-buffer-kill)
+             :map ivy-reverse-i-search-map
+             ("C-k" . ivy-previous-line)
+             ("C-d" . ivy-reverse-i-search-kill))
+
+      :config
+      (ivy-mode 1)
+
+  )
+  (use-package amx
+  :straight t
+  :init (amx-mode 1))
+#+end_src
+** Ivy Frame and Counsel
+#+begin_src emacs-lisp
+  (straight-use-package 'ivy-posframe)
+  (use-package counsel
+    :straight t
+    :bind (
+          ("M-x" . counsel-M-x)
+          ("C-x b" . counsel-buffer-or-recentf)
+          ("C-x C-b" . counsel-switch-buffer)
+          ("C-x C-f" . counsel-find-file)
+          :map minibuffer-local-map
+          ("C-x r" . 'counsel-minibuffer-history)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
+  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+
+  ;;:after (ivy)
+  ;;:config
+  (require 'ivy-posframe)
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
+  (ivy-posframe-mode 1)
+#+end_src
+** Ivy Rich
+#+begin_src emacs-lisp
+    (use-package all-the-icons-ivy-rich
+      :straight t
+      :init (all-the-icons-ivy-rich-mode 1)
+      :config
+      (setq all-the-icons-ivy-rich-icon t)
+      (setq all-the-icons-ivy-rich-color-icon t)
+      (setq all-the-icons-ivy-rich-project t)
+      (setq all-the-icons-ivy-rich-field-width 80)
+      (setq inhibit-compacting-font-caches t)
+  )
+
+    (use-package ivy-rich
+      :straight t
+      :init (ivy-rich-mode 1)
+      :config
+      (defun ivy-rich-counsel-find-file-truename (candidate)
+      (let ((type (car (file-attributes (directory-file-name (expand-file-name candidate ivy--directory))))))
+        (if (stringp type)
+            (concat "-> " (expand-file-name type ivy--directory))
+          "")))
+(setq ivy-rich-display-transformers-list
+      '(ivy-switch-buffer
+        (:columns
+         ((ivy-rich-switch-buffer-icon (:width 2))
+          (ivy-rich-candidate (:width 30))
+          (ivy-rich-switch-buffer-size (:width 7))
+          (ivy-rich-switch-buffer-indicators (:width 4 :face error :align right))
+          (ivy-rich-switch-buffer-major-mode (:width 12 :face warning))
+          (ivy-rich-switch-buffer-project (:width 15 :face success))
+          (ivy-rich-switch-buffer-path (:width (lambda (x) (ivy-rich-switch-buffer-shorten-path x (ivy-rich-minibuffer-width 0.3))))))
+         :predicate
+         (lambda (cand) (get-buffer cand)))))
+
+      )
+
+#+end_src
+
+* Keybindigs
+#+begin_src emacs-lisp
+       (straight-use-package 'general)
+       (require 'general)
+       (general-define-key
+      :keymaps '(normal insert emacs)
+      :prefix "SPC"
+      :non-normal-prefix "M-SPC"
+
+      "/" 'swiper
+      "b" 'counsel-switch-buffer
+
+      "f r" 'counsel-recentf
+      "f f" 'counsel-find-file
+      "SPC" 'counsel-M-x
+
+  )
+#+end_src
+
+
+* Org Roam
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :straight t
+    :custom
+    (org-roam-directory (file-truename "/home/horhik/Documents/Notes/"))
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n g" . org-roam-graph)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n c" . org-roam-capture)
+           ;; Dailies
+           ("C-c n j" . org-roam-dailies-capture-today))
+    :config
+    ;; If you're using a vertical completion framework, you might want a more informative completion interface
+    (setq org-roam-db-location  (concat org-roam-directory  "/home/horhik/Documents/Notes/org-roam.db"))
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (org-roam-db-autosync-mode)
+    ;; If using org-roam-protocol
+    (require 'org-roam-protocol))
+
+
+#+end_src
+** Org-roam UI
+#+begin_src emacs-lisp
+(use-package org-roam-ui
+  :straight
+    (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+    :after org-roam
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+#+end_src
+
+** 
