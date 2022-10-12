@@ -174,17 +174,17 @@
    :config
  ;; Make sure org-indent face is available
    ;; Increase the size of various headings
-   (set-face-attribute 'org-document-title nil :font "Ubuntu" :weight 'bold :height 1.3)
+   (set-face-attribute 'org-document-title nil :font "Vollkorn" :weight 'bold :height 1.3)
 
-   (dolist (face '((org-level-1 . 1.4)
-                   (org-level-2 . 1.3)
-                   (org-level-3 . 1.05)
+   (dolist (face '((org-level-1 . 1.1)
+                   (org-level-2 . 1.0)
+                   (org-level-3 . 1.0)
                    (org-level-4 . 1.0)
-                   (org-level-5 . 1.1)
-                   (org-level-6 . 1.1)
-                   (org-level-7 . 1.1)
-                   (org-level-8 . 1.1)))
-     (set-face-attribute (car face) nil :font "Ubuntu" :weight 'bold :height (cdr face)))
+                   (org-level-5 . 1.0)
+                   (org-level-6 . 1.0)
+                   (org-level-7 . 1.0)
+                   (org-level-8 . 1.0)))
+     (set-face-attribute (car face) nil :font "Vollkorn" :weight 'bold :height (cdr face)))
 
    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
    (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
@@ -597,63 +597,8 @@
   :straight t
   :after org
   :config
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
-
-                                        ;(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
-
-
-
-  ;; (setq org-preview-latex-process-alist '((dvipng :programs
-  ;;                                                 ("latex" "dvipng")
-  ;;                                                 :description "dvi > png" :message "you need to install the programs: latex and dvipng." :image-input-type "dvi" :image-output-type "png" :image-size-adjust
-  ;;                                                 (2.0 . 2.0)
-  ;;                                                 :latex-compiler
-  ;;                                                 ("latex -interaction nonstopmode -output-directory %o %f")
-  ;;                                                 :image-converter
-  ;;                                                 ("dvipng -D %D -T tight -o %O %f"))
-  ;;                                         (dvisvgm :programs
-  ;;                                                  ("latex" "dvisvgm")
-  ;;                                                  :description "dvi > svg" :message "you need to install the programs: latex and dvisvgm." :image-input-type "dvi" :image-output-type "svg" :image-size-adjust
-  ;;                                                  (1.7 . 1.5)
-  ;;                                                  :latex-compiler
-  ;;                                                  ("latex -interaction nonstopmode -output-directory %o %f")
-  ;;                                                  :image-converter
-  ;;                                                  ("/opt/texlive/2022/bin/x86_64-linux/dvisvgm %f -n -b min -c %S -o %O"))
-  ;;                                         (imagemagick :programs
-  ;;                                                      ("latex" "convert")
-  ;;                                                      :description "pdf > png" :message "you need to install the programs: latex and imagemagick." :image-input-type "pdf" :image-output-type "png" :image-size-adjust
-  ;;                                                      (1.0 . 1.0)
-  ;;                                                      :latex-compiler
-  ;;                                                      ("pdflatex -interaction nonstopmode -output-directory %o %f")
-  ;;                                                      :image-converter
-  ;;                                                      ("convert -density %D -trim -antialias %f -quality 100 %O"))))
-
-  (setq org-preview-latex-default-process 'dvipng) ;No blur when scaling
-  )
-(defun my/text-scale-adjust-latex-previews ()
-  "Adjust the size of latex preview fragments when changing the
-buffer's text scale."
-  (pcase major-mode
-    ('latex-mode
-     (dolist (ov (overlays-in (point-min) (point-max)))
-       (if (eq (overlay-get ov 'category)
-               'preview-overlay)
-           (my/text-scale--resize-fragment ov))))
-    ('org-mode
-     (dolist (ov (overlays-in (point-min) (point-max)))
-       (if (eq (overlay-get ov 'org-overlay-type)
-               'org-latex-overlay)
-           (my/text-scale--resize-fragment ov))))))
-
-(defun my/text-scale--resize-fragment (ov)
-  (overlay-put
-   ov 'display
-   (cons 'image
-         (plist-put
-          (cdr (overlay-get ov 'display))
-          :scale (+ 1.0 (* 0.25 text-scale-mode-amount))))))
-
-(add-hook 'text-scale-mode-hook #'my/text-scale-adjust-latex-previews)
+  (add-hook 'org-mode-hook 'org-cdlatex-mode)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.3))
 
 (use-package org-fragtog
   :straight t
