@@ -1,2 +1,6 @@
 #! /bin/sh
+if [ -f /tmp/nospanish ]; then
 setxkbmap us,ru && xkb-switch -n
+else
+setxkbmap us,ru,es && xkb-switch -n
+fi

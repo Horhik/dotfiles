@@ -3,7 +3,7 @@
 export MAIN_DISK="/dev/nvme0n1p7"
 #module GruvboxColors where
 
-backgroundColor="#282828"
+backgroundColor="#504945"
 currentLineColor="#fabd2f"
 selectionColor="#665c54"
 foregroundColor="#ebdbb2"
@@ -124,7 +124,7 @@ COLOR_UNDERLINE="#ff0000"
 kek="%{U$COLOR_UNDERLINE}%{+u}${line#?}%{-u}$PADDING"
 while true
 do
-    echo "%{S1}%{c}$(timeanddate)--$(calendar)%{r}wifi:$(wifi)--disk:$(diskspace)--vol:$(volume)%--bat:$(battery)%"
+    echo "%{S1}%{c}$(timeanddate)--$(calendar)%{r}wifi:$(wifi)--disk:$(diskspace)--vol:$(volume)%--bat:$(battery)%%{S0}%{c}$(timeanddate)--$(calendar)%{r}wifi:$(wifi)--disk:$(diskspace)--vol:$(volume)%--bat:$(battery)%"
   sleep 5
 done
 #echo "$kek%{$(volume)}%{$(layout)}%{$(diskspace)}%{$(timeanddate)}"

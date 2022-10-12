@@ -24,7 +24,7 @@ Mod=Mod4   # Use the super key as the main modifier
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
-hc keybind $Mod-Return spawn "${TERMINAL:-alacritty}" # use your $TERMINAL with xterm as fallback
+hc keybind $Mod-Return spawn "${TERMINAL:-kitty}" # use your $TERMINAL with xterm as fallback
 
 # basic movement in tiling and floating mode
 # focusing clients
@@ -120,11 +120,11 @@ hc attr theme.floating.reset 1
 hc set frame_border_active_color '#fe8019'
 hc set frame_border_normal_color '#101010cc'
 hc set frame_bg_normal_color '#3c383633'
-hc set frame_bg_active_color '#fe801922'
+hc set frame_bg_active_color '#3c383633'
 hc set frame_border_width 0
 hc set always_show_frame on
 hc set frame_bg_transparent off
-hc set frame_transparent_width 2
+hc set frame_transparent_width 0
 hc set frame_gap 0
 
 
@@ -161,13 +161,13 @@ done
 hc attr theme.tiling.outer_width 1
 hc attr theme.background_color '#141414'
 
-hc set window_gap 0
-hc set frame_padding 0
+hc set window_gap 10
+hc set frame_padding -5
 hc set smart_window_surroundings off
 hc set smart_frame_surroundings on
 hc set mouse_recenter_gap 0
-hc pad 1 30
-hc pad 0 30 
+hc pad 1 17
+hc pad 0 17 
 
 # rules
 hc unrule -F
@@ -190,7 +190,7 @@ hc unlock
 # do multi monitor setup here, e.g.:
 # hc set_monitors 1280x1024+0+0 1280x1024+1280+0
 # or simply:
-# hc detect_monitors
+hc detect_monitors
 
 # find the panel
 panel=~/.config/herbstluftwm/panel.sh
@@ -209,9 +209,9 @@ hc keybind $Mod-Shift-e spawn rofi -show emoji
 
 
 # SCRATCHPADS
-hc keybind $Mod-u		spawn ~/.config/herbstluftwm/scratchpad.sh "hlwmScratch1" "alacritty --class=hlwmScratch1"
+hc keybind $Mod-u		spawn ~/.config/herbstluftwm/scratchpad.sh "hlwmScratch1" "kitty --class=hlwmScratch1"
 hc keybind $Mod-d		spawn  ~/.config/herbstluftwm/scratchpad.sh "hlwmScratchemascratch" "emacs --name hlwmScratchemascratch --title hlwmScratchemascratch"
-hc keybind $Mod-Shift-m		spawn  ~/.config/herbstluftwm/scratchpad.sh "hlwmScratchVolume" "alacritty --class=hlwmScratchVolume -e pulsemixer"
+hc keybind $Mod-Shift-m		spawn  ~/.config/herbstluftwm/scratchpad.sh "hlwmScratchVolume" "kitty --class=hlwmScratchVolume -e pulsemixer"
 hc keybind $Mod-Shift-d		spawn  ~/.config/herbstluftwm/scratchpad.sh "obsidian" "~.local/bin/Obsidian.AppImage"
 hc keybind $Mod1-Control-space	spawn  emacsclient --eval "(emacs-everywhere)"
 
@@ -221,10 +221,21 @@ hc rule instance~hlwmScratch.* floating=on floatplacement=center # float all ins
 #Change Language
 hc keybind $Mod-space spawn ~/.config/herbstluftwm/changelang
 hc keybind $Mod1-shift spawn ~/.config/herbstluftwm/changelang
+hc keybind $Mod-F3 spawn ~/.config/herbstluftwm/nospanish.sh 
 
 
 
 picom &
-feh --bg-scale ~/Pictures/backgrounds/berries.jpg 
+feh --bg-scale /home/horhik/Pictures/backgrounds/bulbs.jpg
 syncthing &
-~/.config/herbstluftwm/bar | lemonbar  -n "herbstluftwm" -B "#000" -F "#fff" -f "mononoki Nerd Font:style=Bold:size=9" &
+~/.config/herbstluftwm/bar | lemonbar  -n "herbstluftwm" -B "#1d2021" -F "#ebdbb2" -f "mononoki Nerd Font:style=Bold:size=9" &
+
+xrandr --output eDP --auto
+xrandr --output HDMI-A-0 --auto
+xrandr --output HDMI-A-0 --right-of eDP
+herbstclient detect_monitors
+brightnessctl s 255
+
+pipewire &
+pipewire-pulse &
+syndaemon &
