@@ -176,8 +176,8 @@
    ;; Increase the size of various headings
    (set-face-attribute 'org-document-title nil :font "Vollkorn" :weight 'bold :height 1.3)
 
-   (dolist (face '((org-level-1 . 1.1)
-                   (org-level-2 . 1.0)
+   (dolist (face '((org-level-1 . 1.2)
+                   (org-level-2 . 1.1)
                    (org-level-3 . 1.0)
                    (org-level-4 . 1.0)
                    (org-level-5 . 1.0)
@@ -599,6 +599,32 @@
   :config
   (add-hook 'org-mode-hook 'org-cdlatex-mode)
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.3))
+  (setq org-preview-latex-default-process 'dvisvgm) ;No blur when scaling
+  (defun my/text-scale-adjust-latex-previews ()
+    "Adjust the size of latex preview fragments when changing the
+buffer's text scale."
+    (pcase major-mode
+      ('latex-mode
+       (dolist (ov (overlays-in (point-min) (point-max)))
+         (if (eq (overlay-get ov 'category)
+                 'preview-overlay)
+             (my/text-scale--resize-fragment ov))))
+      ('org-mode
+       (dolist (ov (overlays-in (point-min) (point-max)))
+         (if (eq (overlay-get ov 'org-overlay-type)
+                 'org-latex-overlay)
+             (my/text-scale--resize-fragment ov))))))
+
+  (defun my/text-scale--resize-fragment (ov)
+    (overlay-put
+     ov 'display
+     (cons 'image
+           (plist-put
+            (cdr (overlay-get ov 'display))
+            :scale (+ 1.0 (* 0.25 text-scale-mode-amount))))))
+
+  (add-hook 'text-scale-mode-hook #'my/text-scale-adjust-latex-previews)
+  )
 
 (use-package org-fragtog
   :straight t
