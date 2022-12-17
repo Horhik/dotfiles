@@ -39,7 +39,7 @@
 # by DPI and the specified value is always added at both opposing sides.
 padding:
   x: 40
-  y: 20
+  y: 40
 
   # Spread additional padding evenly around the terminal content.
   #dynamic_padding: false
@@ -87,7 +87,7 @@ padding:
 
 # Font configuration
 font:
-  size: 10
+  size: 9
   normal:
     family: Mononoki Nerd Font
     style: Medium

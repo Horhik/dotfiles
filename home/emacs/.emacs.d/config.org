@@ -15,7 +15,8 @@
   ~C-z~ to toggle vim/emacs mode
   ~M-p~ in Counsel to get previos seach
   ~C-x RET C-\~ - set input method (Tex for *LaTex*)
-
+  ~C-x n s~ - Open subtree  
+  ~org-tree-to-indirect-buffer~ Open subtree in separate buffer
 * Initial
 ** Straight.el
 #+begin_src emacs-lisp
@@ -95,13 +96,34 @@
 
 *** Disbling line numbers
 #+begin_src emacs-lisp
-  (column-number-mode)
-  (global-display-line-numbers-mode)
+  ;(column-number-mode)
+  (global-display-line-numbers-mode 0)
   (dolist (mode '(org-mode-hook
                   term-mode-hook
                   shell-mode-hook
+                  telega-root-mode-hook
+                  telega-chat-mode-hook
+                  doc-view-mode-hook
+                  pdf-mode-hook
+                  eww-mode-hook
                   eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+
+
+
+
+  
+
+  (add-hook 'shell-mode-hook       #'(lambda()(display-line-numbers-mode -1)))
+  (add-hook 'telega-root-mode-hook #'(lambda()(display-line-numbers-mode -1)))
+  (add-hook 'help-mode-hook #'(lambda()(display-line-numbers-mode -1)))
+  (add-hook 'telega-chat-mode-hook #'(lambda()(display-line-numbers-mode -1)))
+  (add-hook 'telega-image-mode-hook #'(lambda()(display-line-numbers-mode -1)))
+  (add-hook 'telega-mode-hook #'(lambda()(display-line-numbers-mode -1)))
+  (add-hook 'doc-view-mode-hook    #'(lambda()(display-line-numbers-mode -1)))
+  (add-hook 'pdf-mode-hook         #'(lambda()(display-line-numbers-mode -1)))
+  (add-hook 'eww-mode-hook         #'(lambda()(display-line-numbers-mode -1)))
 #+end_src
 
 *** Rainbow Brakets
@@ -186,8 +208,47 @@
 ;; Fallback for emojies
 
 #+end_src emacs-lisp
-* Keybindigs
+*** Font for text-mode
 #+begin_src emacs-lisp
+  (use-package mixed-pitch
+     :straight t
+     :hook
+     (text-mode . mixed-pitch-mode)
+     :config
+     (set-face-attribute 'default nil :font "Mononoki Nerd Font" :height 130)
+     (set-face-attribute 'fixed-pitch nil :font "Mononoki Nerd Font")
+     (set-face-attribute 'variable-pitch nil :font "FiraSans"))
+#+end_src
+* Keybindigs
+** Defining smth
+#+begin_src emacs-lisp
+          (defun opt ()
+            "open tasks"
+            (interactive)
+            (find-file "~/GTD/tasks.org"))
+      (defun opi ()
+            "open inbox"
+            (interactive)
+            (find-file "~/GTD/inbox.org"))
+    (defun opd ()
+          "open daily"
+          (interactive)
+          (find-file "~/GTD/daily.org"))
+  (defun opr ()
+        "open readlist"
+        (interactive)
+        (find-file "~/GTD/readlist.org"))
+(defun opc ()
+        "open readlist"
+        (interactive)
+        (find-file "~/.emacs.d/config.org"))
+
+
+#+end_src
+** Basic
+#+begin_src emacs-lisp
+
+
     (use-package general
       :straight t
       :config
@@ -201,8 +262,16 @@
        "/" 'swiper
        "b" 'counsel-switch-buffer
 
-       "f r" 'counsel-recentf
-       "f f" 'counsel-find-file
+       "f r" '(counsel-recentf :which-key "recent files")
+       "f f" '(counsel-find-file :which-key "find files")
+       "f c" '(opc :which-key "open config")
+
+
+       "t t" '(opt :which-key "✅Tasks")
+       "t i" '(opi :which-key "📥Inbox")
+       "t d" '(opd :which-key "🌄Daily")
+       "t r" '(opr :which-key "📚Readlist")
+
        "SPC" 'counsel-M-x
 
        "a" 'org-agenda
@@ -214,97 +283,130 @@
   (general-create-definer my-leader-def
     :states 'motion
     :prefix "SPC")
+
 #+end_src
 
 * Org mode setup
 ** Basic
 #+begin_src emacs-lisp
-      (defun my/org-mode-setup()
-        (auto-fill-mode 0)
-        (visual-line-mode 1)
-        (setq evil-auto-indent 1)
-        (variable-pitch-mode t)
-        (prettify-symbols-mode +1)
-        (display-line-numbers-mode 0)
+       (defun my/org-mode-setup()
+         (auto-fill-mode 0)
+         (visual-line-mode 1)
+         (setq evil-auto-indent 1)
+         (variable-pitch-mode t)
+         (prettify-symbols-mode +1)
+         (display-line-numbers-mode 0)
+         )
+
+       (use-package org
+       :straight t
+
+       :hook ((org-mode . my/org-mode-setup)
+                (org-mode . variable-pitch-mode)
+                (org-mode . org-indent-mode)
+                (org-mode . prettify-symbols-mode)
+       )
+       :config
+    (require 'org-habit)
+    (add-to-list 'org-modules 'org-habit)
+    (setq org-habit-graph-column 60)
+    (setq org-treat-insert-todo-heading-as-state-change t)
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+
+
+     ;; Make sure org-indent face is available
+       ;; Increase the size of various headings
+
+
+       (add-hook 'org-agenda-finalize-hook #'hl-line-mode)
+
+       (set-face-attribute 'org-document-title nil :font "FiraSans" :weight 'bold :height 1.3)
+
+       (dolist (face '((org-level-1 . 1.2)
+                       (org-level-2 . 1.1)
+                       (org-level-3 . 1.0)
+                       (org-level-4 . 1.0)
+                       (org-level-5 . 1.0)
+                       (org-level-6 . 1.0)
+                       (org-level-7 . 1.0)
+                       (org-level-8 . 1.0)))
+         (set-face-attribute (car face) nil :font "FiraSans" :weight 'bold :height (cdr face)))
+
+       ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+       (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+       (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+       (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+       (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+       ;(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+       (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+       (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+       (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+       (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
+        (setq org-agenda-files 
+                                 '(
+                                 "~/GTD/habits.org"
+                                 "~/GTD/daily.org"
+                                 "~/GTD/tasks.org"
+                                 "~/GTD/inbox.org"
+                                 "~/GTD/watchlist.org"
+                                 "~/GTD/readlist.org"
+              )) 
+        (setq org-image-actual-width (list 550))
+       ;; Get rid of the background on column views
+       (set-face-attribute 'org-column nil :background nil)
+       (set-face-attribute 'org-column-title nil :background nil)
+       (setq org-src-fontify-natively t)
+       (setq org-agenda-start-with-log-mode t) 
+         (setq org-log-done 'time) 
+         (setq org-log-into-drawer t)
+         (setq org-todo-keyword-faces '(("TODO" . org-warning) 
+                                        ("STARTED" . "yellow") 
+                                        ("DREAM" . "pink") 
+                                        ("PJ" . "pink") 
+                                        ("IDEA" . "gold") 
+                                        ("READ" . "violet") 
+                                        ("NEXT" . "red") 
+                                        ("ARTICLE" . "lightblue") 
+                                        ("CANCELED" . 
+                                         (:foreground "blue" 
+                                                      :weight bold))))
+
+         (setq org-todo-keywords '((sequence "INBOX(i)" "PJ(p)" "TODO(t)" "NEXT(n)" "CAL(c)" "WAIT(w@/!)" "|" "DONE(d!)" "CANC(k@)") 
+                                   (sequence "IDEA(I)" "DREAM(D)" "READ(R)" "|" "DONE(d!)" "CANC(k@)")
+                                   ))
+       (setq org-agenda-custom-commands org-agenda-settings)
+
+    ) 
+
+    (defun org-habit-streak-count ()
+    (point-min)
+    (while (not (eobp))
+      (when (get-text-property (point) 'org-habit-p)
+        (let ((count (count-matches
+                      (char-to-string org-habit-completed-glyph)
+                      (line-beginning-position) (line-end-position))))
+          (end-of-line)
+          (insert (number-to-string count))))
+        (forward-line 1)))
+  (add-hook 'org-agenda-finalize-hook 'org-habit-streak-count)
+
+       (use-package org-bullets
+       :after (org)
+       :hook (
+          (org-mode . org-bullets-mode )
+          (org-mode . org-indent-mode )
+
         )
 
-      (use-package org
-      :straight t
-
-      :hook ((org-mode . my/org-mode-setup)
-               (org-mode . variable-pitch-mode)
-               (org-mode . org-indent-mode)
-               (org-mode . prettify-symbols-mode)
-      )
-      :config
-    ;; Make sure org-indent face is available
-      ;; Increase the size of various headings
-      (set-face-attribute 'org-document-title nil :font "Vollkorn" :weight 'bold :height 1.3)
-
-      (dolist (face '((org-level-1 . 1.2)
-                      (org-level-2 . 1.1)
-                      (org-level-3 . 1.0)
-                      (org-level-4 . 1.0)
-                      (org-level-5 . 1.0)
-                      (org-level-6 . 1.0)
-                      (org-level-7 . 1.0)
-                      (org-level-8 . 1.0)))
-        (set-face-attribute (car face) nil :font "Vollkorn" :weight 'bold :height (cdr face)))
-
-      ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-      (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-      (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-      (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-      (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-      ;(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-      (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-      (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-      (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-      (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-
-       (setq org-agenda-files `("~/GTD")) 
-       (setq org-image-actual-width (list 550))
-      ;; Get rid of the background on column views
-      (set-face-attribute 'org-column nil :background nil)
-      (set-face-attribute 'org-column-title nil :background nil)
-      (setq org-src-fontify-natively t)
-      (setq org-agenda-start-with-log-mode t) 
-        (setq org-log-done 'time) 
-        (setq org-log-into-drawer t)
-        (setq org-todo-keyword-faces '(("TODO" . org-warning) 
-                                       ("STARTED" . "yellow") 
-                                       ("DREAM" . "pink") 
-                                       ("PJ" . "pink") 
-                                       ("IDEA" . "gold") 
-                                       ("READ" . "violet") 
-                                       ("NEXT" . "red") 
-                                       ("ARTICLE" . "lightblue") 
-                                       ("CANCELED" . 
-                                        (:foreground "blue" 
-                                                     :weight bold))))
-
-        (setq org-todo-keywords '((sequence "INBOX(i)" "PJ(p)" "TODO(t)" "NEXT(n)" "CAL(c)" "WAIT(w@/!)" "|" "DONE(d!)" "CANC(k@)") 
-                                  ))
-      (setq org-agenda-custom-commands org-agenda-settings)
-
-
-
-   )
-
-      (use-package org-bullets
-      :after (org)
-      :hook (
-         (org-mode . org-bullets-mode )
-         (org-mode . org-indent-mode )
-
        )
-
-      )
-    (require 'general)
-    (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
-    (general-def org-mode-map
-        "TAB" 'org-cycle
-    )
+     (require 'general)
+     (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
+     (general-def org-mode-map
+         "TAB" 'org-cycle
+     )
 #+end_src
 ** Org Fonts
 #+begin_src emacs-lisp
@@ -314,54 +416,88 @@
 #+end_src emacs-lisp
 *** Org agenda commands
 #+begin_src emacs-lisp
-   (setq org-agenda-settings '(
-     ("d" "Dashboard 📜"
-      (
-       (agenda ""        ((org-deadline-warning-days 14))) 
-       (tags "@morning"  ((org-agenda-overriding-header "Eat the Frog 🐸"))) 
-       (tags "today"  ((org-agenda-overriding-header "Today Tasks 🌅"))) 
-       (todo "NEXT"      ((org-agenda-overriding-header "Next Tasks ⏩"))) 
-       (todo "WAIT"      ((org-agenda-overriding-header "Waiting tasks ⏰"))) 
-       (todo "PJ"   ((org-agenda-overriding-header "Active Projects ")))
-       (todo "INBOX"     ((org-agenda-overriding-header "Inbox 📥"))) 
-      ))
+    (defun air-org-skip-subtree-if-priority (priority)
+      "Skip an agenda subtree if it has a priority of PRIORITY.
+
+    PRIORITY may be one of the characters ?A, ?B, or ?C."
+      (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+            (pri-value (* 1000 (- org-lowest-priority priority)))
+            (pri-current (org-get-priority (thing-at-point 'line t))))
+        (if (= pri-value pri-current)
+            subtree-end
+          nil)))
+  (defun air-org-skip-subtree-if-habit ()
+    "Skip an agenda entry if it has a STYLE property equal to \"habit\"."
+    (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+      (if (string= (org-entry-get nil "STYLE") "habit")
+          subtree-end
+        nil)))
+       (setq org-agenda-settings '(
+          ("D" "Daily agenda and all TODOs"
+           ((tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
+            (agenda "" ((org-agenda-ndays 1)))
+            (alltodo ""
+                     ((org-agenda-skip-function '(or (air-org-skip-subtree-if-habit)
+                                                     (air-org-skip-subtree-if-priority ?A)
+                                                     (org-agenda-skip-if nil '(scheduled deadline))))
+                      (org-agenda-overriding-header "ALL normal priority tasks:"))))
+           ((org-agenda-compact-blocks t)))
+         ("d" "Dashboard 📜"
+          (
+           (agenda ""        ((org-deadline-warning-days 14))) 
+           (tags "@morning"  ((org-agenda-overriding-header "Eat the Frog 🐸"))) 
+           (tags "today/NEXT"  ((org-agenda-overriding-header "Today Tasks 🌅"))) 
+           (todo "NEXT"      ((org-agenda-overriding-header "Next Tasks ⏩"))) 
+           (todo "WAIT"      ((org-agenda-overriding-header "Waiting tasks ⏰"))) 
+           (todo "PJ"   ((org-agenda-overriding-header "Active Projects ")))
+           (todo "INBOX"     ((org-agenda-overriding-header "Inbox 📥"))) 
+          ))
 
 
-     ("w" "Wait Tasks ⏰"
-      (todo "WAIT"      ((org-agenda-overriding-header "Wait Tasks")))
-      (todo "NEXT"      ((org-agenda-overriding-header "Wait Tasks")))
+         ("w" "Wait Tasks ⏰"
+          (todo "WAIT"      ((org-agenda-overriding-header "Wait Tasks")))
+          (todo "NEXT"      ((org-agenda-overriding-header "Wait Tasks")))
+         )
+         ("c" "Dated Tasks   📅" ((todo "CAL" ((org-agenda-overriding-header "Dated Tasks")))))
+
+         ("S" "Somewhen ⌛" ((todo "TODO" ((org-agenda-overriding-header "Somewhen ")))))
+         ("R" "Read list  📚" tags-todo "+readlist")
+         ("W" "Watch list   🎦" tags-todo "+watchlist")
+         ("I" "Ideas 💡" tags-todo "+idea")
+         ("P" "petprojects 🐕" tags-todo "+petproject")
+         ("B" "Things to buy  🛍" tags-todo "+shoplist")
+         ("sd" "Do Today 🌄" tags-todo "+today/NEXT"   ((org-agenda-overriding-header "Today 🌄")))
+
+         ;; My state/contexts
+         ("s" . "My State and contexts")
+         ("st" "Tired 🥱" tags-todo "+@tired/NEXT"    ((org-agenda-overriding-header "Tired 🥱")))
+         ("sh" "At home🏠" tags-todo "+@home/NEXT"     ((org-agenda-overriding-header "At home🏠")))
+         ("sc" "By a computer 💻" tags-todo "+@computer/NEXT" ((org-agenda-overriding-header "By a computer 💻")))
+         ("ss" "On studies 🏫" tags-todo "+@uni/NEXT"   ((org-agenda-overriding-header "On studies 🏫")))
+         ("ss" "In Kwork 🧑 🛋️  " tags-todo "+@kwork/NEXT"   ((org-agenda-overriding-header "In Kwork 🧑‍💻  🛋️   ")))
+         ("so" "Online 🌐" tags-todo "+@online/NEXT"   ((org-agenda-overriding-header "Online 🌐")))
+         ("sO" "‍Outdoors🚶‍" tags-todo "+@outdoors/NEXT" ((org-agenda-overriding-header "‍Outdoors🚶‍")))
+         ("sT" "To takeaway 👝 " tags-todo "+takeaway"  ((org-agenda-overriding-header "To takeaway 👝 ")))
+
+         ("F" "FROGS!" tags-todo "quack"  ((org-agenda-overriding-header "🐸🐸🐸🐸🐸🐸")))
+          ("h" "💪 Daily habits 💪" 
+              ((agenda ""))
+              ((org-agenda-show-log t)
+               (org-agenda-ndays 3)
+               (org-agenda-log-mode-items '(state))
+               (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp "Habit")))
+               )
+          
+           ("H" "💪Habits!💪🏻  " tags-todo "+Habit"  ((org-agenda-overriding-header "Habits 💪")))
+
+       )
+
+            ;; other commands here
+
      )
-     ("c" "Dated Tasks   📅" ((todo "CAL" ((org-agenda-overriding-header "Dated Tasks")))))
 
-     ("S" "Somewhen ⌛" ((todo "TODO" ((org-agenda-overriding-header "Somewhen ")))))
-     ("R" "Read list  📚" tags-todo "+readlist")
-     ("W" "Watch list   🎦" tags-todo "+watchlist")
-     ("I" "Ideas 💡" tags-todo "+idea")
-     ("P" "petprojects 🐕" tags-todo "+petproject")
-     ("B" "Things to buy  🛍" tags-todo "+shoplist")
-
-     ;; My state/contexts
-     ("s" . "My State and contexts")
-     ("st" "Tired 🥱" tags-todo "+@tired/NEXT"    ((org-agenda-overriding-header "Tired 🥱")))
-     ("sh" "At home🏠" tags-todo "+@home/NEXT"     ((org-agenda-overriding-header "At home🏠")))
-     ("sc" "By a computer 💻" tags-todo "+@computer/NEXT" ((org-agenda-overriding-header "By a computer 💻")))
-     ("ss" "On studies 🏫" tags-todo "+@uni/NEXT"   ((org-agenda-overriding-header "On studies 🏫")))
-     ("so" "Online 🌐" tags-todo "+@online/NEXT"   ((org-agenda-overriding-header "Online 🌐")))
-     ("st" "Do Today 🌄" tags-todo "+today/NEXT"   ((org-agenda-overriding-header "Today 🌄")))
-     ("sO" "‍Outdoors🚶‍" tags-todo "+@outdoors/NEXT" ((org-agenda-overriding-header "‍Outdoors🚶‍")))
-     ("sT" "To takeaway 👝 " tags-todo "+takeaway"  ((org-agenda-overriding-header "To takeaway 👝 ")))
-
-     ("h" "💪 Daily habits 💪" 
-         ((agenda ""))
-         ((org-agenda-show-log t)
-          (org-agenda-ndays 7)
-          (org-agenda-log-mode-items '(state))
-          (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":Habbit:"))))
-     
-   )
-        ;; other commands here
-
-  )
 #+end_src
 *** PDF Tools
   #+begin_src emacs-lisp
@@ -416,6 +552,22 @@
   :custom ((doom-modeline-height 15)))
 #+end_src
 
+** Calendar
+#+begin_src emacs-lisp
+;;  https://github.com/emacsfodder/emacs-theme-darktooth
+
+   (use-package darktooth-theme
+     :straight (:host github :repo "emacsfodder/emacs-theme-darktooth" :branch "master" :files ("*.el" "out"))
+     )
+    ;; (use-package emacs-calfw
+    ;;   :straight (:host github :repo "kiwanami/emacs-calfw" :branch "master" :files ("*.el" "out"))
+    ;;   :config
+
+    ;; (require 'calfw)
+    ;; (require 'calfw-org)
+    ;;   )
+
+#+end_src
 * Org Download
 #+begin_src 
     (use-package org-download
@@ -550,52 +702,68 @@
     :straight t
     :hook (org-roam-mode . company-org-roam)
   )
-(use-package yasnippet
-  :straight t
-  :config
-  (yas-reload-all)
-  (add-hook 'prog-mode-hook 'yas-minor-mode)
-  (add-hook 'text-mode-hook 'yas-minor-mode))
+
+#+end_src
+* Snippets
+#+begin_src emacs-lisp
+      (use-package yasnippet
+        :straight t
+        :config
+        (yas-reload-all)
+        (add-hook 'prog-mode-hook 'yas-minor-mode)
+        (add-hook 'text-mode-hook 'yas-minor-mode)
+        (add-hook 'org-mode-hook 'yas-minor-mode)
+
+
+    )
+        (setq yas-snippet-dirs
+              '("~/.emacs.d/snippets"                 ;; personal snippets
+                ))
+
+
 #+end_src
 
 * Org Roam
+** Basic
 #+begin_src emacs-lisp
-      (use-package org-roam
-        :straight t
-        :custom
-        (org-roam-directory (file-truename "/home/horhik/Notes/"))
-        :bind (("C-c n l" . org-roam-buffer-toggle)
-               ("C-c n f" . org-roam-node-find)
-               ("C-c n g" . org-roam-graph)
-               ("C-c n i" . org-roam-node-insert)
-               ("C-c n c" . org-roam-capture)
-               ;; Dailies
-               ("C-c n j" . org-roam-dailies-capture-today)
+        (use-package org-roam
+          :straight t
+          :custom
+          (org-roam-directory (file-truename "/home/horhik/Notes/"))
+          :bind (("C-c n l" . org-roam-buffer-toggle)
+                 ("C-c n f" . org-roam-node-find)
+                 ("C-c n g" . org-roam-graph)
+                 ("C-c n i" . org-roam-node-insert)
+                 ("C-c n c" . org-roam-capture)
+                 ;; Dailies
+                 ("C-c n j" . org-roam-dailies-capture-today)
 
-               ;; Tags
-               ("C-c t a" . org-roam-tag-add)
-               ("C-c t r" . org-roam-tag-remove)
+                 ;; Tags
+                 ("C-c t a" . org-roam-tag-add)
+                 ("C-c t r" . org-roam-tag-remove)
 
-    )
+      )
 
-        :config
-        ;; If you're using a vertical completion framework, you might want a more informative completion interface
-        (setq org-roam-completion-everywhere t)
-        (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-        (org-roam-db-autosync-mode)
-        ;; If using org-roam-protocol
-        (require 'org-roam-protocol)
-        :custom
-          (setq org-roam-db-location  (concat org-roam-directory  "/home/horhik/Notes/org-roam.db"))
-         (org-roam-directory "~/Notes/")
-         (org-roam-dailies-directory "~/Notes/journals/")
-         (org-roam-capture-templates
-          '(("d" "default" plain
-             "%?" :target
-             (file+head "pages/${slug}.org" "#+title: ${title}\n")
-             :unnarrowed t)))
+          :config
+          ;; If you're using a vertical completion framework, you might want a more informative completion interface
+          (setq org-roam-completion-everywhere t)
+          (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+          (org-roam-db-autosync-mode)
+          ;; If using org-roam-protocol
+          (require 'org-roam-protocol)
+          (require 'org-roam-export)
 
-  )  
+          :custom
+            (setq org-roam-db-location  (concat org-roam-directory  "/home/horhik/Notes/org-roam.db"))
+           (org-roam-directory "~/Notes/")
+           (org-roam-dailies-directory "~/Notes/journals/")
+           (org-roam-capture-templates
+            '(("d" "default" plain
+               "%?" :target
+               (file+head "pages/${slug}.org" "#+title: ${title}\n")
+               :unnarrowed t)))
+
+    )  
 
 #+end_src
 ** Org-roam UI
@@ -637,7 +805,7 @@
 #+end_src
 
 * Projectile
-#+
+** Basic
 #+begin_src  emacs-lisp
   (use-package projectile
     :straight t
@@ -658,6 +826,7 @@
 
 #+end_src
 * Magit
+** Basic
 #+begin_src emacs-lisp
   
     (use-package magit
@@ -746,13 +915,14 @@
 
 
 * LaTeX Ninja 🥷 
+** Basic
 #+begin_src emacs-lisp
   (use-package cdlatex
     :straight t
     :after org
     :config
     (add-hook 'org-mode-hook 'org-cdlatex-mode)
-    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.3))
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
     (setq org-preview-latex-default-process 'dvisvgm) ;No blur when scaling
     (defun my/text-scale-adjust-latex-previews ()
       "Adjust the size of latex preview fragments when changing the
@@ -775,7 +945,7 @@
        (cons 'image
              (plist-put
               (cdr (overlay-get ov 'display))
-              :scale (+ 1.0 (* 0.25 text-scale-mode-amount))))))
+              :scale (+ 1.2 (* 0.25 text-scale-mode-amount))))))
 
     (add-hook 'text-scale-mode-hook #'my/text-scale-adjust-latex-previews)
     )
@@ -789,7 +959,87 @@
     (add-hook 'org-mode-hook 'org-fragtog-mode)
   )
 #+end_src
+** Exporting to latex
+#+begin_src emacs-lisp
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes
+                 '("org-plain-latex"
+                   "\\documentclass{article}
+                  [NO-DEFAULT-PACKAGES]
+                  [PACKAGES]
+                  [EXTRA]"
+                   ("\\section{%s}" . "\\section*{%s}")
+                   ("\\subsection{%s}" . "\\subsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+                     
+#+end_src
+* Starting with inline images
+#+begin_src emacs-lisp
+  (setq org-startup-with-inline-images t)
+#+end_src
+* inkscape integratio
+#+begin_src emacs-lisp
+
+  (use-package inkscape
+    :straight (:host github
+               :repo "ymarco/inkscape.el"
+               :files ("*.el" "*.svg"))
+    :config
+    (setq inkscape-fig-dir "../assets/")
+    )
+
+
+#+end_src
 * Encoding
 #+begin_src emacs-lisp
 (modify-coding-system-alist 'file "\\.tex\\'" 'cp1252)
 #+end_src
+
+* Telega
+#+begin_src emacs-lisp
+  (use-package telega
+    :straight t
+    :config
+    (setq telega-use-docker nil))
+#+end_src
+* Music player
+
+#+begin_src emacs-lisp
+  (use-package emms
+    :straight t
+    :config
+
+  (require 'emms-player-mplayer)
+       (require 'emms-player-simple)
+       (require 'emms-source-file)
+      (require 'emms-source-playlist)
+     (require 'emms-player-mplayer)
+    (setq emms-player-list '(emms-player-mpg321 emms-player-ogg123 emms-player-mplayer))
+(setq exec-path (append exec-path '("/usr/local/bin")))
+(add-to-list 'load-path "~/.emacs.d/site-lisp/emms/lisp")
+(require 'emms-setup)
+(require 'emms-player-mplayer)
+(emms-standard)
+(emms-default-players)
+(define-emms-simple-player mplayer '(file url)
+      (regexp-opt '(".ogg" ".mp3" ".wav" ".mpg" ".mpeg" ".wmv" ".wma"
+                    ".mov" ".avi" ".divx" ".ogm" ".asf" ".mkv" "http://" "mms://"
+                    ".rm" ".rmvb" ".mp4" ".flac" ".vob" ".m4a" ".flv" ".ogv" ".pls"))
+      "mplayer" "-slave" "-quiet" "-really-quiet" "-fullscreen")
+  )
+#+end_src
+
+* Line NUmbers
+* EAF
+
+https://github.com/emacs-eaf/emacs-application-framework
+#+begin_src emacs-lisp
+    
+    (add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
+  (require 'eaf)
+      (require 'eaf-browser)
+      (require 'eaf-pdf-viewer)
+      (require 'eaf-music-player)
+  #+end_src

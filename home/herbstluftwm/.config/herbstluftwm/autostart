@@ -222,6 +222,7 @@ hc rule instance~hlwmScratch.* floating=on floatplacement=center # float all ins
 hc keybind $Mod-space spawn ~/.config/herbstluftwm/changelang
 hc keybind $Mod1-shift spawn ~/.config/herbstluftwm/changelang
 hc keybind $Mod-F3 spawn ~/.config/herbstluftwm/nospanish.sh 
+hc keybind $Mod-F4 spawn ~/.config/herbstluftwm/noenglish.sh 
 
 
 

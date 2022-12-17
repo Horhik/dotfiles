@@ -24,3 +24,7 @@ set path+=**
 call plug#begin('~/.vim/plugged')
 Plug 'dracula/vim'
 call plug#end()
+
+
+au BufRead,BufNewFile *.asm set filetype=nasm
+
