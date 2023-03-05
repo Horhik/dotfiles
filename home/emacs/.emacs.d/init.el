@@ -29,42 +29,42 @@
 (setq straight-use-package-by-default t)
 (setq package-enable-at-startup nil)
 
-(straight-use-package 'doom-themes
-   :init
-     (require 'doom-themes)
-   )
+;  (add-to-list 'custom-theme-load-path "~/.emacs.d/everforest-theme")
+    ;    (load "~/.emacs.d/everforest-theme/everforest-hard-dark-theme.el")
+    ;    (load-theme 'everforest-hard-dark t)
 
 
-   (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-'(custom-enabled-themes '(doom-gruvbox))
-'(custom-safe-themes
-  '("e3daa8f18440301f3e54f2093fe15f4fe951986a8628e98dcd781efbec7a46f2" "969a67341a68becdccc9101dc87f5071b2767b75c0b199e0ded35bd8359ecd69" default)))
- (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  )
 
-   (setq inhibit-startup-message t)
-   (setq visible-bell t)
-   (menu-bar-mode -1)
-   (toggle-scroll-bar -1)
-   (tool-bar-mode -1)
-   (tooltip-mode -1)
-   (set-fringe-mode 10)
-   (visual-line-mode t)
-   (global-visual-line-mode 1)
-   (global-visual-line-mode)
-   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-   (straight-use-package 'use-package)
 
-   (use-package which-key
-   :straight t)
+                  
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+                    (setq inhibit-startup-message t)
+                    (setq visible-bell t)
+                    (menu-bar-mode -1)
+                    (toggle-scroll-bar -1)
+                    (tool-bar-mode -1)
+                    (tooltip-mode -1)
+                    (set-fringe-mode 10)
+                    (visual-line-mode t)
+                    (global-visual-line-mode 1)
+                    (global-visual-line-mode)
+                    (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+                    (straight-use-package 'use-package)
+
+                    (use-package which-key
+                    :straight t)
+
+
+      (use-package solarized-theme
+      :straight t
+      )
+(load-theme 'solarized-dark t nil)
 
 ;(column-number-mode)
 (global-display-line-numbers-mode 0)
@@ -214,123 +214,133 @@
   :prefix "SPC")
 
 (defun my/org-mode-setup()
-       (auto-fill-mode 0)
-       (visual-line-mode 1)
-       (setq evil-auto-indent 1)
-       (variable-pitch-mode t)
-       (prettify-symbols-mode +1)
-       (display-line-numbers-mode 0)
+         (auto-fill-mode 0)
+         (visual-line-mode 1)
+         (setq evil-auto-indent 1)
+         (variable-pitch-mode t)
+         (prettify-symbols-mode +1)
+         (display-line-numbers-mode 0)
+         )
+
+       (use-package org
+       :straight t
+
+       :hook ((org-mode . my/org-mode-setup)
+                (org-mode . variable-pitch-mode)
+                (org-mode . org-indent-mode)
+                (org-mode . prettify-symbols-mode)
        )
+       :config
+    (require 'org-habit)
+    (add-to-list 'org-modules 'org-habit)
+    (setq org-habit-graph-column 60)
+    (setq org-treat-insert-todo-heading-as-state-change t)
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
 
-     (use-package org
-     :straight t
 
-     :hook ((org-mode . my/org-mode-setup)
-              (org-mode . variable-pitch-mode)
-              (org-mode . org-indent-mode)
-              (org-mode . prettify-symbols-mode)
+     ;; Make sure org-indent face is available
+       ;; Increase the size of various headings
+
+
+       (add-hook 'org-agenda-finalize-hook #'hl-line-mode)
+
+       (set-face-attribute 'org-document-title nil :font "FiraSans" :weight 'bold :height 1.3)
+
+       (dolist (face '((org-level-1 . 1.2)
+                       (org-level-2 . 1.1)
+                       (org-level-3 . 1.0)
+                       (org-level-4 . 1.0)
+                       (org-level-5 . 1.0)
+                       (org-level-6 . 1.0)
+                       (org-level-7 . 1.0)
+                       (org-level-8 . 1.0)))
+         (set-face-attribute (car face) nil :font "FiraSans" :weight 'bold :height (cdr face)))
+
+       ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+       (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+       (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+       (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+       (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+       ;(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+       (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+       (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+       (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+       (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
+        (setq org-agenda-files 
+                                 '(
+                                 "~/GTD/daily.org"
+                                 "~/GTD/tasks.org"
+                                 "~/GTD/inbox.org"
+                                 "~/GTD/done.org"
+                                 "~/GTD/projects.org"
+                                 "~/GTD/backlog.org"
+                                 "~/GTD/calendar.org"
+                                 "~/GTD/watchlist.org"
+                                 "~/GTD/readlist.org"
+              )) 
+        (setq org-image-actual-width (list 550))
+       ;; Get rid of the background on column views
+       (set-face-attribute 'org-column nil :background nil)
+       (set-face-attribute 'org-column-title nil :background nil)
+       (setq org-src-fontify-natively t)
+       (setq org-agenda-start-with-log-mode t) 
+         (setq org-log-done 'time) 
+         (setq org-log-into-drawer t)
+         (setq org-todo-keyword-faces '(("TODO" . org-warning) 
+                                        ("STARTED" . "yellow") 
+                                        ("DREAM" . "pink") 
+                                        ("PJ" . "pink") 
+                                        ("IDEA" . "gold") 
+                                        ("READ" . "violet") 
+                                        ("NEXT" . "red") 
+                                        ("ARTICLE" . "lightblue") 
+                                        ("CANCELED" . 
+                                         (:foreground "blue" 
+                                                      :weight bold))))
+
+         (setq org-todo-keywords '((sequence "INBOX(i)" "PJ(p)" "TODO(t)" "NEXT(n)" "CAL(c)" "WAIT(w@/!)" "|" "DONE(d!)" "CANC(k@)") 
+                                   (sequence "IDEA(I)" "DREAM(D)" "READ(R)" "|" "DONE(d!)" "CANC(k@)")
+                                   ))
+       (setq org-agenda-custom-commands org-agenda-settings)
+(setq org-refile-targets
+  '((("~/GTD/tasks.org") :maxlevel . 2)
+    (("~/GTD/projects.org") :maxlevel . 2)
+    (("~/GTD/backlog.org") :maxlevel . 1)
+    (("~/GTD/done.org") :maxlevel . 1)
+    ))
+
+
+    )
+
+    (defun org-habit-streak-count ()
+    (point-min)
+    (while (not (eobp))
+      (when (get-text-property (point) 'org-habit-p)
+        (let ((count (count-matches
+                      (char-to-string org-habit-completed-glyph)
+                      (line-beginning-position) (line-end-position))))
+          (end-of-line)
+          (insert (number-to-string count))))
+        (forward-line 1)))
+  (add-hook 'org-agenda-finalize-hook 'org-habit-streak-count)
+
+       (use-package org-bullets
+       :after (org)
+       :hook (
+          (org-mode . org-bullets-mode )
+          (org-mode . org-indent-mode )
+
+        )
+
+       )
+     (require 'general)
+     (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
+     (general-def org-mode-map
+         "TAB" 'org-cycle
      )
-     :config
-  (require 'org-habit)
-  (add-to-list 'org-modules 'org-habit)
-  (setq org-habit-graph-column 60)
-  (setq org-treat-insert-todo-heading-as-state-change t)
-  (setq org-agenda-start-with-log-mode t)
-  (setq org-log-done 'time)
-  (setq org-log-into-drawer t)
-
-
-   ;; Make sure org-indent face is available
-     ;; Increase the size of various headings
-
-
-     (add-hook 'org-agenda-finalize-hook #'hl-line-mode)
-
-     (set-face-attribute 'org-document-title nil :font "FiraSans" :weight 'bold :height 1.3)
-
-     (dolist (face '((org-level-1 . 1.2)
-                     (org-level-2 . 1.1)
-                     (org-level-3 . 1.0)
-                     (org-level-4 . 1.0)
-                     (org-level-5 . 1.0)
-                     (org-level-6 . 1.0)
-                     (org-level-7 . 1.0)
-                     (org-level-8 . 1.0)))
-       (set-face-attribute (car face) nil :font "FiraSans" :weight 'bold :height (cdr face)))
-
-     ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-     (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-     (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-     (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-     (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-     ;(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-     (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-     (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-     (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-     (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-
-      (setq org-agenda-files 
-                               '(
-                               "~/GTD/habits.org"
-                               "~/GTD/daily.org"
-                               "~/GTD/tasks.org"
-                               "~/GTD/inbox.org"
-                               "~/GTD/watchlist.org"
-                               "~/GTD/readlist.org"
-            )) 
-      (setq org-image-actual-width (list 550))
-     ;; Get rid of the background on column views
-     (set-face-attribute 'org-column nil :background nil)
-     (set-face-attribute 'org-column-title nil :background nil)
-     (setq org-src-fontify-natively t)
-     (setq org-agenda-start-with-log-mode t) 
-       (setq org-log-done 'time) 
-       (setq org-log-into-drawer t)
-       (setq org-todo-keyword-faces '(("TODO" . org-warning) 
-                                      ("STARTED" . "yellow") 
-                                      ("DREAM" . "pink") 
-                                      ("PJ" . "pink") 
-                                      ("IDEA" . "gold") 
-                                      ("READ" . "violet") 
-                                      ("NEXT" . "red") 
-                                      ("ARTICLE" . "lightblue") 
-                                      ("CANCELED" . 
-                                       (:foreground "blue" 
-                                                    :weight bold))))
-
-       (setq org-todo-keywords '((sequence "INBOX(i)" "PJ(p)" "TODO(t)" "NEXT(n)" "CAL(c)" "WAIT(w@/!)" "|" "DONE(d!)" "CANC(k@)") 
-                                 (sequence "IDEA(I)" "DREAM(D)" "READ(R)" "|" "DONE(d!)" "CANC(k@)")
-                                 ))
-     (setq org-agenda-custom-commands org-agenda-settings)
-
-  ) 
-
-  (defun org-habit-streak-count ()
-  (point-min)
-  (while (not (eobp))
-    (when (get-text-property (point) 'org-habit-p)
-      (let ((count (count-matches
-                    (char-to-string org-habit-completed-glyph)
-                    (line-beginning-position) (line-end-position))))
-        (end-of-line)
-        (insert (number-to-string count))))
-      (forward-line 1)))
-(add-hook 'org-agenda-finalize-hook 'org-habit-streak-count)
-
-     (use-package org-bullets
-     :after (org)
-     :hook (
-        (org-mode . org-bullets-mode )
-        (org-mode . org-indent-mode )
-
-      )
-
-     )
-   (require 'general)
-   (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
-   (general-def org-mode-map
-       "TAB" 'org-cycle
-   )
 
 (defun air-org-skip-subtree-if-priority (priority)
     "Skip an agenda subtree if it has a priority of PRIORITY.
@@ -392,7 +402,7 @@
        ("sh" "At home🏠" tags-todo "+@home/NEXT"     ((org-agenda-overriding-header "At home🏠")))
        ("sc" "By a computer 💻" tags-todo "+@computer/NEXT" ((org-agenda-overriding-header "By a computer 💻")))
        ("ss" "On studies 🏫" tags-todo "+@uni/NEXT"   ((org-agenda-overriding-header "On studies 🏫")))
-       ("ss" "In Kwork 🧑 🛋️  " tags-todo "+@kwork/NEXT"   ((org-agenda-overriding-header "In Kwork 🧑‍💻  🛋️   ")))
+       ("sK" "In Kwork 🧑 🛋️  " tags-todo "+@kwork/NEXT"   ((org-agenda-overriding-header "In Kwork 🧑‍💻  🛋️   ")))
        ("so" "Online 🌐" tags-todo "+@online/NEXT"   ((org-agenda-overriding-header "Online 🌐")))
        ("sO" "‍Outdoors🚶‍" tags-todo "+@outdoors/NEXT" ((org-agenda-overriding-header "‍Outdoors🚶‍")))
        ("sT" "To takeaway 👝 " tags-todo "+takeaway"  ((org-agenda-overriding-header "To takeaway 👝 ")))
@@ -460,6 +470,31 @@
     ;; (require 'calfw)
     ;; (require 'calfw-org)
     ;;   )
+
+(use-package org-ref
+  :straight t
+)
+
+(use-package org-download
+  :straight t
+  :after org
+  :bind
+     (:map org-mode-map
+       (("s-Y" . org-download-screenshot)
+        ("s-y" . org-download-yank)))
+
+  :config
+      (setq-default org-download-image-dir "~/Notes/assets")
+
+  )
+(general-define-key
+         :keymaps '(normal insert emacs)
+         :prefix "SPC"
+         :global-prefix "C-SPC"
+         :non-normal-prefix "M-SPC"
+    "n s Y" '(org-download-screenshot :which-key "Download screenshot")
+    "n s y" '(org-download-yank :which-key "Download yank")
+    )
 
 (use-package ivy
     :straight t
@@ -581,10 +616,12 @@
           '("~/.emacs.d/snippets"                 ;; personal snippets
             ))
 
-(use-package org-roam
-      :straight t
+(let ((default-directory "~/Notes/"))
+    (use-package org-roam
+      :straight (:host github :repo "org-roam/org-roam"
+           :files (:defaults "extensions/*"))
       :custom
-      (org-roam-directory (file-truename "/home/horhik/Notes/"))
+      (org-roam-directory (file-truename default-folder))
       :bind (("C-c n l" . org-roam-buffer-toggle)
              ("C-c n f" . org-roam-node-find)
              ("C-c n g" . org-roam-graph)
@@ -609,15 +646,17 @@
       (require 'org-roam-export)
 
       :custom
-        (setq org-roam-db-location  (concat org-roam-directory  "/home/horhik/Notes/org-roam.db"))
-       (org-roam-directory "~/Notes/")
+        (setq org-roam-db-location    "~/Notes/org-roam.db")
+       (org-roam-directory "~/Notes")
        (org-roam-dailies-directory "~/Notes/journals/")
+
        (org-roam-capture-templates
         '(("d" "default" plain
            "%?" :target
            (file+head "pages/${slug}.org" "#+title: ${title}\n")
            :unnarrowed t)))
 
+)
 )
 
 (use-package org-roam-ui
@@ -627,8 +666,9 @@
 ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
 ;;         a hookable mode anymore, you're advised to pick something yourself
 ;;         if you don't care about startup time, use
-;;  :hook (after-init . org-roam-ui-mode)
+          ;;  :hook (after-init . org-roam-ui-mode)
     :config
+
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
@@ -650,8 +690,17 @@
   "l b" '(list-bookmarks :which-key "List bookmarks")
   "n t a" '(org-roam-tag-add :which-key "Add tag")
   "n t r" '(org-roam-tag-remove :which-key "Remove tag")
+  "n s Y" '(org-download-screenshot :which-key "Download screenshot")
+  "n s y" '(org-download-yank :which-key "Download yank")
+  "n s c" '(org-download-clipboard :which-key "Past from clipboard")
 
   )
+
+(use-package org-roam-bibtex
+  :straight t
+  :after org-roam
+  :config
+  (require 'org-ref)) ; optional: if using Org-ref v2 or v3 citation links
 
 (use-package projectile
   :straight t
@@ -675,70 +724,6 @@
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   )
-
-(use-package lsp-mode
-  :straight t
-  :commands lsp
-  :custom
-  ;; what to use when checking on-save. "check" is default, I prefer clippy
-  (lsp-rust-analyzer-cargo-watch-command "clippy")
-  (lsp-eldoc-render-all t)
-  (lsp-idle-delay 1.6)
-  ;; enable / disable the hints as you prefer:
-  (lsp-rust-analyzer-server-display-inlay-hints t)
-  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
-  (lsp-rust-analyzer-display-chaining-hints t)
-  (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
-  (lsp-rust-analyzer-display-closure-return-type-hints t)
-  (lsp-rust-analyzer-display-parameter-hints nil)
-  (lsp-rust-analyzer-display-reborrow-hints nil)
-  :config
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
-
-(use-package lsp-ui
-  :straight t
-  :commands lsp-ui-mode
-  :custom
-  ;(lsp-ui-peek-always-show t)
-  ;(lsp-ui-sideline-show-hover t)
-
-  (lsp-ui-doc-enable nil)
-  :config
-  (setq lsp-ui-sideline-enable nil)
-  (setq lsp-ui-doc-enable t)
-  )
-
-(defun rk/rustic-mode-hook ()
-  ;; so that run C-c C-c C-r works without having to confirm, but don't try to/
-  ;; save rust buffers that are not file visiting. Once
-  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
-  ;; no longer be necessary.
-  (when buffer-file-name
-    (setq-local buffer-save-without-query t)))
-
-(use-package rustic
-  :straight t
-  :bind (:map rustic-mode-map
-              ("M-j" . lsp-ui-imenu)
-              ("M-?" . lsp-find-references)
-              ("C-c C-c l" . flycheck-list-errors)
-              ("C-c C-c a" . lsp-execute-code-action)
-              ("C-c C-c r" . lsp-rename)
-              ("C-c C-c q" . lsp-workspace-restart)
-              ("C-c C-c Q" . lsp-workspace-shutdown)
-              ("C-c C-c s" . lsp-rust-analyzer-status))
-  :config
-  ;; uncomment for less flashiness
-  ;; (setq lsp-eldoc-hook nil)
-  ;; (setq lsp-enable-symbol-highlighting nil)
-  ;; (setq lsp-signature-auto-activate nil)
-
-  ;; comment to disable rustfmt on save
-  (setq rustic-format-on-save t)
-  ;(setq lsp-rust-analyzer-server-display-inlay-hints t)
-  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
-
-(use-package flycheck :straight t)
 
 (use-package cdlatex
   :straight t
@@ -832,8 +817,154 @@ buffer's text scale."
       "mplayer" "-slave" "-quiet" "-really-quiet" "-fullscreen")
   )
 
-(add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
+;    (add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
+
+
+(use-package eaf
+  :straight (eaf
+             :type git
+             :host github
+             :repo "emacs-eaf/emacs-application-framework"           
+             :files ("*.el" "*.py" "core" "app" "*.json")
+             :includes (eaf-pdf-viewer eaf-browser eaf-music-player      eaf-image-viewer   eaf-org-previewer   eaf-markdown-previewer) ; Straight won't try to search for these packages when we make further use-package invocations for them
+
+
+
+             :pre-build (("python" "install-eaf.py" "--install" "pdf-viewer" "browser" "music-player" "image-viewer" "org-previewer" "markdown-previewer" "evil" "--ignore-sys-deps"))
+             )
+  :init (evil-set-initial-state 'eaf-mode 'emacs)) ; Evil mode doesn't work well with eaf keybindings.
+:config 
+;(eaf-wm-focus-fix-wms "i3")
+;; unbind, see more in the Wiki
+
+(use-package eaf-browser
+  :custom
+  (eaf-browser-continue-where-left-off t)
+  (eaf-browser-enable-adblocker t))
+(use-package eaf-pdf-viewer)
+(use-package eaf-music-player)
+(use-package eaf-image-viewer)
+(use-package eaf-org-previewer)
+(use-package eaf-markdown-previewer)
+
+                                        ;(setq   spacemacs-cmds) 
+
+
 (require 'eaf)
-    (require 'eaf-browser)
-    (require 'eaf-pdf-viewer)
-    (require 'eaf-music-player)
+(eaf-bind-key insert_or_select_left_tab "nil" eaf-browser-keybinding)
+
+(use-package org-krita
+  :straight (org-krita
+                 :type git
+                 :host github
+                 :repo "lepisma/org-krita"           
+                 :files ("*.el" "*.py" "core" "app" "*.json"))
+:config
+(add-hook 'org-mode-hook 'org-krita-mode))
+
+(use-package habitica
+  :straight t
+  :config
+  (setq habitica-uid "0027ca78-392a-43ba-8450-d51f6be57b09")
+  (setq habitica-token "b3b28a7e-3ee8-4c21-8222-c8f8060c6d66")
+  )
+
+(use-package lsp-mode
+  :straight t
+  :commands lsp
+  :custom
+  ;; what to use when checking on-save. "check" is default, I prefer clippy
+  (lsp-rust-analyzer-cargo-watch-command "clippy")
+  (lsp-eldoc-render-all t)
+  (lsp-idle-delay 1.6)
+  ;; enable / disable the hints as you prefer:
+  (lsp-rust-analyzer-server-display-inlay-hints t)
+  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+  (lsp-rust-analyzer-display-chaining-hints t)
+  (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+  (lsp-rust-analyzer-display-closure-return-type-hints t)
+  (lsp-rust-analyzer-display-parameter-hints nil)
+  (lsp-rust-analyzer-display-reborrow-hints nil)
+  :config
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
+(use-package lsp-ui
+  :straight t
+  :commands lsp-ui-mode
+  :custom
+  ;(lsp-ui-peek-always-show t)
+  ;(lsp-ui-sideline-show-hover t)
+
+  (lsp-ui-doc-enable nil)
+  :config
+  (setq lsp-ui-sideline-enable nil)
+  (setq lsp-ui-doc-enable t)
+  )
+
+(defun rk/rustic-mode-hook ()
+  ;; so that run C-c C-c C-r works without having to confirm, but don't try to/
+  ;; save rust buffers that are not file visiting. Once
+  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+  ;; no longer be necessary.
+  (when buffer-file-name
+    (setq-local buffer-save-without-query t)))
+
+(use-package rustic
+  :straight t
+  :bind (:map rustic-mode-map
+              ("M-j" . lsp-ui-imenu)
+              ("M-?" . lsp-find-references)
+              ("C-c C-c l" . flycheck-list-errors)
+              ("C-c C-c a" . lsp-execute-code-action)
+              ("C-c C-c r" . lsp-rename)
+              ("C-c C-c q" . lsp-workspace-restart)
+              ("C-c C-c Q" . lsp-workspace-shutdown)
+              ("C-c C-c s" . lsp-rust-analyzer-status))
+  :config
+  ;; uncomment for less flashiness
+  ;; (setq lsp-eldoc-hook nil)
+  ;; (setq lsp-enable-symbol-highlighting nil)
+  ;; (setq lsp-signature-auto-activate nil)
+
+  ;; comment to disable rustfmt on save
+  (setq rustic-format-on-save t)
+  ;(setq lsp-rust-analyzer-server-display-inlay-hints t)
+  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+
+(use-package flycheck :straight t)
+
+(require 'lsp-mode)
+(add-hook 'typescript-mode-hook 'lsp-deferred)
+(add-hook 'javascript-mode-hook 'lsp-deferred)
+
+(use-package typescript-mode
+  :straight t
+  )
+
+(which-key-mode)
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
+
+(use-package haskell-mode
+  :straight t
+  )
+
+(add-to-list 'load-path "~/.emacs.d/tidal")
+(require 'haskell-mode)
+(require 'tidal)
+
+(defun increment-number-at-point ()
+ (interactive)
+ (skip-chars-backward "0-9")
+ (or (looking-at "[0-9]+")
+     (error "No number at point"))
+ (replace-match (number-to-string (1+ (string-to-number (match-string 0))))))
+
+    (global-set-key (kbd "C-c +") 'increment-number-at-point)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files
+   '("/home/horhik/GTD/daily.org" "/home/horhik/GTD/tasks.org" "/home/horhik/GTD/inbox.org" "/home/horhik/GTD/done.org" "/home/horhik/GTD/projects.org" "/home/horhik/GTD/backlog.org" "/home/horhik/GTD/watchlist.org" "/home/horhik/GTD/readlist.org")))
