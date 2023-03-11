@@ -36,13 +36,12 @@
 
 
 
-                  
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+                  (custom-set-faces
+                   ;; custom-set-faces was added by Custom.
+                   ;; If you edit it by hand, you could mess it up, so be careful.
+                   ;; Your init file should contain only one such instance.
+                   ;; If there is more than one, they won't work right.
+                   )
 
                     (setq inhibit-startup-message t)
                     (setq visible-bell t)
@@ -67,7 +66,7 @@
 (load-theme 'solarized-dark t nil)
 
 ;(column-number-mode)
-(global-display-line-numbers-mode 0)
+(global-display-line-numbers-mode 1)
 (dolist (mode '(org-mode-hook
                 term-mode-hook
                 shell-mode-hook
@@ -213,6 +212,12 @@
   :states 'motion
   :prefix "SPC")
 
+(defun my/setup-org-margins()
+  (setq visual-fill-column-center-text t)
+  (visual-fill-column-mode t)
+  (visual-line-mode t)
+  )
+
 (defun my/org-mode-setup()
          (auto-fill-mode 0)
          (visual-line-mode 1)
@@ -229,6 +234,7 @@
                 (org-mode . variable-pitch-mode)
                 (org-mode . org-indent-mode)
                 (org-mode . prettify-symbols-mode)
+                (org-mode . my/setup-org-margins)
        )
        :config
     (require 'org-habit)
@@ -238,6 +244,7 @@
     (setq org-agenda-start-with-log-mode t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
+    (setq org-hide-emphasis-markers t)
 
 
      ;; Make sure org-indent face is available
@@ -246,28 +253,28 @@
 
        (add-hook 'org-agenda-finalize-hook #'hl-line-mode)
 
-       (set-face-attribute 'org-document-title nil :font "FiraSans" :weight 'bold :height 1.3)
+       (set-face-attribute 'org-document-title nil :font "mononoki" :weight 'bold :height 1.3)
 
-       (dolist (face '((org-level-1 . 1.2)
-                       (org-level-2 . 1.1)
-                       (org-level-3 . 1.0)
-                       (org-level-4 . 1.0)
-                       (org-level-5 . 1.0)
-                       (org-level-6 . 1.0)
-                       (org-level-7 . 1.0)
-                       (org-level-8 . 1.0)))
-         (set-face-attribute (car face) nil :font "FiraSans" :weight 'bold :height (cdr face)))
+       ;; (dolist (face '((org-level-1 . 1.0)
+       ;;                 (org-level-2 . 1.0)
+       ;;                 (org-level-3 . 1.0)
+       ;;                 (org-level-4 . 1.0)
+       ;;                 (org-level-5 . 1.0)
+       ;;                 (org-level-6 . 1.0)
+       ;;                 (org-level-7 . 1.0)
+       ;;                 (org-level-8 . 1.0)))
+       ;;   (set-face-attribute (car face) nil :font "mononoki" :weight 'bold :height (cdr face)))
 
        ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-       (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-       (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-       (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-       (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+       ;(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+       ;(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+       ;(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+       ;(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
        ;(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-       (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-       (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-       (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-       (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+      ; (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+       ;(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+       ;(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+      ; (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
 
         (setq org-agenda-files 
                                  '(
@@ -826,11 +833,11 @@ buffer's text scale."
              :host github
              :repo "emacs-eaf/emacs-application-framework"           
              :files ("*.el" "*.py" "core" "app" "*.json")
-             :includes (eaf-pdf-viewer eaf-browser eaf-music-player      eaf-image-viewer   eaf-org-previewer   eaf-markdown-previewer) ; Straight won't try to search for these packages when we make further use-package invocations for them
+             :includes ( eaf-browser ) ; Straight won't try to search for these packages when we make further use-package invocations for them
 
 
 
-             :pre-build (("python" "install-eaf.py" "--install" "pdf-viewer" "browser" "music-player" "image-viewer" "org-previewer" "markdown-previewer" "evil" "--ignore-sys-deps"))
+             :pre-build (("python" "install-eaf.py" "--install" "pdf-viewer" "browser"  "evil" "--ignore-sys-deps"))
              )
   :init (evil-set-initial-state 'eaf-mode 'emacs)) ; Evil mode doesn't work well with eaf keybindings.
 :config 
@@ -841,11 +848,6 @@ buffer's text scale."
   :custom
   (eaf-browser-continue-where-left-off t)
   (eaf-browser-enable-adblocker t))
-(use-package eaf-pdf-viewer)
-(use-package eaf-music-player)
-(use-package eaf-image-viewer)
-(use-package eaf-org-previewer)
-(use-package eaf-markdown-previewer)
 
                                         ;(setq   spacemacs-cmds) 
 
@@ -961,10 +963,7 @@ buffer's text scale."
  (replace-match (number-to-string (1+ (string-to-number (match-string 0))))))
 
     (global-set-key (kbd "C-c +") 'increment-number-at-point)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-agenda-files
-   '("/home/horhik/GTD/daily.org" "/home/horhik/GTD/tasks.org" "/home/horhik/GTD/inbox.org" "/home/horhik/GTD/done.org" "/home/horhik/GTD/projects.org" "/home/horhik/GTD/backlog.org" "/home/horhik/GTD/watchlist.org" "/home/horhik/GTD/readlist.org")))
+
+(use-package howm
+    :straight t
+    )
