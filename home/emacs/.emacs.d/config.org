@@ -192,57 +192,68 @@
 
 ** Fonts
 #+begin_src emacs-lisp
+(add-to-list 'default-frame-alist
+                       '(font . "Liberation Serif"))
 ;; Default fonts
-(add-to-list 'default-frame-alist '(font . "Mononoki Nerd Font" ))
-(set-face-attribute 'default t :font "Mononoki Nerd Font" )
-(set-frame-font "Mononoki Nerd Font 12" nil t)
+;(add-to-list 'default-frame-alist '(font . "mononoki" ))
+;(set-face-attribute 'default t :font "mononoki" )
+;(set-frame-font "mononoki" nil t)
+
 
 ;;(set-fontset-font "fontset-startup" 'unicode
-;;		  (font-spec :name "Mononoki Nerd Font" :size 14))
-(when (member "Twitter Color Emoji" (font-family-list))
-  (set-fontset-font t 'unicode "Twitter Color Emoji" nil 'prepend))
-
-(when (member "Twemoji" (font-family-list))
-  (set-fontset-font t 'unicode "Twemoji" nil 'prepend))
+;;		  (font-spec :name "mononoki" :size 14))
+;(when (member "Twemoji" (font-family-list))
+;  (set-fontset-font t 'unicode "Twemoji" nil 'prepend))
 ;; ☺️ ☻ 😃 😄 😅 😆 😊 😎 😇 😈 😏 🤣 🤩 🤪 🥳 😁 😀 😂 🤠 🤡 🤑 🤓 🤖 😗 😚 😘 😙 😉 🤗 😍 🥰 🤤 😋 🤔 🤨 🧐 🤭 🤫 😯 🤐 😌 😖 😕 😳 😔 🤥 🥴 😮 😲 🤯 😩 😫 🥱 😪 😴 😵 ☹️ 😦 😞 😥 😟 😢 😭 🤢 🤮 😷 🤒 🤕 🥵 🥶 🥺 😬 😓 😰 😨 😱 😒 😠 😡 😤 😣 😧 🤬 😸 😹 😺 😻 😼 😽 😾 😿 🙀 🙈 🙉 🙊 🤦 🤷 🙅 🙆 🙋 🙌 🙍 🙎 🙇 🙏 👯 💃 🕺 🤳 💇 💈 💆 🧖 🧘 🧍 🧎 👰 🤰 🤱 👶 🧒 👦 👧 👩 👨 🧑 🧔 🧓 👴 👵 👤 👥 👪 👫 👬 👭 👱 👳 👲 🧕 👸 🤴 🎅 🤶 🧏 🦻 🦮 🦯 🦺 🦼 🦽 🦾 🦿 🤵 👮 👷 💁 💂 🕴 🕵️ 🦸 🦹 🧙 🧚 🧜 🧝 🧞 🧛 🧟 👼 👿 👻 👹 👺 👽 👾 🛸 💀 ☠️ 🕱 🧠 🦴 👁 👀 👂 👃 👄 🗢 👅 🦷 🦵 🦶 💭 🗬 🗭 💬 🗨 🗩 💦 💧 💢 💫 💤 💨 💥 💪 🗲 🔥 💡 💩 💯 
 ;; Fallback for emojies
 
+;(set-frame-font "-UKWN-mononoki-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
+;(add-to-list 'default-frame-alist '(font . "Liberation Sans" ))
 #+end_src emacs-lisp
 *** Font for text-mode
 #+begin_src emacs-lisp
-  (use-package mixed-pitch
-     :straight t
-     :hook
-     (text-mode . mixed-pitch-mode)
-     :config
-     (set-face-attribute 'default nil :font "Mononoki Nerd Font" :height 130)
-     (set-face-attribute 'fixed-pitch nil :font "Mononoki Nerd Font")
-     (set-face-attribute 'variable-pitch nil :font "FiraSans"))
+  ;; (use-package mixed-pitch
+  ;;    :straight t
+  ;;    :hook
+  ;;    (text-mode . mixed-pitch-mode)
+  ;;    :config
+  ;;    (set-face-attribute 'default nil :font "mononoki" :height 130)
+  ;;    (set-face-attribute 'fixed-pitch nil :font "mononoki")
+  ;;    (set-face-attribute 'variable-pitch nil :font "mononoki"))
+
 #+end_src
 * Keybindigs
 ** Defining smth
 #+begin_src emacs-lisp
-          (defun opt ()
-            "open tasks"
+            (defun opt ()
+              "open tasks"
+              (interactive)
+              (find-file "~/GTD/tasks.org"))
+        (defun opi ()
+              "open inbox"
+              (interactive)
+              (find-file "~/GTD/inbox.org"))
+      (defun opd ()
+            "open daily"
             (interactive)
-            (find-file "~/GTD/tasks.org"))
-      (defun opi ()
-            "open inbox"
-            (interactive)
-            (find-file "~/GTD/inbox.org"))
-    (defun opd ()
-          "open daily"
+            (find-file "~/GTD/daily.org"))
+    (defun opr ()
+          "open readlist"
           (interactive)
-          (find-file "~/GTD/daily.org"))
-  (defun opr ()
-        "open readlist"
-        (interactive)
-        (find-file "~/GTD/readlist.org"))
-(defun opc ()
-        "open readlist"
-        (interactive)
-        (find-file "~/.emacs.d/config.org"))
+          (find-file "~/GTD/readlist.org"))
+  (defun opc ()
+          "open readlist"
+          (interactive)
+          (find-file "~/.emacs.d/config.org"))
 
+(defun open-shoplist ()
+        "open shoplist"
+        (interactive)
+        (find-file "~/GTD/shoplist.org"))
+(defun open-projects ()
+        "open projects"
+        (interactive)
+        (find-file "~/GTD/projects.org"))
 
 #+end_src
 ** Basic
@@ -271,6 +282,8 @@
        "t i" '(opi :which-key "📥Inbox")
        "t d" '(opd :which-key "🌄Daily")
        "t r" '(opr :which-key "📚Readlist")
+       "t s" '(open-shoplist :which-key "🛒Shoplist")
+       "t p" '(open-projects :which-key "📁Projects")
 
        "SPC" 'counsel-M-x
 
@@ -293,7 +306,7 @@
 #+begin_src emacs-lisp
   (defun my/setup-org-margins()
     (setq visual-fill-column-center-text t)
-    (visual-fill-column-mode t)
+    ;(visual-fill-column-mode t)
     (visual-line-mode t)
     )
 #+end_src
@@ -334,7 +347,7 @@
 
          (add-hook 'org-agenda-finalize-hook #'hl-line-mode)
 
-         (set-face-attribute 'org-document-title nil :font "mononoki" :weight 'bold :height 1.3)
+         (set-face-attribute 'org-document-title nil :font "Mononoki Nerd Font" :weight 'bold :height 1.3)
 
          ;; (dolist (face '((org-level-1 . 1.0)
          ;;                 (org-level-2 . 1.0)
@@ -373,7 +386,7 @@
          ;; Get rid of the background on column views
          (set-face-attribute 'org-column nil :background nil)
          (set-face-attribute 'org-column-title nil :background nil)
-         (setq org-src-fontify-natively t)
+         ;(setq org-src-fontify-natively t)
          (setq org-agenda-start-with-log-mode t) 
            (setq org-log-done 'time) 
            (setq org-log-into-drawer t)
@@ -609,7 +622,7 @@
           ("s-y" . org-download-yank)))
  
     :config
-        (setq-default org-download-image-dir "~/Notes/assets")
+        (setq-default org-download-image-dir ".")
 
     )
   (general-define-key
@@ -1182,7 +1195,179 @@ https://github.com/emacs-eaf/emacs-application-framework
 #+end_src
 * HOWM
 #+begin_src emacs-lisp
-(use-package howm
-    :straight t
-    )
+  (use-package howm
+      :straight t
+      )
+(global-set-key (kbd "C-x *") 'zoom)
+#+end_src
+* Orb Publish
+** Setting up variables
+#+begin_src emacs-lisp
+  (setq blog-path "~/Space/Code/Blog/")
+  (setq blog-static-path "~/Space/Code/Blog/html/")
+  (setq blog-content-path "~/Space/Code/Blog/html/")
+  (setq blog-templates "~/Space/Code/Blog/assets/templates/")
+#+end_src
+** Custom sections
+#+begin_src emacs-lisp
+  (defun blog/html-postamble (plist)
+      "PLIST."
+      (concat (format
+               (with-temp-buffer
+                 (insert-file-contents (concat blog-templates "postamble.html")) (buffer-string))
+               (format-time-string this-date-format (plist-get plist :time)) (plist-get plist :creator))))
+
+    (defun blog/html-preamble (plist)
+    "PLIST: An entry."
+    (if (org-export-get-date plist this-date-format)
+        (plist-put plist
+                   :subtitle (format "Published on %s by %s."
+                                     (org-export-get-date plist this-date-format)
+                                     (car (plist-get plist :author)))))
+    ;; Preamble
+    (with-temp-buffer
+      (insert-file-contents (concat blog-templates "preamble.html")) (buffer-string)))
+
+  (defun blog/html-index-preamble (plist)
+    "PLIST: An entry."
+    (if (org-export-get-date plist this-date-format)
+        (plist-put plist
+                   :subtitle (format "Published on %s by %s."
+                                     (org-export-get-date plist this-date-format)
+                                     (car (plist-get plist :author)))))
+    ;; Preamble
+    (with-temp-buffer
+      (insert-file-contents (concat blog-templates "index-preamble.html")) (buffer-string)))
+
+#+end_src
+** Preambles and postambles
+#+begin_center emacs-lisp
+(setq index-preamble "<section>
+                 <div> <h3> Segmentation Fail. Horhik's blog </h3></div>
+      <div><ul>
+        <li><a href='./posts/index.html'>Posts</a></li>
+        <li><a href='./portfolio/index.html'>Portfolio</a></li>
+        <li><a href='./about/index.html'>About</a></li>
+        <li><a href='./donate/index.html'>Donate</a></li>
+        <li><a href='./projects/index.html'>Projects</a></li>
+       </ul></div>
+                </section>")
+(setq inner-preamble "<header>
+                 <div> <h3> <a href='../index.html'>Horhik's blog </a></h3></div>
+      <div><ul>
+        <li><a href='../posts/index.html'>Posts</a></li>
+        <li><a href='../portfolio/index.html'>Portfolio</a></li>
+        <li><a href='../about/index.html'>About</a></li>
+        <li><a href='../donate/index.html'>Donate</a></li>
+        <li><a href='../projects/index.html'>Projects</a></li>
+       </ul></div>
+                </header>")
+
+(setq site-postamble "<footer><p>
+               <b> This site is made by Horhik and all contens are under CC I forgot full license name </b>
+             </p></footer>")
+(setq org-html-preamble-format `(("en", inner-preamble)))    
+(setq org-html-postamble-format `(("en", site-postamble)))                
+#+end_center
+** list
+#+begin_src emacs-lisp
+  (require 'ox-publish)
+
+
+  (setq org-publish-project-alist
+        '(
+          ("blogposts"
+           :base-directory ,(concat blog-content-path "posts")
+           :base-extension "org"
+           :publishing-directory ,(concat blog-static-path "posts")
+           :publishing-function org-html-publish-to-html
+           :recursive t
+           :headline-levels 8             
+           :html-preamble blog/html-preamble
+           :html-postamble blog/html-postamble
+           :sitemap-filename "posts.org"
+           :sitemap-title "Blog Index"         
+           :with-tags t
+           :with-toc t
+           :section-numbers: nil
+           :table-of-contents t
+           :html-head-include-default-style nil
+           )
+          ("portfolio"
+           :base-directory "/home/horhik/Code/Blog/pages/portfolio/"
+           :base-extension "org"
+           :publishing-directory "/home/horhik/Code/Blog/html/"
+           :publishing-function org-html-publish-to-html
+           :headline-levels 8             
+           :html-preamble blog/html-preamble
+           :html-postamble blog/html-postamble
+           :sitemap-filename: "portfolio.org"
+           :sitemap-title: "Portfolio"
+           :validation-link nil
+           :table-of-contents nil
+           :html-head-include-default-style nil
+           )
+          ("about"
+           :base-directory "/home/horhik/Code/Blog/pages/about/"
+           :base-extension "org"
+           :publishing-directory "/home/horhik/Code/Blog/html/about/"
+           :publishing-function org-html-publish-to-html
+           :recursive t
+           :headline-levels 8             
+           :html-preamble blog/html-preamble
+           :html-postamble blog/html-postamble
+           :validation-link nil
+           :table-of-contents nil
+           :html-head-include-default-style nil
+           )
+          ("donate"
+           :base-directory "/home/horhik/Code/Blog/pages/donate"
+           :base-extension "org"
+           :publishing-directory "/home/horhik/Code/Blog/html/"
+           :publishing-function org-html-publish-to-html
+           :recursive t
+           :headline-levels 8             
+           :html-preamble blog/html-preamble
+           :html-postamble blog/html-postamble
+           :validation-link nil
+           :table-of-contents nil
+           :html-head-include-default-style nil
+           )
+          ("projects"
+           :base-directory "/home/horhik/Code/Blog/pages/projects/"
+           :base-extension "org"
+           :publishing-directory "/home/horhik/Code/Blog/html/"
+           :publishing-function org-html-publish-to-html
+           :recursive t
+           :headline-levels 8             
+           :html-preamble blog/html-preamble
+           :html-postamble blog/html-postamble
+           :validation-link nil
+           :sitemap-filename "projects.org"
+           :sitemap-title "Projects"         
+           :table-of-contents nil
+           :html-head-include-default-style nil
+           )
+          ("blogstatic"
+           :base-directory "~Blog/pages/"
+           :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+           :publishing-directory "/home/horhik/Code/Blog/html/"
+           :recursive t
+           :publishing-function org-publish-attachment
+           )
+            ("index"
+             :base-directory "/home/horhik/Code/Blog/"
+             :base-extension "org"
+             :publishing-directory "/home/horhik/Code/Blog/html/"
+             :publishing-function org-html-publish-to-html
+             :auto-sitemap: t
+             :sitemap-filename "sitemap.org"
+             :sitemap-title "Sitemap"         
+             :headline-levels 8             
+             :html-preamble blog/html-index-preamble
+             :html-postamble blog/html-postamble
+             )
+          ("Blog" :components ("blogposts" "blogstatic" "projects" "portfolio" "about" "donate" "index"))
+          )
+        )
 #+end_src
