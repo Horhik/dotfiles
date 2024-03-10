@@ -11,7 +11,7 @@ hc() {
 
 hc emit_hook reload
 
-xsetroot -solid '#fe8019'
+xsetroot -solid '#2b3338'
 
 # remove all existing keybindings
 hc keyunbind --all
@@ -20,6 +20,28 @@ hc keyunbind --all
 # if you have a super key you will be much happier with Mod set to Mod4
 Mod1=Mod1    # Use alt as the main modifier
 Mod=Mod4   # Use the super key as the main modifier
+
+
+S_base02="#112"
+#S_base03op="#002b36aa"
+#S_base03="#002b36"
+S_base03="#000"
+#S_base02="#073642"
+S_base02="#111"
+S_base01="#586e75"
+S_base00="#657b83"
+S_base0="#839496"
+S_base1="#93a1a1"
+S_base2="#eee8d5"
+S_base3="#fdf6e3"
+S_yellow="#b58900"
+S_orange="#cb4b16"
+S_red="#dc322f"
+S_magenta="#d33682"
+S_violet="#6c71c4"
+S_blue="#268bd2"
+S_cyan="#2aa198"
+S_green="#859900"
 
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
@@ -66,8 +88,8 @@ hc keybind $Mod-Control-Up      resize up +$resizestep
 hc keybind $Mod-Control-Right   resize right +$resizestep
 
 # tags
-tag_names=( {1..9} )
-tag_keys=( {1..9} 0 )
+tag_names=( {1,2,3,4,5,6,7,8,9,'a','b','c'} )
+tag_keys=( {1,2,3,4,5,6,7,8,9,'d','u','b'} 0 )
 
 hc rename default "${tag_names[0]}" || true
 for i in "${!tag_names[@]}" ; do
@@ -89,7 +111,7 @@ hc keybind $Mod-s floating toggle
 hc keybind $Mod-f fullscreen toggle
 hc keybind $Mod-Control-f tiling toggle
 hc keybind $Mod-Shift-f set_attr clients.focus.floating toggle
-hc keybind $Mod-Shift-d set_attr clients.focus.decorated toggle
+hc keybind $Mod-Control-Shift-d set_attr clients.focus.decorated toggle
 hc keybind $Mod-Control-m set_attr clients.focus.minimized true
 hc keybind $Mod-Control-Shift-m jumpto last-minimized
 hc keybind $Mod-Control-p pseudotile toggle
@@ -117,10 +139,10 @@ hc keybind $Mod-i jumpto urgent
 # theme
 hc attr theme.tiling.reset 1
 hc attr theme.floating.reset 1
-hc set frame_border_active_color '#fe8019'
-hc set frame_border_normal_color '#101010cc'
-hc set frame_bg_normal_color '#3c383633'
-hc set frame_bg_active_color '#3c383633'
+hc set frame_border_active_color '#2b3339'
+hc set frame_border_normal_color '#2b3339'
+hc set frame_bg_normal_color $S_base03op
+hc set frame_bg_active_color $S_base03op
 hc set frame_border_width 0
 hc set always_show_frame on
 hc set frame_bg_transparent off
@@ -129,45 +151,49 @@ hc set frame_gap 0
 
 
 # "#fe8019" "#d65d0e" "#af3a03'
-hc attr theme.title_height 10
+hc attr theme.title_height 12
 hc attr theme.title_when always
 hc attr theme.title_font 'Mononoki Nerd Font:pixelsize=12'  # example using Xft
 # hc attr theme.title_font '-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*'
 hc attr theme.title_depth 3  # space below the title's baseline
-hc attr theme.active.color '#fe8019'
-hc attr theme.title_color '#ffffff'
-hc attr theme.normal.color '#fe801955'
-hc attr theme.urgent.color '#7811A1'
-hc attr theme.tab_color '#3c3836'
-hc attr theme.active.tab_color '#ffffff00'
-hc attr theme.active.tab_outer_color '#fe8019'
-hc attr theme.active.tab_title_color '#f9f5d7'
-hc attr theme.normal.title_color '#f2e5bc'
+hc attr theme.active.color $S_base03
+hc attr theme.normal.color $S_base02
+hc attr theme.title_color  $S_base2
+hc attr theme.normal.color $S_base03
+hc attr theme.urgent.color $S_red
+
+hc attr theme.tab_color $S_base02
+hc attr theme.normal.tab_color $S_base02
+hc attr theme.active.tab_color $S_base02
+hc attr theme.active.tab_outer_color $S_base02
+hc attr theme.active.tab_title_color $S_base2
+
+hc attr theme.normal.title_color $S_base3
 hc attr theme.inner_width 1
 hc attr theme.inner_color black
-hc attr theme.border_width 1
-hc attr theme.fullscreen.border_width 1
-hc attr theme.floating.border_width 1
-hc attr theme.floating.outer_width 1
+hc attr theme.border_width 2
+hc attr theme.fullscreen.border_width 2
+hc attr theme.floating.border_width 2
+hc attr theme.floating.outer_width 2
 hc attr theme.floating.outer_color black
-hc attr theme.active.inner_color '#fe8019'
-hc attr theme.urgent.inner_color '#9A65B0'
-hc attr theme.normal.inner_color '#3c3836'
+hc attr theme.active.inner_color $S_base01
+hc attr theme.urgent.inner_color $S_magenta
+hc attr theme.normal.inner_color $S_base02
 # copy inner color to outer_color
 for state in active urgent normal ; do
     hc substitute C theme.${state}.inner_color \
         attr theme.${state}.outer_color C
 done
 hc attr theme.tiling.outer_width 1
-hc attr theme.background_color '#141414'
+hc attr theme.background_color $S_base02
 
-hc set window_gap 10
-hc set frame_padding -5
+hc set window_gap 0
+hc set frame_padding 0
 hc set smart_window_surroundings off
 hc set smart_frame_surroundings on
 hc set mouse_recenter_gap 0
-hc pad 1 17
-hc pad 0 17 
+hc pad 1 20
+hc pad 0 20 
 
 # rules
 hc unrule -F
@@ -193,7 +219,7 @@ hc unlock
 hc detect_monitors
 
 # find the panel
-panel=~/.config/herbstluftwm/panel.sh
+#panel=~/.config/herbstluftwm/panel.sh
 [ -x "$panel" ] || panel=/etc/xdg/herbstluftwm/panel.sh
 for monitor in $(hc list_monitors | cut -d: -f1) ; do
     # start it on each monitor
@@ -209,34 +235,59 @@ hc keybind $Mod-Shift-e spawn rofi -show emoji
 
 
 # SCRATCHPADS
-hc keybind $Mod-u		spawn ~/.config/herbstluftwm/scratchpad.sh "hlwmScratch1" "kitty --class=hlwmScratch1"
-hc keybind $Mod-d		spawn  ~/.config/herbstluftwm/scratchpad.sh "hlwmScratchemascratch" "emacs --name hlwmScratchemascratch --title hlwmScratchemascratch"
+#hc keybind $Mod-u use_index "0"
+#spawn ~/.config/herbstluftwm/scratchpad.sh "hlwmScratch1" "kitty --class=hlwmScratch1"
+#hc keybind $Mod-d	use_index "2"
+
+#spawn  ~/.config/herbstluftwm/scratchpad.sh "hlwmScratchemascratch" "emacs --name hlwmScratchemascratch --title hlwmScratchemascratch"
 hc keybind $Mod-Shift-m		spawn  ~/.config/herbstluftwm/scratchpad.sh "hlwmScratchVolume" "kitty --class=hlwmScratchVolume -e pulsemixer"
-hc keybind $Mod-Shift-d		spawn  ~/.config/herbstluftwm/scratchpad.sh "obsidian" "~.local/bin/Obsidian.AppImage"
+#hc keybind $Mod-Shift-d		spawn  ~/.config/herbstluftwm/scratchpad.sh "obsidian" "~.local/bin/Obsidian.AppImage"
 hc keybind $Mod1-Control-space	spawn  emacsclient --eval "(emacs-everywhere)"
 
 # put this somewhere after 'hc unrule -F' line
 hc rule instance~hlwmScratch.* floating=on floatplacement=center # float all instances which contains 'hlwmScratch'
 
 #Change Language
-hc keybind $Mod-space spawn ~/.config/herbstluftwm/changelang
+hc keybind $Mod-space spawn  xkb-switch -n
+#~/.config/herbstluftwm/changelang
 hc keybind $Mod1-shift spawn ~/.config/herbstluftwm/changelang
 hc keybind $Mod-F3 spawn ~/.config/herbstluftwm/nospanish.sh 
 hc keybind $Mod-F4 spawn ~/.config/herbstluftwm/noenglish.sh 
 
 
-
-picom &
-feh --bg-scale /home/horhik/Pictures/backgrounds/bulbs.jpg
+# SERVICES 
 syncthing &
-~/.config/herbstluftwm/bar | lemonbar  -n "herbstluftwm" -B "#1d2021" -F "#ebdbb2" -f "mononoki Nerd Font:style=Bold:size=9" &
+picom &
+
+# BAR
+polybar &
+
+#~/.config/herbstluftwm/bar | lemonbar  -n "herbstluftwm" -B $S_base03 -F $S_base3 -f "mononoki Nerd Font:style=Bold:size=9" &
+
+
+# WALLPAPER
+
+feh --bg-fill ~/Pictures/mushroom.jpg
+
+# Monitors
 
 xrandr --output eDP --auto
 xrandr --output HDMI-A-0 --auto
-xrandr --output HDMI-A-0 --right-of eDP
+xrandr --output HDMI-A-0 --above-of eDP
 herbstclient detect_monitors
 brightnessctl s 255
 
+
+# SOUND 
 pipewire &
 pipewire-pulse &
 syndaemon &
+
+# KEYBOARD
+
+setxkbmap us,ru 
+
+# WACOM TABLET
+
+xinput map-to-output "Wacom One by Wacom S Pen stylus" HDMI-A-0
+

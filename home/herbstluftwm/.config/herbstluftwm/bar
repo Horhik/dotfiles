@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export MAIN_DISK="/dev/nvme0n1p7"
+export MAIN_DISK="/dev/nvme0n1p1"
 #module GruvboxColors where
 
 backgroundColor="#504945"
