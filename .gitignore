@@ -24,7 +24,12 @@ home/xmonad/.xmonad/xmonad.errors
 home/pure_emacs/.emacs.d/bb/
 home/pure_emacs/.emacs.d/eln-cache/
 home/pure_emacs/.emacs.d/straight/
+home/pure_emacs/.emacs.d/icons/
 home/pure_emacs/.emacs.d/private/
 home/pure_emacs/.emacs.d/private/*
 home/emacs/.emacs.d/ltximg/
+home/emacs/.emacs.d/.*
+home/emacs/.emacs.d/icons
+home/emacs/.emacs.d/icons/
+home/emacs/.emacs.d/
 
