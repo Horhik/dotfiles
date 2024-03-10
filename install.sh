@@ -79,6 +79,7 @@ sudo ninja -C build install
 
 sudo ln -s $HOME/.local/scripts/bin/* /usr/bin
 
+
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions
@@ -86,6 +87,8 @@ git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zs
 git clone https://github.com/elkowar/eww /tmp/eww
 cd /tmp/eww
 cargo build --release
+
+
 
 echo "installing tmp (tmux package manager)"
 git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm

@@ -65,7 +65,7 @@ set norunexec
 
 " Selected color scheme
 
-colorscheme Default
+colorscheme solarized-dark
 
 " Format for displaying time in file list. For example:
 " TIME_STAMP_FORMAT=%m/%d-%H:%M
@@ -356,11 +356,11 @@ filextype */
 "
 " Or leave it for automatic detection
 "
-" fileviewer *[^/] pygmentize -O style=monokai -f console256 -g
+ fileviewer *[^/] pygmentize -O style=monokai -f console256 -g
 
 " Displaying pictures in terminal
 "
-" fileviewer *.jpg,*.png shellpic %c
+ fileviewer *.jpg,*.png shellpic %c
 
 " Open all other files with default system programs (you can also remove all
 " :file[x]type commands above to ensure they don't interfere with system-wide
