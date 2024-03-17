@@ -1,17 +1,34 @@
 (setq max-lisp-eval-depth 10000)
-(print "Adding melpa")
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
+  (print "Adding melpa")
 
-
-(print "Initializing...")
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+;; and `package-pinned-packages`. Most users will not need or want to do this.
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
 
-(unless package-archive-contents
-  (package-refresh-contents))
-(setq package-enable-at-startup nil)
-(setq use-package-always-ensure t)
+  (print "Initializing...")
+
+  (unless package-archive-contents
+    (package-refresh-contents))
+  (setq package-enable-at-startup nil)
+  (setq use-package-always-ensure t)
+
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
 (menu-bar-mode -1)
 (setq inhibit-startup-message t)
@@ -28,7 +45,7 @@
 
 (use-package which-key)
 
-(use-package gruvbox-theme
+(straight-use-package 'gruvbox-theme
 
 )
 
@@ -485,6 +502,34 @@
                     :weight 'normal
                     :width 'normal)
 
+(setq org-startup-with-latex-preview t)
+(setq org-preview-latex-default-process 'dvisvgm)
+(setq org-preview-latex-process-alist
+       '((dvipng :programs
+         ("lualatex" "dvipng")
+         :description "dvi > png" :message "you need to install the programs: latex and dvipng." :image-input-type "dvi" :image-output-type "png" :image-size-adjust
+         (1.0 . 1.0)
+         :latex-compiler
+         ("lualatex -output-format dvi -interaction nonstopmode -output-directory %o %f")
+         :image-converter
+         ("dvipng -fg %F -bg %B -D %D -T tight -o %O %f"))
+       (dvisvgm :programs
+          ("latex" "dvisvgm")
+          :description "dvi > svg" :message "you need to install the programs: latex and dvisvgm." :use-xcolor t :image-input-type "xdv" :image-output-type "svg" :image-size-adjust
+          (1.7 . 1.5)
+          :latex-compiler
+          ("xelatex -no-pdf -interaction nonstopmode -output-directory %o %f")
+          :image-converter
+          ("dvisvgm %f -n -b min -c %S -o %O"))
+       (imagemagick :programs
+              ("latex" "convert")
+              :description "pdf > png" :message "you need to install the programs: latex and imagemagick." :use-xcolor t :image-input-type "pdf" :image-output-type "png" :image-size-adjust
+              (1.0 . 1.0)
+              :latex-compiler
+              ("xelatex -no-pdf -interaction nonstopmode -output-directory %o %f")
+              :image-converter
+              ("convert -density %D -trim -antialias %f -quality 100 %O"))))
+
 (use-package pdf-tools
   :ensure t
   :defer t
@@ -516,38 +561,40 @@
   "o l" '(counsel-org-link :which-key "insert tag")
 )
 
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)))
+(setq-default tab-width 4)
 
-(use-package org-ref
+  (straight-use-package 'doom-modeline)
+
+
+(doom-modeline-mode)
+
+(straight-use-package 'org-ref
   :ensure t
 )
 
 (use-package ivy
-    :ensure t
-    :bind (("C-s" . swiper)
-           :map ivy-minibuffer-map
-           ("TAB" . ivy-alt-done)	
-           ("C-l" . ivy-alt-done)
-           ("C-j" . ivy-next-line)
-           ("C-k" . ivy-previous-line)
-           :map ivy-switch-buffer-map
-           ("C-k" . ivy-previous-line)
-           ("C-l" . ivy-done)
-           ("C-d" . ivy-switch-buffer-kill)
-           :map ivy-reverse-i-search-map
-           ("C-k" . ivy-previous-line)
-           ("C-d" . ivy-reverse-i-search-kill))
+      :ensure t
+      :bind (("C-s" . swiper)
+             :map ivy-minibuffer-map
+             ("TAB" . ivy-alt-done)	
+             ("C-l" . ivy-alt-done)
+             ("C-j" . ivy-next-line)
+             ("C-k" . ivy-previous-line)
+             :map ivy-switch-buffer-map
+             ("C-k" . ivy-previous-line)
+             ("C-l" . ivy-done)
+             ("C-d" . ivy-switch-buffer-kill)
+             :map ivy-reverse-i-search-map
+             ("C-k" . ivy-previous-line)
+             ("C-d" . ivy-reverse-i-search-kill))
 
-    :config
-    (ivy-mode 1)
+      :config
+      (ivy-mode 1)
 
-)
-(use-package amx
-:ensure t
-:init (amx-mode 1))
+  )
+  (straight-use-package 'amx
+  ) 
+(amx-mode 1)
 
 (use-package ivy-posframe)
   (use-package counsel
@@ -640,6 +687,62 @@
           '("~/.emacs.d/snippets"                 ;; personal snippets
             ))
 
+(setq org-roam-directory "~/Notes/pages")
+  (setq org-roam-db-location "~/Notes/notes.org")
+  (setq org-roam-dailies-directory "~/Notes/journals/")
+(use-package org-roam
+                                        ;(org-roam-directory (file-truename default-folder))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today)
+
+         ;; Tags
+         ("C-c t a" . org-roam-tag-add)
+         ("C-c t r" . org-roam-tag-remove)
+
+         )
+
+  :config
+  (setq org-roam-directory "~/Notes/pages")
+  (setq org-roam-db-location "~/Notes/notes.org")
+  (setq org-roam-dailies-directory "~/Notes/journals/")
+  (setq org-roam-mode-sections
+        (list #'org-roam-backlinks-section
+              #'org-roam-reflinks-section
+              #'org-roam-unlinked-references-section
+              ))
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-completion-everywhere t)
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol)
+  (require 'org-roam-export)
+
+
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "%?" :target
+      (file+head "pages/${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)))
+
+
+  (add-to-list 'display-buffer-alist
+               '("\\*org-roam\\*"
+                 (display-buffer-in-side-window)
+                 (side . right)
+                 (window-width . 0.33)
+                 (window-parameters . (
+                                       (no-delete-other-windows . t)))))
+  (org-roam-db-autosync-mode t)
+
+
+
+  )
+
 (use-package org-roam-ui
     :after org-roam
 ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
@@ -675,20 +778,17 @@
 
   )
 
-(use-package all-the-icons
-          :ensure t
+(straight-use-package 'all-the-icons
+            )
+  (straight-use-package 'treemacs-all-the-icons
           )
-(use-package treemacs-all-the-icons
-        :ensure t
-        )
 
-  (use-package treemacs-nerd-icons
-      :config
-      (treemacs-load-theme "nerd-icons"))
+(straight-use-package 'treemacs-nerd-icons)
+;(treemacs-load-theme "nerd-icons")
 
-(use-package treemacs
+(straight-use-package 'treemacs
   :config
-  (treemacs-load-all-the-icons-with-workaround-font "Hermit")
+  ;(treemacs-load-all-the-icons-with-workaround-font "Hermit")
 
 (general-define-key
    :keymaps 'treemacs-mode-map
@@ -816,22 +916,7 @@ buffer's text scale."
 \\end{titlepage}
 ")
 
-(setq org-roam-directory "~/Notes/pages")
-  (setq org-roam-db-location "~/Notes/notes.org")
-  (setq org-roam-dailies-directory "~/Notes/journals/")
-(setq org-roam-mode-sections
-      (list #'org-roam-backlinks-section
-            #'org-roam-reflinks-section
-            #'org-roam-unlinked-references-section
-            ))
 
-(add-to-list 'display-buffer-alist
-           '("\\*org-roam\\*"
-             (display-buffer-in-side-window)
-             (side . right)
-             (window-width . 0.33)
-             (window-parameters . (
-                                   (no-delete-other-windows . t)))))
 
 (use-package lsp-mode
   :ensure t
@@ -896,14 +981,6 @@ buffer's text scale."
   (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
 
 (use-package flycheck :ensure t)
-
-(require 'lsp-mode)
-(add-hook 'typescript-mode-hook 'lsp-deferred)
-(add-hook 'javascript-mode-hook 'lsp-deferred)
-
-(use-package typescript-mode
-  :ensure t
-  )
 
 (which-key-mode)
 (add-hook 'c-mode-hook 'lsp)
