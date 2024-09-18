@@ -23,7 +23,7 @@ set $menu kickoff
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /run/current-system/sw/share/backgrounds/sway/)
-output * bg /run/current-system/sw/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+#output * bg /mnt/space/Pictures/Wallpapers/physarium.png fill
 #
 # Example configuration:
 #
@@ -233,7 +233,7 @@ bindsym $mod+Shift+s mode "screenshot"
 mode "redshift" {
     bindsym k exec gammastep -O 3000
     bindsym j exec gammastep -x; gammastep -x
-    bindsym 0 exec gammastep -x 
+    bindsym 0 exec pkill gammastep
     bindsym 1 exec gammastep -O 1000
     bindsym 2 exec gammastep -O 1500
     bindsym 3 exec gammastep -O 2000
@@ -263,6 +263,7 @@ bar {
 }
 
 
+
 include /etc/sway/config.d/*
 
 default_border pixel 2
@@ -272,10 +273,11 @@ default_border pixel 2
 
 
 input "1267:12553:ELAN2204:00_04F3:3109_Touchpad" {
+
     dwt enabled
     tap enabled
     middle_emulation enabled
-    pointer_accel 0.7
+    pointer_accel 0.4
     accel_profile adaptive
 }
 
@@ -301,11 +303,10 @@ input "1386:890:Wacom_One_by_Wacom_S_Pen" map_to_output eDP-1
 
 
 #output * background  /space/Pictures/Wallpapers/magent.png fill
-output * background  /space/Pictures/Wallpapers/masha_mandala.jpg fill
 
 
 output HDMI-A-1 pos 0 0
-output eDP-1 pos 0 1080
+#output eDP-1 pos 0 0
 
 
 set $background		   #282420
@@ -367,9 +368,20 @@ client.background        $mess
 set $opacity 0.90
 #for_window [class=".*"] opacity $opacity
 for_window [app_id="kitty"] opacity $opacity
+for_window [app_id="emacs"] opacity $opacity
 for_window [app_id="org.pwmt.zathura"] opacity $opacity
 for_window [app_id="sioyek"] opacity $opacity
-for_window [class="PatchWindow"] opacity 0.5
+for_window [class="PatchWindow"] opacity 0.9
+for_window [class="calibre"] opacity 0.8
 
 
 focus_follows_mouse yes
+exec "swaybg -i /space/Pictures/Wallpapers/masha_mandala.jpg  -m fill &"
+exec "waybar &"
+exec anki
+
+
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec hash dbus-update-activation-environment 2>/dev/null && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec systemctl --user start xdg-desktop-portal.service
+
