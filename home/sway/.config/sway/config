@@ -277,13 +277,13 @@ input "1267:12553:ELAN2204:00_04F3:3109_Touchpad" {
     dwt enabled
     tap enabled
     middle_emulation enabled
-    pointer_accel 0.4
+    pointer_accel 1.0
     accel_profile adaptive
 }
 
 input "1267:12553:ELAN2204:00_04F3:3109_Mouse" {
-    pointer_accel 0.7
-    accel_profile adaptive
+    pointer_accel 1.0
+    accel_profile flat
 }
 
 input type:keyboard {
@@ -296,8 +296,8 @@ input type:keyboard {
 
 
 
-#input "1386:890:Wacom_One_by_Wacom_S_Pen" map_to_output HDMI-A-1
-input "1386:890:Wacom_One_by_Wacom_S_Pen" map_to_output eDP-1 
+input "1386:890:Wacom_One_by_Wacom_S_Pen" map_to_output HDMI-A-1
+#input "1386:890:Wacom_One_by_Wacom_S_Pen" map_to_output eDP-1 
 
 # HDMI-A-1 eDP-1 
 
@@ -305,7 +305,9 @@ input "1386:890:Wacom_One_by_Wacom_S_Pen" map_to_output eDP-1
 #output * background  /space/Pictures/Wallpapers/magent.png fill
 
 
-output HDMI-A-1 pos 0 0
+output HDMI-A-1 pos 0 0 res 2560x1440
+output eDP-1 pos 0 1440 res 1920x1080
+#swaymsg output eDP-1 disable
 #output eDP-1 pos 0 0
 
 
@@ -376,8 +378,9 @@ for_window [class="calibre"] opacity 0.8
 
 
 focus_follows_mouse yes
-exec "swaybg -i /space/Pictures/Wallpapers/masha_mandala.jpg  -m fill &"
+exec "swaybg -i  ~/Documents/Wallpaper.png   -m fill &"
 exec "waybar &"
+exec "dunst &"
 exec anki
 
 
