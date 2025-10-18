@@ -1,11 +1,11 @@
 {
 "layer": "top",
 "position": "top",
-"height": 10,
+"height": 20,
 "margin-bottom":0,
 "margin-top":0,
 
-"modules-left": ["sway/mode","cpu","memory","network","mpd"],
+"modules-left": ["sway/mode","cpu","memory","network","custom/playerctl"],
 "modules-center": ["sway/workspaces","wlr/workspaces"],
 "modules-right":  ["tray","idle_inhibitor","pulseaudio","backlight","battery","clock"],
 
@@ -98,7 +98,7 @@
   "on-click": "pavucontrol"
 },
 "mpd": {
-  "format": "{stateIcon} {artist} - {title}",
+  "format": "{artist} - {title}",
   "format-disconnected": "🎶",
   "format-stopped": "♪",
   "interval": 10,
@@ -139,5 +139,15 @@
     "exec": "echo '{\"class\": \"audio recording\"}'",
     "exec-if": "pgrep ffmpeg",
 },
+"custom/playerctl": {
+  "exec": "~/.config/waybar/scripts/playerctl.sh",
+  "interval": 3,
+  "return-type": "json",
+  "format": "{}",
+  "on-click": "playerctl play-pause",
+  "on-scroll-up": "playerctl next",
+  "on-scroll-down": "playerctl previous"
+}
+
 }
 
