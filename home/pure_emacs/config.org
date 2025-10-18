@@ -1,0 +1,467 @@
+#+TITLE: Emacs Configuration
+#+AUTHOR: Your Name
+
+* Package Management
+** Disabling package.el
+#+begin_src emacs-lisp :tangle yes
+  (setq package-enable-at-startup nil)
+#+end_src
+** Elpaca Setup
+#+begin_src emacs-lisp :tangle yes
+  ;; Initialize Elpaca package manager
+
+  (defvar elpaca-installer-version 0.10)
+  (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+  (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+  (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+  (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                                :ref nil :depth 1 :inherit ignore
+                                :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                                :build (:not elpaca--activate-package)))
+  (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+         (build (expand-file-name "elpaca/" elpaca-builds-directory))
+         (order (cdr elpaca-order))
+         (default-directory repo))
+    (add-to-list 'load-path (if (file-exists-p build) build repo))
+    (unless (file-exists-p repo)
+      (make-directory repo t)
+      (when (<= emacs-major-version 28) (require 'subr-x))
+      (condition-case-unless-debug err
+          (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                    ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                    ,@(when-let* ((depth (plist-get order :depth)))
+                                                        (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                    ,(plist-get order :repo) ,repo))))
+                    ((zerop (call-process "git" nil buffer t "checkout"
+                                          (or (plist-get order :ref) "--"))))
+                    (emacs (concat invocation-directory invocation-name))
+                    ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                          "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                    ((require 'elpaca))
+                    ((elpaca-generate-autoloads "elpaca" repo)))
+              (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+            (error "%s" (with-current-buffer buffer (buffer-string))))
+        ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+    (unless (require 'elpaca-autoloads nil t)
+      (require 'elpaca)
+      (elpaca-generate-autoloads "elpaca" repo)
+      (load "./elpaca-autoloads")))
+  (add-hook 'after-init-hook #'elpaca-process-queues)
+  (elpaca `(,@elpaca-order))
+
+  (elpaca elpaca-use-package
+  ;; Enable use-package :ensure support for Elpaca.
+  (elpaca-use-package-mode))
+
+#+end_src
+
+* Core Configuration
+** Basic Settings
+#+begin_src emacs-lisp :tangle yes
+;; Essential configurations
+(setq inhibit-startup-message t
+      visible-bell t
+      initial-scratch-message nil
+      custom-file (expand-file-name "custom.el" user-emacs-directory))
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(set-frame-font "mononoki 12" nil t)
+#+end_src
+
+* Evil Mode Configuration
+** Basic Setup
+#+begin_src emacs-lisp :tangle yes
+(elpaca evil
+  ;; Enable evil mode
+  (evil-mode 1)
+
+  ;; Set initial state for major modes
+  (setq evil-default-state 'normal
+        evil-shift-width 4
+        evil-want-C-u-scroll t))
+#+end_src
+
+* UI & Themes
+** Doom Theme Setup
+#+begin_src emacs-lisp :tangle yes
+(elpaca doom-themes
+  (load-theme 'doom-one t)
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
+#+end_src
+
+** Visual Enhancements
+#+begin_src emacs-lisp :tangle yes
+;; Line numbers
+(global-display-line-numbers-mode 1)
+(setq display-line-numbers-type 'relative)
+
+;; Modeline
+(elpaca doom-modeline
+  (doom-modeline-mode 1))
+#+end_src
+
+* Essential Packages
+** Completion Framework
+#+begin_src emacs-lisp :tangle yes
+  (elpaca vertico
+          (vertico-mode))
+
+      (elpaca vertico-posframe
+        (vertico-posframe-mode 1)
+        )
+        (elpaca orderless
+          (setq completion-styles '(orderless basic)
+                completion-category-defaults nil
+                completion-category-overrides '((file (styles . (partial-completion))))))
+
+        (elpaca marginalia
+          (marginalia-mode))
+
+        (elpaca consult
+          (global-set-key (kbd "C-s") 'consult-line)
+          (global-set-key (kbd "C-x b") 'consult-buffer))
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode))
+#+end_src
+** Completion Framework
+#+begin_src emacs-lisp :tangle yes
+(with-eval-after-load 'vertico-posframe
+  (require 'vertico-multiform))
+#+end_src
+** Development Setup
+#+begin_src emacs-lisp :tangle yes
+  (elpaca eglot
+    (add-hook 'prog-mode-hook 'eglot-ensure))
+
+  (elpaca (transient :host github :repo "magit/transient"))
+#+end_src
+
+* All Keybindings
+#+begin_src emacs-lisp :tangle no
+(defun my/setup-org-general-keys ()
+  (general-define-key
+   :keymaps 'org-mode-map
+   "TAB" #'org-cycle)
+
+  (general-define-key
+   :states '(normal insert emacs)
+   :prefix "SPC"
+   :global-prefix "C-SPC"
+   :non-normal-prefix "M-SPC"
+   "n f" '(org-roam-node-find :which-key "Find Node")
+   "n i" '(org-roam-node-insert :which-key "Insert Node")
+   "n b" '(org-roam-buffer-toggle :which-key "Toggle buffer")
+   "n c" '(org-roam-capture :which-key "Capture")
+   "n d t" '(org-roam-dailies-capture-today :which-key "Today")
+   "n d T" '(org-roam-dailies-goto-tomorrow :which-key "Tomorrow")
+   "n d y" '(org-roam-dailies-goto-yesterday :which-key "Yesterday")
+   "l b" '(list-bookmarks :which-key "List bookmarks")
+   "n t a" '(org-roam-tag-add :which-key "Add tag")
+   "n t r" '(org-roam-tag-remove :which-key "Remove tag")
+   "n s Y" '(org-download-screenshot :which-key "Download screenshot")
+   "n s y" '(org-download-yank :which-key "Download yank")
+   "n s c" '(org-download-clipboard :which-key "Paste from clipboard"))
+)
+
+;; Then, in your config (after general is loaded):
+(with-eval-after-load 'general
+  (my/setup-org-general-keys))
+
+#+end_src
+* General
+#+begin_src emacs-lisp :tangle yes
+     (use-package general
+     :ensure t
+     :demand t
+     :config
+
+  (general-create-definer my-leader-def
+    :prefix "SPC")
+  (my-leader-def
+    :states '(normal visual emacs)
+    "f" 'find-file  ; SPC f to open a file
+    "/" 'consult-ripgrep  
+    "b" 'switch-to-buffer
+    "p" '(:package projectile :keymap projectile-command-map :which-key "projectile")
+    "ec" '(lambda () (interactive) (find-file "~/.emacs.d/config.org"))  
+    )      
+;;  (my/setup-org-general-keys)
+   )
+#+end_src
+
+* Projects
+#+begin_src emacs-lisp :tangle yes
+
+  (use-package projectile
+    :ensure t
+    :init
+    ;; Enable projectile-mode globally
+    (projectile-mode +1)
+    :bind
+    ;; Bind the command prefix keymap under C-c p and optionally s-p (super-p)
+    (:map projectile-mode-map
+          ("C-c p" . projectile-command-map)
+          ("s-p" . projectile-command-map))
+          ;; (define-key projectile-mode-map (kbd "SPC p") 'projectile-command-map) ;
+   )
+      
+
+#+end_src
+
+* Org mode
+** Use package
+#+begin_src emacs-lisp :tangle yes
+
+(use-package org
+    :config
+    (setq org-use-speed-commands t)
+(define-key org-mode-map (kbd "<tab>") #'org-cycle)
+)
+ 
+
+#+end_src
+* Org Roam 
+** Basic
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-roam
+    :ensure t
+                                          ;(org-roam-directory (file-truename default-folder))
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n g" . org-roam-graph)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n c" . org-roam-capture)
+           ;; Dailies
+           ("C-c n j" . org-roam-dailies-capture-today)
+
+           ;; Tags
+           ("C-c t a" . org-roam-tag-add)
+           ("C-c t r" . org-roam-tag-remove)
+
+           )
+
+    :config
+    (setq org-roam-directory "~/Notes/pages")
+    (setq org-roam-db-location "~/Notes/notes.org")
+    (setq org-roam-dailies-directory "~/Notes/journals/")
+    (setq org-roam-mode-sections
+          (list #'org-roam-backlinks-section
+                #'org-roam-reflinks-section
+                #'org-roam-unlinked-references-section
+                ))
+    ;; If you're using a vertical completion framework, you might want a more informative completion interface
+    (setq org-roam-completion-everywhere t)
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    ;; If using org-roam-protocol
+    (require 'org-roam-protocol)
+    (require 'org-roam-export)
+
+
+    (org-roam-capture-templates
+     '(("d" "default" plain
+        "%?" :target
+        (file+head "pages/${slug}.org" "#+title: ${title}\n")
+        :unnarrowed t)))
+
+
+    (add-to-list 'display-buffer-alist
+                 '("\\*org-roam\\*"
+                   (display-buffer-in-side-window)
+                   (side . right)
+                   (window-width . 0.33)
+                   (window-parameters . (
+                                         (no-delete-other-windows . t)))))
+    (org-roam-db-autosync-mode t)
+
+
+
+    )
+
+#+end_src
+** Org-roam UI
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-roam-ui
+      :ensure t
+      :after org-roam
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+            ;;  :hook (after-init . org-roam-ui-mode)
+      :config
+
+      (setq org-roam-ui-sync-theme t
+            org-roam-ui-follow t
+            org-roam-ui-update-on-save t
+            org-roam-ui-open-on-start t))
+#+end_src
+** ORG roam keybindings
+#+begin_src
+ (general-define-key
+        :keymaps '(normal insert emacs)
+        :prefix "SPC"
+        :global-prefix "C-SPC"
+        :non-normal-prefix "M-SPC"
+
+   "n f" '(org-roam-node-find :which-key "Find Node")
+   "n i" '(org-roam-node-insert :which-key "Insert Node")
+   "n b" '(org-roam-buffer-toggle :which-key "Toggle buffer")
+   "n c" '(org-roam-capture :which-key "Capture")
+   "n d t" '(org-roam-dailies-goto-today :which-key "Today")
+   "n d T" '(org-roam-dailies-goto-tomorrow :which-key "Tomorrow")
+   "n d y" '(org-roam-dailies-goto-yesterday :which-key "Yesterday")
+   "l b" '(list-bookmarks :which-key "List bookmarks")
+   "n t a" '(org-roam-tag-add :which-key "Add tag")
+   "n t r" '(org-roam-tag-remove :which-key "Remove tag")
+   "n s Y" '(org-download-screenshot :which-key "Download screenshot")
+   "n s y" '(org-download-yank :which-key "Download yank")
+   "n s c" '(org-download-clipboard :which-key "Past from clipboard")
+
+   )
+#+end_src
+** Bibtex
+#+begin_src exports: no
+(use-package org-roam-bibtex
+  :ensure t
+  :after org-roam
+  :config
+  (require 'org-ref)) ; optional: if using Org-ref v2 or v3 citation links #+end_src
+
+* START
+#+begin_src emacs-lisp :tangle yes
+
+(elpaca-wait)
+(elpaca-process-queues)
+
+(defun custom-start-page ()
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (insert "
+                 ,-.      .-,
+                 |\\/\\    /\\/|
+                 :    \\  /   :
+                 \\     \\/    /
+                  \\    /\\   /
+                   \\  /  \\ /
+                    \\/    \\/
+                    |      |
+                    |      |
+                    |      |
+                    |      |
+                    |      |
+                    |      |
+                    |      |
+                    |      |
+                    |      |
+                    |      |
+                    |      |
+                    '------'
+
+Welcome to Emacs!
+
+Press C-x C-f to open a file
+Press M-x to execute a command
+")
+    (read-only-mode)
+    (local-set-key (kbd "q") 'quit-window)))
+
+(defun display-custom-start-page ()
+  (interactive)
+  (switch-to-buffer (get-buffer-create "*Custom Start*"))
+  (custom-start-page))
+
+(setq initial-buffer-choice 'display-custom-start-page)
+
+#+end_src
+
+* Typst
+#+begin_src emacs-lisp :tangle yes
+(use-package typst-ts-mode
+  :ensure t
+)
+#+end_src
+* Magit
+#+begin_src emacs-lisp :tangle yes
+  (defun my/setup-magit-keys ()
+    
+
+    (general-define-key
+     :states '(normal insert emacs)
+     :prefix "SPC"
+     :global-prefix "C-SPC"
+     :non-normal-prefix "M-SPC"
+     "g" '(magit :which-key "Open Magit")
+     )
+  )
+
+    (use-package magit
+      :ensure t
+      :config
+      (evil-mode 1)
+    ;; Ensure Magit buffers start in Emacs state by default
+    (add-to-list 'evil-emacs-state-modes 'magit-mode)
+    (add-to-list 'evil-emacs-state-modes 'magit-status-mode)
+    (add-to-list 'evil-emacs-state-modes 'magit-diff-mode))
+  (use-package evil-collection
+    :ensure t
+    :after (evil magit)
+    :config
+    (require 'evil-magit))
+
+  (with-eval-after-load 'general
+  (my/setup-magit-keys))
+
+#+end_src
+
+
+* Enable TAB over org headings
+#+begin_src emacs-lisp :tangle yes
+  ;; (require 'general)
+  ;; (general-define-key
+  ;;  :keymaps 'org-mode-map
+  ;;  "TAB" #'org-cycle)
+#+end_src
+
+* Coding
+
+** C/C++
+
+*** Xref
+#+begin_src emacs-lisp :tangle yes
+  (setq xref-backend-functions
+            (list #'etags--xref-backend))
+
+#+end_src
+
+* Treemacs
+#+begin_src emacs-lisp
+    (use-package treemacs
+      :ensure t
+      )
+  (use-package treemacs-evil
+      :ensure t
+      )
+(use-package treemacs-projectile
+    :ensure t
+    )
+#+end_src
+
+* TreeSitter
+#+begin_src emacs-lisp
+  (use-package tree-sitter
+    :ensure t
+    :config
+    (global-tree-sitter-mode)
+    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+    )
+#+end_src
+
+* Org Agenda files
+#+begin_src emacs-lisp
+(setq org-agenda-files (concat (directory-files-recursively "~/remote_mount/Documents/" "\\.org$") (directory-files "~/GTD/" t "\\.org$" t)))  
+#+end_src
